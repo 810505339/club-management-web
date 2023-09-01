@@ -1,18 +1,11 @@
 <!--
  * @Author: yxx
  * @Date: 2023-08-29 09:12:52
- * @LastEditTime: 2023-09-02 02:55:15
+ * @LastEditTime: 2023-09-02 02:59:04
  * @LastEditors: yxx
  * @Description:
  * @FilePath: \club-management-web\README.md
 -->
-<p align="center">
- <img src="https://img.shields.io/badge/Pig-3.7-success.svg" alt="Build Status">
- <img src="https://img.shields.io/badge/Spring%20Cloud-2021-blue.svg" alt="Coverage Status">
- <img src="https://img.shields.io/badge/Spring%20Boot-2.7-blue.svg" alt="Downloads">
- <img src="https://img.shields.io/badge/Vue-3.2-blue.svg" alt="Downloads">
- <img src="https://img.shields.io/github/license/pig-mesh/pig"/>
-</p>
 
 ## 分支说明
 

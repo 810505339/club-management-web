@@ -1,8 +1,8 @@
 {
-	"name": "pig-ui",
+	"name": "club-management",
 	"version": "3.7.1",
-	"description": "PIGCLOUD微服务开发平台",
-	"author": "pig4cloud",
+	"description": "club-management",
+	"author": "ali",
 	"license": "Apache-2.0",
 	"scripts": {
 		"dev": "vite --force",
