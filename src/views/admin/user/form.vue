@@ -5,34 +5,41 @@
 				<el-row :gutter="20">
 					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('sysuser.username')" prop="username">
-							<el-input :disabled="dataForm.userId !== ''" placeholder="请输入用户名" v-model="dataForm.username"></el-input>
+							<el-input :disabled="dataForm.userId !== ''" :placeholder="$t('sysuser.inputUsernameTip')" v-model="dataForm.username"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('sysuser.password')" prop="password">
-							<el-input clearable placeholder="请输入密码" type="password" v-model="dataForm.password"></el-input>
+							<el-input clearable :placeholder="$t('sysuser.inputPwdTip')" type="password" v-model="dataForm.password"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('sysuser.name')" prop="name">
-							<el-input clearable placeholder="请输入姓名" v-model="dataForm.name"></el-input>
+							<el-input clearable :placeholder="$t('sysuser.inputNameTip')" v-model="dataForm.name"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="12" class="mb20">
+						<el-form-item :label="$t('sysuser.gender')" prop="gender">
+							<el-select v-model="dataForm.gender" :placeholder="$t('sysuser.selectGender')">
+								<el-option v-for="item in props.gender" :label="item.label" :value="item.value + 0" :key="item.roleId" clearable> </el-option>
+							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('sysuser.phone')" prop="phone">
-							<el-input clearable placeholder="请输入手机号" v-model="dataForm.phone"></el-input>
+							<el-input clearable :placeholder="$t('sysuser.inputPhoneTip')" v-model="dataForm.phone"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('sysuser.role')" prop="role">
-							<el-select class="w100" clearable multiple placeholder="请选择角色" v-model="dataForm.role">
+							<el-select class="w100" clearable multiple :placeholder="$t('sysuser.inputPhoneRole')" v-model="dataForm.role">
 								<el-option :key="item.roleId" :label="item.roleName" :value="item.roleId" v-for="item in roleData" />
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('sysuser.post')" prop="post">
-							<el-select class="w100" clearable multiple placeholder="请选择岗位" v-model="dataForm.post">
+							<el-select class="w100" clearable multiple :placeholder="$t('sysuser.inputPostRole')" v-model="dataForm.post">
 								<el-option :key="item.postId" :label="item.postName" :value="item.postId" v-for="item in postData" />
 							</el-select>
 						</el-form-item>
@@ -45,7 +52,7 @@
 								check-strictly
 								class="w100"
 								clearable
-								placeholder="请选择所属部门"
+								:placeholder="$t('sysuser.inputDeptRole')"
 								v-model="dataForm.deptId"
 							>
 							</el-tree-select>
@@ -54,18 +61,18 @@
 
 					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('sysuser.email')" prop="email">
-							<el-input clearable placeholder="请输入邮箱" v-model="dataForm.email"></el-input>
+							<el-input clearable :placeholder="$t('sysuser.inputEmailRole')" v-model="dataForm.email"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('sysuser.nickname')" prop="nickname">
-							<el-input clearable placeholder="请输入昵称" v-model="dataForm.nickname"></el-input>
+							<el-input clearable :placeholder="$t('sysuser.inputNicknameRole')" v-model="dataForm.nickname"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('sysuser.lockFlag')" prop="lockFlag">
 							<el-radio-group v-model="dataForm.lockFlag">
-								<el-radio :key="index" :label="item.value" border v-for="(item, index) in lock_flag">{{ item.label }} </el-radio>
+								<el-radio :key="index" :label="item.value" border v-for="(item, index) in props.lock_flag">{{ item.label }} </el-radio>
 							</el-radio-group>
 						</el-form-item>
 					</el-col>
@@ -86,17 +93,24 @@ import { addObj, getObj, putObj, validatePhone, validateUsername } from '/@/api/
 import { list as roleList } from '/@/api/admin/role';
 import { list as postList } from '/@/api/admin/post';
 import { deptTree } from '/@/api/admin/dept';
-import { useDict } from '/@/hooks/dict';
+// import { useDict } from '/@/hooks/dict';
 import { useI18n } from 'vue-i18n';
 import { useMessage } from '/@/hooks/message';
 import { rule } from '/@/utils/validate';
 
 const { t } = useI18n();
-
-// 定义刷新表格emit
+const props = defineProps({
+	gender: {
+		default: () => [],
+	},
+	lock_flag: {
+		default: () => [],
+	},
+});
+// 定义刷新
 const emit = defineEmits(['refresh']);
 // @ts-ignore
-const { lock_flag } = useDict('lock_flag');
+// const { lock_flag } = useDict('lock_flag');
 
 // 定义变量内容
 const dataFormRef = ref();
@@ -123,6 +137,7 @@ const dataForm = reactive({
 	email: '',
 	post: [] as string[],
 	role: [] as string[],
+	gender: '',
 });
 
 const dataRules = ref({
@@ -255,7 +270,9 @@ const getDeptData = () => {
 	deptTree().then((res) => {
 		deptData.value = res.data;
 		// 默认选择第一个
-		dataForm.deptId = res.data[0].id;
+		// if (!dataForm.userId) {
+		// 	dataForm.deptId = res.data[0].id;
+		// }
 	});
 };
 
@@ -264,7 +281,9 @@ const getPostData = () => {
 	postList().then((res) => {
 		postData.value = res.data;
 		// 默认选择第一个
-		dataForm.post = [res.data[0].postId];
+		// if (!dataForm.userId) {
+		// 	dataForm.post = [res.data[0].postId];
+		// }
 	});
 };
 // 角色数据
@@ -272,7 +291,9 @@ const getRoleData = () => {
 	roleList().then((res) => {
 		roleData.value = res.data;
 		// 默认选择第一个
-		dataForm.role = [res.data[0].roleId];
+		// if (!dataForm.userId) {
+		// 	dataForm.role = [res.data[0].roleId];
+		// }
 	});
 };
 

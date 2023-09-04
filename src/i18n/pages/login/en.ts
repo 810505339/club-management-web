@@ -1,3 +1,11 @@
+/*
+ * @Author: yxx
+ * @Date: 2023-08-29 09:12:52
+ * @LastEditTime: 2023-09-04 21:01:12
+ * @LastEditors: yxx
+ * @Description:
+ * @FilePath: \club-management-web\src\i18n\pages\login\en.ts
+ */
 export default {
 	label: {
 		one1: 'Account login',
@@ -18,6 +26,8 @@ export default {
 		registerBtnText: 'Create account',
 		readAccept: 'I have read and accept',
 		privacyPolicy: 'the Privacy Policy',
+		passwordUpdate: 'Change Password',
+		passwordContent: 'Contact the administrator to reset the password',
 	},
 	mobile: {
 		placeholder1: 'Please enter your mobile number',

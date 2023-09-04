@@ -29,6 +29,16 @@
 							<el-form-item :label="$t('sysuser.phone')" prop="phone">
 								<el-input v-model="state.queryForm.phone" :placeholder="$t('sysuser.inputPhoneTip')" clearable />
 							</el-form-item>
+							<el-form-item :label="$t('sysuser.role')" prop="role">
+								<el-select v-model="state.queryForm.role" multiple :placeholder="$t('sysuser.inputPhoneRole')">
+									<el-option v-for="item in optionsRoles" :key="item.roleId" :label="item.roleName" :value="item.roleId" clearable> </el-option>
+								</el-select>
+							</el-form-item>
+							<el-form-item :label="$t('sysuser.lockFlag')" prop="lockFlag">
+								<el-select v-model="state.queryForm.lockFlag" :placeholder="$t('sysuser.inputLockFlag')">
+									<el-option v-for="item in lock_flag" :key="item.id" :label="item.label" :value="item.value" clearable> </el-option>
+								</el-select>
+							</el-form-item>
 							<el-form-item>
 								<el-button icon="Search" type="primary" @click="getDataList">{{ $t('common.queryBtn') }}</el-button>
 								<el-button icon="Refresh" @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
@@ -78,6 +88,11 @@
 						<el-table-column :label="$t('sysuser.index')" type="index" width="60" fixed="left" />
 						<el-table-column :label="$t('sysuser.username')" prop="username" fixed="left" show-overflow-tooltip></el-table-column>
 						<el-table-column :label="$t('sysuser.name')" prop="name" show-overflow-tooltip></el-table-column>
+						<el-table-column :label="$t('sysuser.gender')" prop="gender" show-overflow-tooltip>
+							<template #default="scope">
+								{{ scope.row.gender == 1 ? '男' : scope.row.gender == 2 ? '女' : '-' }}
+							</template>
+						</el-table-column>
 						<el-table-column :label="$t('sysuser.phone')" prop="phone" show-overflow-tooltip></el-table-column>
 						<el-table-column :label="$t('sysuser.post')" show-overflow-tooltip>
 							<template #default="scope">
@@ -121,7 +136,7 @@
 			</pane>
 		</splitpanes>
 
-		<user-form ref="userDialogRef" @refresh="getDataList(false)" />
+		<user-form ref="userDialogRef" :gender="gender" :lock_flag="lock_flag" @refresh="getDataList(false)" />
 
 		<upload-excel
 			ref="excelUploadRef"
@@ -136,22 +151,33 @@
 <script lang="ts" name="systemUser" setup>
 import { delObj, pageList, putObj } from '/@/api/admin/user';
 import { deptTree } from '/@/api/admin/dept';
+import { list } from '/@/api/admin/role';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
-
+import { useDict } from '/@/hooks/dict';
 // 动态引入组件
 const UserForm = defineAsyncComponent(() => import('./form.vue'));
 const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'));
 
 const { t } = useI18n();
-
+const { lock_flag } = useDict('lock_flag');
+const gender = ref([
+	{
+		value: 1,
+		label: '男',
+	},
+	{
+		value: 2,
+		label: '女',
+	},
+]);
 // 定义变量内容
 const userDialogRef = ref();
 const excelUploadRef = ref();
 const queryRef = ref();
 const showSearch = ref(true);
-
+const optionsRoles = ref([]) as any;
 // 多选rows
 const selectObjs = ref([]) as any;
 // 是否可以多选
@@ -163,6 +189,8 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 		deptId: '',
 		username: '',
 		phone: '',
+		role: '',
+		lockFlag: '',
 	},
 	pageList: pageList,
 });
@@ -176,7 +204,9 @@ const deptData = reactive({
 		});
 	},
 });
-
+list().then((res) => {
+	optionsRoles.value = res.data;
+});
 // 清空搜索条件
 const resetQuery = () => {
 	queryRef.value?.resetFields();
@@ -225,6 +255,8 @@ const handleDelete = async (ids: string[]) => {
 
 //表格内开关 (用户状态)
 const changeSwitch = async (row: object) => {
+	row.role = row.roleList.map((d) => d.roleId);
+	row.post = row.postList.map((d) => d.postId);
 	await putObj(row);
 	useMessage().success(t('common.optSuccessText'));
 	getDataList();

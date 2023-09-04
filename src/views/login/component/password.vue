@@ -46,11 +46,18 @@
 				<img :src="imgSrc" @click="getVerifyCode" />
 			</el-col>
 		</el-form-item>
+		<el-form-item class="login-animation2">
+			<el-tooltip class="item" effect="dark" :content="$t('password.passwordContent')" placement="right">
+				{{ $t('password.passwordUpdate') }}
+			</el-tooltip>
+		</el-form-item>
+
 		<el-form-item class="login-animation4">
 			<el-button type="primary" class="login-content-submit" :loading="loading" @click="onSignIn">
 				<span>{{ $t('password.accountBtnText') }}</span>
 			</el-button>
 		</el-form-item>
+
 		<div class="font12 mt30 login-animation4 login-msg">{{ $t('browserMsgText') }}</div>
 	</el-form>
 </template>
