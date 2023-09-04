@@ -88,6 +88,9 @@ dependencies:
   vuedraggable:
     specifier: ^4.1.0
     version: 4.1.0(vue@3.2.47)
+  win-node-env:
+    specifier: ^0.6.1
+    version: 0.6.1
 
 devDependencies:
   '@types/node':
@@ -3425,6 +3428,12 @@ packages:
 
   /wildcard@1.1.2:
     resolution: {integrity: sha512-DXukZJxpHA8LuotRwL0pP1+rS6CS7FF2qStDDE1C7DDg2rLud2PXRMuEDYIPhgEezwnlHNL4c+N6MfMTjCGTng==}
+    dev: false
+
+  /win-node-env@0.6.1:
+    resolution: {integrity: sha512-oR+MLQ6jdvwqkLEkKBYxRvBOYbTlQV9dJKn8vLzjA4HCzcqdlCE6H1oOvA7lAdCgNXiOX0xfjl/Y47ZcZN6FDA==}
+    os: [win32]
+    hasBin: true
     dev: false
 
   /wrap-ansi@6.2.0:
