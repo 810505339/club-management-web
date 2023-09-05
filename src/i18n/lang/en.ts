@@ -73,6 +73,7 @@ export default {
 		layoutLinkView: 'Link View',
 		layoutIframeViewOne: 'Iframe View One',
 		layoutIframeViewTwo: 'Iframe View Two',
+		clientmanager:'clientmanager'
 	},
 	staticRoutes: {
 		login: 'Login',

@@ -2,6 +2,7 @@
 export default {
 	router: {
 		home: '首页',
+		client:'客户管理',
 		system: '系统设置',
 		systemMenu: '菜单管理',
 		systemRole: '角色管理',
@@ -66,6 +67,7 @@ export default {
 		layoutLinkView: '外链',
 		layoutIframeViewOne: '内嵌 iframe1',
 		layoutIframeViewTwo: '内嵌 iframe2',
+		clientmanager:'客户管理'
 	},
 	staticRoutes: {
 		login: '登录',
