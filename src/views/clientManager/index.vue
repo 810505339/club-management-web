@@ -1,25 +1,7 @@
 <template>
 	<div class="layout-padding">
 		<splitpanes>
-			<pane size="15">
-				<div class="layout-padding-auto layout-padding-view">
-					<el-scrollbar>
-						<query-tree :placeholder="$t('common.queryDeptTip')" :query="deptData.queryList" :show-expand="true" @node-click="handleNodeClick">
-							<!-- 没有数据权限提示 -->
-							<template #default="{ node, data }">
-								<el-tooltip v-if="data.isLock" class="item" effect="dark" :content="$t('sysuser.noDataScopeTip')" placement="right-start">
-									<span
-										>{{ node.label }}
-										<SvgIcon name="ele-Lock" />
-									</span>
-								</el-tooltip>
-								<span v-if="!data.isLock">{{ node.label }}</span>
-							</template>
-						</query-tree>
-					</el-scrollbar>
-				</div>
-			</pane>
-			<pane class="ml8">
+			<pane >
 				<div class="layout-padding-auto layout-padding-view">
 					<el-row v-show="showSearch">
 						<el-form ref="queryRef" :inline="true" :model="state.queryForm" @keyup.enter="getDataList">
