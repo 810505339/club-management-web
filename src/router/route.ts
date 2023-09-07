@@ -56,6 +56,19 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 			isHide: true,
 		},
 	},
+	{
+		path: '/client',
+		name: 'router.client',
+		component: () => import('/@/views/admin/client/index.vue'),
+		meta: {
+			isLink: '',
+			isHide: false,
+			isKeepAlive: true,
+			isAffix: true,
+			isIframe: false,
+			icon: 'iconfont icon-shouye',
+		},
+	},
 ];
 
 /**
