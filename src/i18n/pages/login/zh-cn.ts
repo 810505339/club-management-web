@@ -19,7 +19,7 @@ export default {
 		registerBtnText: '注 册',
 		readAccept: '我已仔细阅读并接受',
 		privacyPolicy: '《隐私政策》',
-		passwordUpdate: '修改密码',
+		passwordUpdate: '忘记密码',
 		passwordContent: '请联系管理员重置密码',
 	},
 	mobile: {

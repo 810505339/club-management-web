@@ -49,6 +49,19 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 		},
 	},
 	{
+		path: '/clientmanager',
+		name: 'router.clientmanager',
+		component: () => import('/@/views/clientManager/index.vue'),
+		meta: {
+			isLink: '',
+			isHide: false,
+			isKeepAlive: true,
+			isAffix: true,
+			isIframe: false,
+			icon: 'iconfont icon-shouye',
+		},
+	},
+	{
 		path: '/personal',
 		name: 'router.personal',
 		component: () => import('/@/views/admin/user/personal.vue'),
