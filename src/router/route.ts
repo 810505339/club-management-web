@@ -1,3 +1,11 @@
+/*
+ * @Author: yxx
+ * @Date: 2023-09-24 10:33:14
+ * @LastEditTime: 2023-09-24 17:42:44
+ * @LastEditors: yxx
+ * @Description:
+ * @FilePath: \club-management-web\src\router\route.ts
+ */
 import { RouteRecordRaw } from 'vue-router';
 
 /**
@@ -34,55 +42,7 @@ declare module 'vue-router' {
  * 定义静态路由（默认路由）
  * 前端添加路由，请在此处加
  */
-export const dynamicRoutes: Array<RouteRecordRaw> = [
-	{
-		path: '/home',
-		name: 'router.home',
-		component: () => import('/@/views/home/index.vue'),
-		meta: {
-			isLink: '',
-			isHide: false,
-			isKeepAlive: true,
-			isAffix: true,
-			isIframe: false,
-			icon: 'iconfont icon-shouye',
-		},
-	},
-	{
-		path: '/clientmanager',
-		name: 'router.clientmanager',
-		component: () => import('/@/views/clientManager/index.vue'),
-		meta: {
-			isLink: '',
-			isHide: false,
-			isKeepAlive: true,
-			isAffix: true,
-			isIframe: false,
-			icon: 'iconfont icon-shouye',
-		},
-	},
-	{
-		path: '/personal',
-		name: 'router.personal',
-		component: () => import('/@/views/admin/user/personal.vue'),
-		meta: {
-			isHide: true,
-		},
-	},
-	{
-		path: '/client',
-		name: 'router.client',
-		component: () => import('/@/views/admin/client/index.vue'),
-		meta: {
-			isLink: '',
-			isHide: false,
-			isKeepAlive: true,
-			isAffix: true,
-			isIframe: false,
-			icon: 'iconfont icon-shouye',
-		},
-	},
-];
+export const dynamicRoutes: Array<RouteRecordRaw> = [];
 
 /**
  * 定义静态路由（默认路由）
@@ -95,7 +55,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
 		meta: {
 			isAuth: false,
 		},
-	}
+	},
 ];
 
 /**
