@@ -1,5 +1,14 @@
+/*
+ * @Author: yxx
+ * @Date: 2023-08-29 09:12:52
+ * @LastEditTime: 2023-09-24 11:21:14
+ * @LastEditors: yxx
+ * @Description:
+ * @FilePath: \club-management-web\src\views\admin\menu\i18n\zh-cn.ts
+ */
 export default {
 	sysmenu: {
+		addBtn: '新增菜单',
 		index: '#',
 		name: '菜单名称',
 		enName: '菜单英文',

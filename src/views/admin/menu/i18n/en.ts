@@ -1,6 +1,7 @@
 export default {
 	sysmenu: {
 		index: '#',
+		addBtn: 'add menu',
 		name: 'menu name',
 		enName: 'en menu name',
 		sortOrder: 'sortOrder',

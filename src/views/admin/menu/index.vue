@@ -1,3 +1,11 @@
+<!--
+ * @Author: yxx
+ * @Date: 2023-08-29 09:12:52
+ * @LastEditTime: 2023-09-24 11:21:39
+ * @LastEditors: yxx
+ * @Description: 
+ * @FilePath: \club-management-web\src\views\admin\menu\index.vue
+-->
 <template>
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
