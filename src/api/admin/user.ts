@@ -128,3 +128,18 @@ export function validatePhone(rule: any, value: any, callback: any, isEdit: bool
 		}
 	});
 }
+
+
+//分页查询客户
+
+export type IUser = {
+	[k in string]: string
+}
+export function getUserList(params: IUser) {
+	return request({
+		url: '/admin/customer/page',
+		method: 'get',
+		params
+	});
+}
+

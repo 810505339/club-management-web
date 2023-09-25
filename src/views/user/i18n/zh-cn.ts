@@ -1,6 +1,34 @@
 export default {
-	
-	clientmanager: {
-	
+
+	clientUser: {
+		index: '#',
+		username: '用户名',
+		name: '姓名',
+		phone: '手机号',
+		post: '岗位',
+		role: '角色',
+		lockFlag: '状态',
+		inputLockFlag: '请选择状态',
+		createTime: '创建时间',
+		password: '密码',
+		dept: '部门',
+		email: '邮箱',
+		nickname: '昵称',
+		inputUsernameTip: '请输入用户名',
+		inputPwdTip: '请输入密码',
+		inputPhoneTip: '请输入手机号',
+		inputNameTip: '请输入姓名',
+		inputPhoneRole: '请选择角色',
+		inputPostRole: '请选择岗位',
+		inputDeptRole: '请选择部门',
+		inputEmailRole: '请输入邮箱',
+		inputNicknameRole: '请输入昵称',
+		importUserTip: '用户导入',
+		deleteDisabledTip: 'admin 不允许被删除',
+		noDataScopeTip: '没有数据权限',
+		gender: '性别',
+		selectGender: '请选择性别',
+		poolOrder: '拼酒次数',
+		orderConsume: '累计消费(元)'
 	},
 };
