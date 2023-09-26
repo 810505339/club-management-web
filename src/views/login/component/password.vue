@@ -1,7 +1,9 @@
 <template>
-	<el-form size="large" class="login-content-form" ref="loginFormRef" :rules="loginRules" :model="state.ruleForm" @keyup.enter="onSignIn">
+	<el-form size="large" class="login-content-form" ref="loginFormRef" :rules="loginRules" :model="state.ruleForm"
+		@keyup.enter="onSignIn">
 		<el-form-item class="login-animation1" prop="username">
-			<el-input text :placeholder="$t('password.accountPlaceholder1')" v-model="state.ruleForm.username" clearable autocomplete="off">
+			<el-input text :placeholder="$t('password.accountPlaceholder1')" v-model="state.ruleForm.username" clearable
+				autocomplete="off">
 				<template #prefix>
 					<el-icon class="el-input__icon">
 						<ele-User />
@@ -10,30 +12,25 @@
 			</el-input>
 		</el-form-item>
 		<el-form-item class="login-animation2" prop="password">
-			<el-input
-				:type="state.isShowPassword ? 'text' : 'password'"
-				:placeholder="$t('password.accountPlaceholder2')"
-				v-model="state.ruleForm.password"
-				autocomplete="off"
-			>
+			<el-input :type="state.isShowPassword ? 'text' : 'password'" :placeholder="$t('password.accountPlaceholder2')"
+				v-model="state.ruleForm.password" autocomplete="off">
 				<template #prefix>
 					<el-icon class="el-input__icon">
 						<ele-Unlock />
 					</el-icon>
 				</template>
 				<template #suffix>
-					<i
-						class="iconfont el-input__icon login-content-password"
+					<i class="iconfont el-input__icon login-content-password"
 						:class="state.isShowPassword ? 'icon-yincangmima' : 'icon-xianshimima'"
-						@click="state.isShowPassword = !state.isShowPassword"
-					>
+						@click="state.isShowPassword = !state.isShowPassword">
 					</i>
 				</template>
 			</el-input>
 		</el-form-item>
-		<el-form-item class="login-animation2" prop="code" v-if="verifyEnable">
+		<!-- <el-form-item class="login-animation2" prop="code" v-if="verifyEnable">
 			<el-col :span="15">
-				<el-input text maxlength="4" :placeholder="$t('mobile.placeholder2')" v-model="state.ruleForm.code" clearable autocomplete="off">
+				<el-input text maxlength="4" :placeholder="$t('mobile.placeholder2')" v-model="state.ruleForm.code" clearable
+					autocomplete="off">
 					<template #prefix>
 						<el-icon class="el-input__icon">
 							<ele-Position />
@@ -45,20 +42,22 @@
 			<el-col :span="8">
 				<img :src="imgSrc" @click="getVerifyCode" />
 			</el-col>
-		</el-form-item>
-		<el-form-item class="login-animation2">
-			<el-tooltip class="item" effect="dark" :content="$t('password.passwordContent')" placement="right">
-				{{ $t('password.passwordUpdate') }}
-			</el-tooltip>
-		</el-form-item>
+		</el-form-item> -->
+
 
 		<el-form-item class="login-animation4">
-			<el-button type="primary" class="login-content-submit" :loading="loading" @click="onSignIn">
+			<el-button type="primary" class="login-content-submit" round :loading="loading" @click="onSignIn">
 				<span>{{ $t('password.accountBtnText') }}</span>
 			</el-button>
 		</el-form-item>
+		<div class="login-animation4 flex items-center justify-center">
+			<el-icon class="mr-2">
+				<WarningFilled />
+			</el-icon>
+			{{ $t('password.passwordContent') }}
+		</div>
 
-		<div class="font12 mt30 login-animation4 login-msg">{{ $t('browserMsgText') }}</div>
+		<!-- <div class="font12 mt30 login-animation4 login-msg">{{ $t('browserMsgText') }}</div> -->
 	</el-form>
 </template>
 
@@ -104,7 +103,7 @@ const getVerifyCode = () => {
 
 // 账号密码登录
 const onSignIn = async () => {
-	const valid = await loginFormRef.value.validate().catch(() => {}); // 表单校验
+	const valid = await loginFormRef.value.validate().catch(() => { }); // 表单校验
 	if (!valid) return false;
 
 	loading.value = true; // 正在登录中

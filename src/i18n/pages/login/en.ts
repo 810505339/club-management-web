@@ -1,7 +1,7 @@
 /*
  * @Author: yxx
  * @Date: 2023-08-29 09:12:52
- * @LastEditTime: 2023-09-04 21:01:12
+ * @LastEditTime: 2023-09-26 21:50:02
  * @LastEditors: yxx
  * @Description:
  * @FilePath: \club-management-web\src\i18n\pages\login\en.ts
@@ -18,7 +18,7 @@ export default {
 		two4: 'Links',
 	},
 	password: {
-		accountPlaceholder1: 'The username "admin" is common, please use another',
+		accountPlaceholder1: 'User ID',
 		accountPlaceholder2: 'Password',
 		accountPlaceholder3: 'Please enter the verification code',
 		phonePlaceholder4: 'Please enter your phone number',
@@ -39,7 +39,8 @@ export default {
 		text: 'Use your mobile device to scan and quickly log in or create an account',
 		wechatApp: 'Scan with WeChat app for quick access',
 	},
-	signInText: 'Welcome back!',
+	signInText: 'Welcome Back',
+	signInText1: 'Have A Nice Day at Work～',
 	tenant_guide: {
 		title: 'Please select a tenant by clicking here',
 		description: 'You only need to select a tenant once for future use',
