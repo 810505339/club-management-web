@@ -1,66 +1,77 @@
+<!--
+ * @Author: yxx
+ * @Date: 2023-09-24 11:50:21
+ * @LastEditTime: 2023-09-26 23:16:51
+ * @LastEditors: yxx
+ * @Description: 
+ * @FilePath: \club-management-web\src\views\finance\balance\form.vue
+-->
 <template>
-	<el-dialog v-model="visible" :close-on-click-modal="false" :title="form.jobId ? $t('common.editBtn') : $t('common.addBtn')" draggable>
+	<el-dialog v-model="visible" :close-on-click-modal="false"
+		:title="form.jobId ? $t('common.editBtn') : $t('common.addBtn')" draggable>
 		<el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="120px" v-loading="loading">
 			<el-row :gutter="20">
 				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('job.jobName')" prop="jobName">
-						<el-input v-model="form.jobName" :placeholder="t('job.inputjobNameTip')" />
+					<el-form-item :label="t('balance.balanceName')" prop="balanceName">
+						<el-input v-model="form.jobName" :placeholder="t('balance.inputbalanceNameTip')" />
 					</el-form-item>
 				</el-col>
 				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('job.jobGroup')" prop="jobGroup">
-						<el-input v-model="form.jobGroup" :placeholder="t('job.inputjobGroupTip')" />
+					<el-form-item :label="t('balance.balanceGroup')" prop="balanceGroup">
+						<el-input v-model="form.jobGroup" :placeholder="t('balance.inputbalanceGroupTip')" />
 					</el-form-item>
 				</el-col>
 
 				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('job.jobType')" prop="jobType">
-						<el-select v-model="form.jobType" :placeholder="t('job.jobType')">
-							<el-option v-for="(item, index) in job_type" :key="index" :label="item.label" :value="item.value"></el-option>
+					<el-form-item :label="t('balance.balanceType')" prop="jobType">
+						<el-select v-model="form.jobType" :placeholder="t('balance.balanceType')">
+							<el-option v-for="(item, index) in job_type" :key="index" :label="item.label"
+								:value="item.value"></el-option>
 						</el-select>
 					</el-form-item>
 				</el-col>
 
 				<el-col :span="12" class="mb20" v-if="['3', '4'].includes(form.jobType)">
-					<el-form-item :label="t('job.executePath')" prop="executePath">
-						<el-input v-model="form.executePath" :placeholder="t('job.inputexecutePathTip')" />
+					<el-form-item :label="t('balance.executePath')" prop="executePath">
+						<el-input v-model="form.executePath" :placeholder="t('balance.inputexecutePathTip')" />
 					</el-form-item>
 				</el-col>
 
 				<el-col :span="12" class="mb20" v-if="['1', '2'].includes(form.jobType)">
-					<el-form-item :label="t('job.className')" prop="className">
-						<el-input v-model="form.className" :placeholder="t('job.inputclassNameTip')" />
+					<el-form-item :label="t('balance.className')" prop="className">
+						<el-input v-model="form.className" :placeholder="t('balance.inputclassNameTip')" />
 					</el-form-item>
 				</el-col>
 
 				<el-col :span="12" class="mb20" v-if="['1', '2'].includes(form.jobType)">
-					<el-form-item :label="t('job.methodName')" prop="methodName">
-						<el-input v-model="form.methodName" :placeholder="t('job.inputmethodNameTip')" />
+					<el-form-item :label="t('balance.methodName')" prop="methodName">
+						<el-input v-model="form.methodName" :placeholder="t('balance.inputmethodNameTip')" />
 					</el-form-item>
 				</el-col>
 
 				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('job.methodParamsValue')" prop="methodParamsValue">
-						<el-input v-model="form.methodParamsValue" :placeholder="t('job.inputmethodParamsValueTip')" />
+					<el-form-item :label="t('balance.methodParamsValue')" prop="methodParamsValue">
+						<el-input v-model="form.methodParamsValue" :placeholder="t('balance.inputmethodParamsValueTip')" />
 					</el-form-item>
 				</el-col>
 
 				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('job.cronExpression')" prop="cronExpression">
+					<el-form-item :label="t('balance.cronExpression')" prop="cronExpression">
 						<crontab clearable @hide="popoverVis(false)" v-model="form.cronExpression"></crontab>
 					</el-form-item>
 				</el-col>
 
 				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('job.misfirePolicy')" prop="misfirePolicy">
-						<el-select v-model="form.misfirePolicy" :placeholder="t('job.inputmisfirePolicyTip')">
-							<el-option v-for="(item, index) in misfire_policy" :key="index" :label="item.label" :value="item.value"></el-option>
+					<el-form-item :label="t('balance.misfirePolicy')" prop="misfirePolicy">
+						<el-select v-model="form.misfirePolicy" :placeholder="t('balance.inputmisfirePolicyTip')">
+							<el-option v-for="(item, index) in misfire_policy" :key="index" :label="item.label"
+								:value="item.value"></el-option>
 						</el-select>
 					</el-form-item>
 				</el-col>
 				<el-col :span="24" class="mb20">
-					<el-form-item :label="t('job.remark')" prop="remark">
-						<el-input v-model="form.remark" :placeholder="t('job.inputremarkTip')" type="textarea" />
+					<el-form-item :label="t('balance.remark')" prop="remark">
+						<el-input v-model="form.remark" :placeholder="t('balance.inputremarkTip')" type="textarea" />
 					</el-form-item>
 				</el-col>
 			</el-row>
@@ -68,7 +79,8 @@
 		<template #footer>
 			<span class="dialog-footer">
 				<el-button formDialogRef @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
-				<el-button formDialogRef type="primary" @click="onSubmit" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
+				<el-button formDialogRef type="primary" @click="onSubmit" :disabled="loading">{{ $t('common.confirmButtonText')
+				}}</el-button>
 			</span>
 		</template>
 	</el-dialog>
@@ -147,7 +159,7 @@ const openDialog = (id: string) => {
 
 // 提交
 const onSubmit = async () => {
-	const valid = await dataFormRef.value.validate().catch(() => {});
+	const valid = await dataFormRef.value.validate().catch(() => { });
 	if (!valid) return false;
 
 	try {

@@ -1,6 +1,25 @@
+/*
+ * @Author: yxx
+ * @Date: 2023-09-24 11:50:20
+ * @LastEditTime: 2023-09-27 00:44:16
+ * @LastEditors: yxx
+ * @Description: 
+ * @FilePath: \club-management-web\src\views\finance\journal\i18n\zh-cn.ts
+ */
 export default {
-	job: {
+	journal: {
 		index: '#',
+		time: '收款日期',
+		type: '收款方式',
+		inputTypeTip: '请选择收款方式',
+		order: '订单ID',
+		inputOrderTip: '请输入订单ID',
+		shop: '门店',
+		userName: '用户姓名',
+		userPhone: '手机号',
+		amount: '金额',
+
+
 		importsysJobTip: '导入定时任务调度表',
 		jobId: '任务id',
 		jobName: '任务名称',

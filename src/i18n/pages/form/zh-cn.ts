@@ -22,6 +22,8 @@ export default {
 		confirmButtonText: '确认',
 		cancelButtonText: '取消',
 		download: '下载',
+		inputTimeTip1: '开始时间',
+		inputTimeTip2: '结束时间',
 	},
 	message: {
 		box: {

@@ -2,13 +2,9 @@
 	<div class="top-right-btn" :style="style">
 		<el-row>
 			<!-- 搜索框控制 -->
-			<el-tooltip
-				class="item"
-				effect="dark"
-				:content="showSearch ? $t('queryTree.hideSearch') : $t('queryTree.displayTheSearch')"
-				placement="top"
-				v-if="search"
-			>
+			<el-tooltip class="item" effect="dark"
+				:content="showSearch ? $t('queryTree.hideSearch') : $t('queryTree.displayTheSearch')" placement="top"
+				v-if="search">
 				<el-button circle icon="Search" @click="toggleSearch()" />
 			</el-tooltip>
 

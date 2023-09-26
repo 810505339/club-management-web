@@ -1,6 +1,19 @@
 export default {
-	job: {
+	journal: {
 		index: '#',
+		time: 'collectionDays',
+		type: 'paymentTerm',
+		inputTypeTip: 'select payment term',
+		order: 'orderID',
+		inputOrderTip: 'input orderID',
+		shop: 'shop',
+		userName: 'userName',
+		userPhone: 'userPhone',
+		amount: 'amount',
+
+
+
+
 		importsysJobTip: 'import SysJob',
 		jobId: 'jobId',
 		jobName: 'jobName',

@@ -1,36 +1,29 @@
 <!--
  * @Author: yxx
  * @Date: 2023-09-03 00:23:12
- * @LastEditTime: 2023-09-04 20:42:58
+ * @LastEditTime: 2023-09-26 21:42:57
  * @LastEditors: yxx
  * @Description: 
  * @FilePath: \club-management-web\src\views\login\index.vue
 -->
 <template>
 	<div class="select-none">
-		<img :src="bg" class="wave" />
+		<!-- <img :src="bg" class="wave" /> -->
 		<div class="flex-c absolute right-5 top-3"></div>
 		<div class="login-container">
 			<div class="img">
-				<img :src="illustration" />
+				<!-- <img :src="illustration" /> -->
 			</div>
 			<div class="login-box">
 				<div class="login-form">
-					<div class="login-title">{{ getThemeConfig.globalTitle }}</div>
-					<!-- <el-tabs v-model="tabsActiveName"> -->
-					<!-- 用户名密码登录 -->
-					<!-- <el-tab-pane :label="$t('label.one1')" name="account"> -->
+					<div class="flex justify-between items-center mb-[50px]">
+						<div class="login-title">{{ $t('password.accountBtnText') }}</div>
+						<div class="text-right text-[16px]">
+							{{ $t('signInText') }}<br />{{ $t('signInText1') }}
+						</div>
+					</div>
+
 					<Password @signInSuccess="signInSuccess" />
-					<!-- </el-tab-pane> -->
-					<!-- 手机号登录 -->
-					<!-- <el-tab-pane :label="$t('label.two2')" name="mobile">
-							<Mobile @signInSuccess="signInSuccess" />
-						</el-tab-pane> -->
-					<!-- 注册 -->
-					<!-- <el-tab-pane :label="$t('label.register')" name="register" v-if="registerEnable">
-							<Register @afterSuccess="tabsActiveName = 'account'" />
-						</el-tab-pane> -->
-					<!-- </el-tabs> -->
 				</div>
 			</div>
 		</div>

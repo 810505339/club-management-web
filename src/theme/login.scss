@@ -33,7 +33,7 @@
 		width: 100%;
 		letter-spacing: 2px;
 		font-weight: 300;
-		margin-top: 15px;
+		margin-top: 100px;
 	}
 
 	.login-msg {
@@ -47,6 +47,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-around;
+
 	.box {
 		cursor: pointer;
 	}
@@ -71,24 +72,29 @@
 		text-align: center;
 	}
 }
+
 .select-none {
 	user-select: none;
 }
+
 .tenant {
 	position: absolute;
 	top: 0.75rem;
 	right: 1.25rem;
 	z-index: 9;
 }
+
 .mini_qr {
 	position: fixed;
 	right: 2rem;
 	bottom: 1rem;
 	padding: 36px;
 	z-index: 1000;
+
 	img {
 		width: 120px;
 	}
+
 	p {
 		margin-top: 20px;
 		text-align: center;
@@ -96,6 +102,7 @@
 		font-size: 12px;
 	}
 }
+
 .wave {
 	position: fixed;
 	width: 100%;
@@ -104,6 +111,7 @@
 	bottom: 0;
 	z-index: 0;
 }
+
 .login-container {
 	width: 100vw;
 	height: 100vh;
@@ -111,6 +119,19 @@
 	grid-template-columns: repeat(2, 1fr);
 	grid-gap: 18rem;
 	padding: 0 2rem;
+	background-color: #000;
+
+	.el-input__wrapper {
+		border-radius: 20px;
+		background-color: rgba(0, 0, 0, 0.50);
+		;
+	}
+
+	.el-button {
+		height: 60px;
+		font-size: 24px;
+		border-radius: 30px;
+	}
 }
 
 .img {
@@ -127,9 +148,10 @@
 .login-title {
 	font-size: 20px;
 	font-weight: 500;
-	font-family: PingFang SC, Arial, Hiragino Sans GB, Microsoft YaHei, sans-serif;
-	margin-bottom: 32px;
+	font-size: 48px;
+	font-weight: bold;
 }
+
 .login-box {
 	display: flex;
 	align-items: center;
@@ -137,7 +159,11 @@
 }
 
 .login-form {
-	width: 400px;
+	width: 480px;
+	background: radial-gradient(rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.30) 47%, rgba(255, 255, 255, 0.00));
+	border-radius: 50px;
+	padding: 32px;
+	color: #fff;
 }
 
 .avatar {
@@ -156,8 +182,9 @@
 	.login-container {
 		grid-gap: 4rem;
 	}
+
 	.login-form {
-		width: 400px;
+		width: 480px;
 	}
 
 	.login-form h2 {

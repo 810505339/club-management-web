@@ -3,20 +3,12 @@
 		<div class="layout-padding-auto layout-padding-view">
 			<el-row class="ml10" v-show="showSearch">
 				<el-form :inline="true" :model="state.queryForm" ref="queryRef">
-					<el-form-item :label="$t('job.jobName')" prop="jobName">
-						<el-input :placeholder="$t('job.inputjobNameTip')" @keyup.enter="getDataList" clearable v-model="state.queryForm.jobName" />
+					<el-form-item :label="$t('balance.userName')" prop="jobName">
+						<el-input :placeholder="$t('balance.inputUserNameTip')" clearable v-model="state.queryForm.jobName" />
 					</el-form-item>
-					<el-form-item :label="t('job.jobStatus')" prop="jobStatus">
-						<el-select :placeholder="t('job.inputjobStatusTip')" v-model="state.queryForm.jobStatus">
-							<el-option :key="index" :label="item.label" :value="item.value" v-for="(item, index) in job_status"></el-option>
-						</el-select>
+					<el-form-item :label="t('balance.userPhone')" prop="jobStatus">
+						<el-input :placeholder="t('balance.inputUserPhoneTip')" v-model="state.queryForm.jobStatus" />
 					</el-form-item>
-					<el-form-item :label="t('job.jobExecuteStatus')" prop="jobExecuteStatus">
-						<el-select :placeholder="t('job.inputjobExecuteStatusTip')" v-model="state.queryForm.jobExecuteStatus">
-							<el-option :key="index" :label="item.label" :value="item.value" v-for="(item, index) in job_execute_status"></el-option>
-						</el-select>
-					</el-form-item>
-
 					<el-form-item>
 						<el-button @click="getDataList" icon="Search" type="primary">{{ $t('common.queryBtn') }} </el-button>
 						<el-button @click="resetQuery" icon="Refresh">{{ $t('common.resetBtn') }}</el-button>
@@ -24,89 +16,23 @@
 				</el-form>
 			</el-row>
 			<el-row>
-				<div class="mb8" style="width: 100%">
-					<el-button v-auth="'job_sys_job_add'" @click="formDialogRef.openDialog()" class="ml10" icon="folder-add" type="primary">
-						{{ $t('common.addBtn') }}
-					</el-button>
-					<el-button plain v-auth="'job_sys_job_del'" :disabled="multiple" @click="handleDelete(undefined)" class="ml10" icon="Delete" type="primary">
-						{{ $t('common.delBtn') }}
-					</el-button>
-					<right-toolbar
-						:export="'job_sys_job_add'"
-						@exportExcel="exportExcel"
-						@queryTable="getDataList"
-						class="ml10"
-						style="float: right; margin-right: 20px"
-						v-model:showSearch="showSearch"
-					/>
+				<div class="mb8 w-[100%]">
+					<right-toolbar @queryTable="getDataList" class="ml10" style="float: right; margin-right: 20px"
+						v-model:showSearch="showSearch" />
 				</div>
 			</el-row>
-			<el-table
-				:data="state.dataList"
-				@selection-change="handleSelectionChange"
-				style="width: 100%"
-				v-loading="state.loading"
-				border
-				:cell-style="tableStyle.cellStyle"
-				:header-cell-style="tableStyle.headerCellStyle"
-			>
-				<el-table-column align="center" type="selection" width="40" />
-				<el-table-column :label="t('job.index')" fixed="left" type="index" width="60" />
-				<el-table-column :label="t('job.jobName')" fixed="left" prop="jobName" show-overflow-tooltip width="120" />
-				<el-table-column :label="t('job.jobGroup')" prop="jobGroup" show-overflow-tooltip width="120" />
-				<el-table-column :label="t('job.jobStatus')" prop="jobStatus" show-overflow-tooltip width="120">
+			<el-table :data="state.dataList" class="w-[100%]" v-loading="state.loading" border
+				:cell-style="tableStyle.cellStyle" :header-cell-style="tableStyle.headerCellStyle">
+				<el-table-column :label="t('balance.index')" fixed="left" type="index" />
+				<el-table-column :label="t('balance.userName')" fixed="left" prop="jobName" show-overflow-tooltip />
+				<el-table-column :label="t('balance.userPhone')" prop="jobGroup" show-overflow-tooltip />
+
+				<el-table-column :label="t('balance.balance1')" prop="startTime" show-overflow-tooltip />
+				<el-table-column :label="t('balance.balance2')" prop="previousTime" show-overflow-tooltip />
+				<el-table-column :label="t('balance.balance3')" prop="nextTime" show-overflow-tooltip />
+				<el-table-column :label="$t('common.action')" fixed="right" width="120">
 					<template #default="scope">
-						<dict-tag :options="job_status" :value="scope.row.jobStatus"></dict-tag>
-					</template>
-				</el-table-column>
-				<el-table-column :label="t('job.jobExecuteStatus')" prop="jobExecuteStatus" show-overflow-tooltip width="120">
-					<template #default="scope">
-						<dict-tag :options="job_execute_status" :value="scope.row.jobExecuteStatus"></dict-tag>
-					</template>
-				</el-table-column>
-
-				<el-table-column :label="t('job.startTime')" prop="startTime" show-overflow-tooltip width="120" />
-
-				<el-table-column :label="t('job.previousTime')" prop="previousTime" show-overflow-tooltip width="120" />
-				<el-table-column :label="t('job.nextTime')" prop="nextTime" show-overflow-tooltip width="120" />
-				<el-table-column :label="t('job.jobType')" prop="jobType" show-overflow-tooltip width="120">
-					<template #default="scope">
-						<dict-tag :options="job_type" :value="scope.row.jobType"></dict-tag>
-					</template>
-				</el-table-column>
-				<el-table-column :label="t('job.executePath')" prop="executePath" show-overflow-tooltip width="120" />
-				<el-table-column :label="t('job.className')" prop="className" show-overflow-tooltip width="120" />
-				<el-table-column :label="t('job.methodName')" prop="methodName" show-overflow-tooltip width="120" />
-				<el-table-column :label="t('job.methodParamsValue')" prop="methodParamsValue" show-overflow-tooltip width="120" />
-				<el-table-column :label="t('job.cronExpression')" prop="cronExpression" show-overflow-tooltip width="120" />
-				<el-table-column :label="t('job.misfirePolicy')" prop="misfirePolicy" show-overflow-tooltip width="200">
-					<template #default="scope">
-						<dict-tag :options="misfire_policy" :value="scope.row.misfirePolicy"></dict-tag>
-					</template>
-				</el-table-column>
-
-				<el-table-column :label="$t('common.action')" fixed="right" width="300">
-					<template #default="scope">
-						<el-button @click="handleJobLog(scope.row)" text type="primary">日志</el-button>
-
-						<el-button v-auth="'job_sys_job_start_job'" @click="handleStartJob(scope.row)" text type="primary" v-if="scope.row.jobStatus !== '2'"
-							>启动
-						</el-button>
-
-						<el-button
-							v-auth="'job_sys_job_shutdown_job'"
-							@click="handleShutDownJob(scope.row)"
-							text
-							type="primary"
-							v-if="scope.row.jobStatus === '2'"
-							>暂停
-						</el-button>
-
-						<el-button v-auth="'job_sys_job_edit'" @click="handleEditJob(scope.row)" text type="primary">{{ $t('common.editBtn') }} </el-button>
-
-						<el-button v-auth="'job_sys_job_start_job'" @click="handleRunJob(scope.row)" text type="primary">执行</el-button>
-
-						<el-button v-auth="'job_sys_job_del'" @click="handleDelete(scope.row)" text type="primary">{{ $t('common.delBtn') }} </el-button>
+						<el-button @click="handleJobLog(scope.row)" text type="primary">收支明细</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -114,21 +40,22 @@
 		</div>
 
 		<!-- 编辑、新增  -->
-		<form-dialog @refresh="getDataList()" ref="formDialogRef" />
-		<job-log ref="jobLogRef"></job-log>
+
+		<Bill ref="billRef" />
 	</div>
 </template>
 
 <script lang="ts" name="systemSysJob" setup>
 import { BasicTableProps, useTable } from '/@/hooks/table';
+import { pageList, putObj } from '/@/api/admin/user';
+
 import { delObj, fetchList, runJobRa, shutDownJobRa, startJobRa } from '/@/api/daemon/job';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useDict } from '/@/hooks/dict';
 import { useI18n } from 'vue-i18n';
 
-// 引入组件
-const FormDialog = defineAsyncComponent(() => import('./form.vue'));
-const JobLog = defineAsyncComponent(() => import('./job-log.vue'));
+// 引入组件 
+const Bill = defineAsyncComponent(() => import('./bill.vue'));
 
 // 获取国际化方法
 const { t } = useI18n();
@@ -136,7 +63,7 @@ const { t } = useI18n();
 /** 表单弹窗引用 */
 const formDialogRef = ref();
 /** 作业日志引用 */
-const jobLogRef = ref();
+const billRef = ref();
 
 /** 搜索表单信息 */
 const queryForm = reactive({
@@ -160,7 +87,7 @@ const { job_status, job_execute_status, misfire_policy, job_type } = useDict('jo
 /** 表格状态变量 */
 const state = reactive<BasicTableProps>({
 	queryForm,
-	pageList: fetchList,
+	pageList: pageList,
 });
 
 /** 获取表格数据方法 */
@@ -185,7 +112,7 @@ const exportExcel = () => {
 
 /** 查看作业日志 */
 const handleJobLog = (row) => {
-	jobLogRef.value.openDialog(row.jobId);
+	billRef.value.openDialog(row.jobId);
 };
 
 /** 编辑作业 */
