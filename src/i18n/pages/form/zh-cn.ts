@@ -13,6 +13,7 @@ export default {
 		queryDeptTip: '请输入部门名称',
 		resetBtn: '重置',
 		action: '操作',
+		audit: '审核',
 		optSuccessText: '操作成功',
 		editSuccessText: '修改成功',
 		addSuccessText: '添加成功',
@@ -32,7 +33,11 @@ export default {
 		empty: '不能为空',
 		management: '管理系统',
 		text: '由 成都敲可爱科技有限公司 提供技术支持',
-		text1: '我们的媒体:'
+		text1: '我们的媒体:',
+		agree: '同意',
+		disagree: '不同意',
+		search: '搜索',
+		searchKey: '输入搜索'
 	},
 	message: {
 		box: {

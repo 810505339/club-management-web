@@ -1,7 +1,30 @@
 export default {
-	job: {
+	refund: {
 		index: '#',
-		importsysJobTip: '导入定时任务调度表',
+		type: '状态',
+		No: '退费单号',
+		userName: '用户姓名',
+		userName1: '退费用户',
+		userPhone: '用户手机号',
+		amount: '退费金额',
+		reason: '退费原因',
+		person: '申请人',
+		status: '状态',
+		reason1: '审核说明',
+		inputReasonTip: '请仔细填写"审核说明"描述清楚详细原因，以便后续追溯',
+		refund: '发起退费',
+
+
+
+
+
+
+
+
+
+
+
+		inputStatusTip: '导入定时任务调度表',
 		jobId: '任务id',
 		jobName: '任务名称',
 		jobGroup: '任务组名',

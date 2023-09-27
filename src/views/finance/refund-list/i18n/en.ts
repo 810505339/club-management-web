@@ -1,6 +1,22 @@
 export default {
-	job: {
+	refund: {
 		index: '#',
+		type: 'state',
+		No: 'refundNumber',
+		userName: 'userName',
+		userName1: 'accountPerson',
+		userPhone: 'userPhone',
+		amount: 'refundAmount',
+		reason: 'Reason',
+		person: 'Applicant',
+		status: 'Status',
+		reason1: 'Audit Description',
+		inputReasonTip: 'Please fill in the "Audit Description" carefully to describe the detailed reasons for follow-up',
+		refund: 'Initiate Refund',
+
+
+
+
 		importsysJobTip: 'import SysJob',
 		jobId: 'jobId',
 		jobName: 'jobName',

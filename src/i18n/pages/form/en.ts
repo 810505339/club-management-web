@@ -14,6 +14,7 @@ export default {
 		queryDeptTip: 'Enter department name',
 		resetBtn: 'Reset',
 		action: 'Action',
+		audit: 'Audit',
 		optSuccessText: 'Operation successful',
 		optConfirmText: 'Confirm this operation?',
 		editSuccessText: 'Successfully edited',
@@ -31,7 +32,12 @@ export default {
 		empty: ' cannot be empty',
 		management: 'Management System',
 		text: 'Powered by ChengDu Supercute Technology Co., Ltd',
-		text1: 'Our Social Media:'
+		text1: 'Our Social Media:',
+		agree: 'agree',
+		disagree: 'disagree',
+		search: 'Search',
+		searchKey: 'Please enter a keyword'
+
 
 	},
 	message: {
