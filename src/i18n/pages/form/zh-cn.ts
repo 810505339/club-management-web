@@ -29,7 +29,10 @@ export default {
 		please: '请输入',
 		select: '请选择',
 		index: '#',
-		empty: '不能为空'
+		empty: '不能为空',
+		management: '管理系统',
+		text: '由 成都敲可爱科技有限公司 提供技术支持',
+		text1: '我们的媒体:'
 	},
 	message: {
 		box: {

@@ -112,14 +112,19 @@
 	z-index: 0;
 }
 
+.login-main {
+	background: url(/@/assets/login/bg.png) no-repeat center/cover;
+
+}
+
 .login-container {
 	width: 100vw;
-	height: 100vh;
+	height: calc(100vh - 141px);
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
-	grid-gap: 18rem;
-	padding: 0 2rem;
-	background-color: #000;
+	grid-gap: 50px;
+	// padding: 0 2rem;
+	// background-color: #000;
 
 	.el-input__wrapper {
 		border-radius: 20px;
@@ -138,6 +143,7 @@
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
+
 }
 
 .img img {

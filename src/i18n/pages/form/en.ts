@@ -28,7 +28,10 @@ export default {
 		please: 'please input the',
 		select: 'please select the',
 		index: '#',
-		empty: ' cannot be empty'
+		empty: ' cannot be empty',
+		management: 'Management System',
+		text: 'Powered by ChengDu Supercute Technology Co., Ltd',
+		text1: 'Our Social Media:'
 
 	},
 	message: {

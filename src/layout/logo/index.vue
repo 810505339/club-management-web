@@ -1,6 +1,15 @@
+<!--
+ * @Author: yxx
+ * @Date: 2023-08-29 09:12:52
+ * @LastEditTime: 2023-09-27 21:37:42
+ * @LastEditors: yxx
+ * @Description: 
+ * @FilePath: \club-management-web\src\layout\logo\index.vue
+-->
 <template>
 	<div class="layout-logo" v-if="setShowLogo" @click="onThemeConfigChange">
-		<span>{{ themeConfig.globalTitle }}</span>
+		<!-- <span>{{ themeConfig.globalTitle }}</span> -->
+		<img :src="logo" class=" w-[180px]" />
 	</div>
 	<div class="layout-logo-size" v-else @click="onThemeConfigChange">
 		<img :src="logoMini" class="layout-logo-size-img" />
@@ -9,8 +18,8 @@
 
 <script setup lang="ts" name="layoutLogo">
 import { useThemeConfig } from '/@/stores/themeConfig';
-import logoMini from '/@/assets/logo-mini.svg';
-
+import logoMini from '/@/assets/images/logo2.png';
+import logo from '/@/assets/images/logo1.png';
 // 定义变量内容
 const storesThemeConfig = useThemeConfig();
 const { themeConfig } = storeToRefs(storesThemeConfig);
@@ -39,6 +48,7 @@ const onThemeConfigChange = () => {
 	font-size: 16px;
 	cursor: pointer;
 	animation: logoAnimation 0.3s ease-in-out;
+
 	span {
 		white-space: nowrap;
 		display: inline-block;
@@ -46,22 +56,26 @@ const onThemeConfigChange = () => {
 		font-weight: 700;
 		white-space: nowrap;
 	}
+
 	&:hover {
 		span {
 			color: var(--color-primary-light-2);
 		}
 	}
 }
+
 .layout-logo-size {
 	width: 100%;
 	height: 50px;
 	display: flex;
 	cursor: pointer;
 	animation: logoAnimation 0.3s ease-in-out;
+
 	&-img {
 		width: 20px;
 		margin: auto;
 	}
+
 	&:hover {
 		img {
 			animation: logoAnimation 0.3s ease-in-out;

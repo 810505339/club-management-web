@@ -1,3 +1,11 @@
+/*
+ * @Author: yxx
+ * @Date: 2023-08-29 09:12:52
+ * @LastEditTime: 2023-09-27 20:30:08
+ * @LastEditors: yxx
+ * @Description: 
+ * @FilePath: \club-management-web\src\utils\commonFunction.ts
+ */
 // 通用函数
 import useClipboard from 'vue-clipboard3';
 import { ElMessage } from 'element-plus';
@@ -54,6 +62,14 @@ export default function () {
 			}
 		});
 	};
+	/**
+ * 由于vite不支持require引入图片，使用原生方式引入
+ * @param name:图片路径
+ * @returns
+ */
+	const getImageUrl = (name: string) => {
+		return new URL(`../assets/images/${name}.png`, import.meta.url).href
+	}
 	return {
 		percentFormat,
 		dateFormatYMD,
@@ -62,5 +78,6 @@ export default function () {
 		scaleFormat,
 		scale2Format,
 		copyText,
+		getImageUrl
 	};
 }

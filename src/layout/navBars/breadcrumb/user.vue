@@ -2,11 +2,12 @@
 	<div class="layout-navbars-breadcrumb-user pr15" :style="{ flex: layoutUserFlexNum }">
 		<el-dropdown :show-timeout="70" :hide-timeout="50" trigger="click" @command="onLanguageChange">
 			<div class="layout-navbars-breadcrumb-user-icon">
-				<i class="iconfont" :class="state.disabledI18n === 'en' ? 'icon-fuhao-yingwen' : 'icon-fuhao-zhongwen'" :title="$t('user.title1')"></i>
+				<i class="iconfont" :class="state.disabledI18n === 'en' ? 'icon-fuhao-yingwen' : 'icon-fuhao-zhongwen'"
+					:title="$t('user.title1')"></i>
 			</div>
 			<template #dropdown>
 				<el-dropdown-menu>
-					<el-dropdown-item command="zh-cn" :disabled="state.disabledI18n === 'zh-cn'">简体中文</el-dropdown-item>
+					<el-dropdown-item command="zh-cn" :disabled="state.disabledI18n === 'zh-cn'">中文</el-dropdown-item>
 					<el-dropdown-item command="en" :disabled="state.disabledI18n === 'en'">English</el-dropdown-item>
 				</el-dropdown-menu>
 			</template>
@@ -39,11 +40,8 @@
 			</el-popover>
 		</div>
 		<div class="layout-navbars-breadcrumb-user-icon mr10" @click="onScreenfullClick">
-			<i
-				class="iconfont"
-				:title="state.isScreenfull ? $t('user.title6') : $t('user.title5')"
-				:class="!state.isScreenfull ? 'icon-fullscreen' : 'icon-tuichuquanping'"
-			></i>
+			<i class="iconfont" :title="state.isScreenfull ? $t('user.title6') : $t('user.title5')"
+				:class="!state.isScreenfull ? 'icon-fullscreen' : 'icon-tuichuquanping'"></i>
 		</div>
 		<el-dropdown :show-timeout="70" :hide-timeout="50" @command="onHandleCommandClick">
 			<span class="layout-navbars-breadcrumb-user-link">
@@ -172,7 +170,7 @@ const onHandleCommandClick = (path: string) => {
 				// 使用 reload 时，不需要调用 resetRoute() 重置路由
 				window.location.reload();
 			})
-			.catch(() => {});
+			.catch(() => { });
 	} else if (path === 'personal') {
 		// 打开个人页面
 		personalDrawerRef.value.open();
