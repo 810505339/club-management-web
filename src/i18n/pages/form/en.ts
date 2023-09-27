@@ -26,7 +26,9 @@ export default {
 		upload: 'upload',
 		fileUpload: 'files with a size less than',
 		please: 'please input the',
-		select: 'please select the'
+		select: 'please select the',
+		index: '#',
+		empty: ' cannot be empty'
 
 	},
 	message: {

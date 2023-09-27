@@ -27,8 +27,9 @@ export default {
 		upload: '上传',
 		fileUpload: '文件应该小于',
 		please: '请输入',
-		select: '请选择'
-
+		select: '请选择',
+		index: '#',
+		empty: '不能为空'
 	},
 	message: {
 		box: {

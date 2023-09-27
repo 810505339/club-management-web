@@ -22,7 +22,7 @@
       </el-form-item>
 
       <el-form-item :label="t('area.time')" prop="clientSecret">
-        <el-input type="textarea" :placeholder="`${t('common.select')}${t('area.time')}`" v-model="form.clientSecret" />
+        <el-input type="textarea" :placeholder="`${t('common.select')}${t('area.store')}`" v-model="form.clientSecret" />
       </el-form-item>
 
 

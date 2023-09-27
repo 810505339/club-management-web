@@ -2,17 +2,17 @@
   <el-dialog :close-on-click-modal="false" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" width="600"
     draggable v-model="visible">
     <el-form :model="form" :rules="dataRules" formDialogRef label-width="120px" ref="dataFormRef" v-loading="loading">
-      <el-form-item :label="t('shopList.name')" prop="clientId">
+      <el-form-item :label="t('shopList.name')" prop="name">
         <el-input :placeholder="`${t('shopList.please')}${t('shopList.name')}`" v-model="form.clientId" />
       </el-form-item>
-      <el-form-item :label="t('shopList.introduce')" prop="clientSecret">
+      <el-form-item :label="t('shopList.introduce')" prop="introduce">
         <el-input type="textarea" :placeholder="`${t('shopList.please')}${t('shopList.introduce')}`"
           v-model="form.clientSecret" />
       </el-form-item>
-      <el-form-item :label="t('shopList.address')" prop="scope">
+      <el-form-item :label="t('shopList.address')" prop="address">
         <el-input type="textarea" :placeholder="`${t('shopList.please')}${t('shopList.address')}`" v-model="form.scope" />
       </el-form-item>
-      <el-form-item :label="t('shopList.image')" prop="authorizedGrantTypes">
+      <el-form-item :label="t('shopList.image')" prop="image">
         <el-upload v-model:file-list="fileList" class="w-full"
           action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" list-type="picture">
           <el-button type="primary" icon="upload">{{ t('common.upload') }}</el-button>
@@ -104,32 +104,20 @@ const form = reactive({
 
 // 定义校验规则
 const dataRules = ref({
-  clientId: [
-    { required: true, message: '编号不能为空', trigger: 'blur' },
+  name: [
+    { required: true, message: `${t('shopList.name')}${t('common.empty')}`, trigger: 'blur' },
     { validator: rule.validatorLowercase, trigger: 'blur' },
-    {
-      validator: (rule: any, value: any, callback: any) => {
-        validateclientId(rule, value, callback, form.id !== '');
-      },
-      trigger: 'blur',
-    },
   ],
-  clientSecret: [
-    { required: true, message: '密钥不能为空', trigger: 'blur' },
-    { validator: rule.validatorLower, trigger: 'blur' },
+  introduce: [
+    { validator: rule.validatorLowercase, trigger: 'blur' },
   ],
-  scope: [{ required: true, message: '域不能为空', trigger: 'blur' }],
-  authorizedGrantTypes: [{ required: true, message: '授权模式不能为空', trigger: 'blur' }],
-  accessTokenValidity: [
-    { required: true, message: '令牌时效不能为空', trigger: 'blur' },
-    { type: 'number', min: 1, message: '令牌时效不能小于一小时', trigger: 'blur' },
+  address: [
+    { required: true, message: `${t('shopList.address')}${t('common.empty')}`, trigger: 'blur' },
+    { validator: rule.validatorLowercase, trigger: 'blur' },
   ],
-  refreshTokenValidity: [
-    { required: true, message: '刷新时效不能为空', trigger: 'blur' },
-    { type: 'number', min: 1, message: '刷新时效不能小于两小时', trigger: 'blur' },
-  ],
-  autoapprove: [{ required: true, message: '自动放行不能为空', trigger: 'blur' }],
-  webServerRedirectUri: [{ required: true, message: '回调地址不能为空', trigger: 'blur' }],
+  image: [],
+  video: []
+
 });
 
 // 打开弹窗
