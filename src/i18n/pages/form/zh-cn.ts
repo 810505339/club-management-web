@@ -24,10 +24,16 @@ export default {
 		download: '下载',
 		inputTimeTip1: '开始时间',
 		inputTimeTip2: '结束时间',
+		upload: '上传',
+		fileUpload: '文件应该小于',
+		please: '请输入',
+		select: '请选择'
+
 	},
 	message: {
 		box: {
 			title: '系统提示',
+			warning: '警告'
 		},
 	},
 };

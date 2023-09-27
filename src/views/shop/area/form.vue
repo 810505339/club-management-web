@@ -1,76 +1,73 @@
 <template>
   <el-dialog :close-on-click-modal="false" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" width="600"
-             draggable v-model="visible">
+    draggable v-model="visible">
     <el-form :model="form" :rules="dataRules" formDialogRef label-width="120px" ref="dataFormRef" v-loading="loading">
-      <el-form-item :label="t('client.clientId')" prop="clientId">
-        <el-input :placeholder="t('client.inputClientIdTip')" v-model="form.clientId"/>
+      <el-form-item :label="t('area.name')" prop="clientId">
+        <el-input :placeholder="`${t('area.please')}${t('area.name')}`" v-model="form.clientId" />
       </el-form-item>
-      <el-form-item :label="t('client.clientSecret')" prop="clientSecret">
-        <el-input :placeholder="t('client.inputClientSecretTip')" v-model="form.clientSecret"/>
-      </el-form-item>
-      <el-form-item :label="t('client.scope')" prop="scope">
-        <el-input :placeholder="t('client.inputScopeTip')" v-model="form.scope"/>
-      </el-form-item>
-      <el-form-item :label="t('client.authorizedGrantTypes')" prop="authorizedGrantTypes">
-        <el-select collapse-tags collapse-tags-tooltip multiple v-model="form.authorizedGrantTypes">
-          <el-option :key="index" :label="item.label" :value="item.value"
-                     v-for="(item, index) in grant_types"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item :label="t('client.accessTokenValidity')" prop="accessTokenValidity">
-        <el-input-number :placeholder="t('client.inputAccessTokenValidityTip')" v-model="form.accessTokenValidity"/>
-      </el-form-item>
-      <el-form-item :label="t('client.refreshTokenValidity')" prop="refreshTokenValidity">
-        <el-input-number :placeholder="t('client.inputRefreshTokenValidityTip')" v-model="form.refreshTokenValidity"/>
-      </el-form-item>
-      <el-form-item :label="t('client.autoapprove')" prop="autoapprove" v-if="form.authorizedGrantTypes.includes('authorization_code')">
-        <el-radio-group v-model="form.autoapprove">
-          <el-radio :key="index" :label="item.value" border v-for="(item, index) in common_status">{{
-              item.label
-            }}
-          </el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item :label="t('client.authorities')" prop="authorities"
-                    v-if="form.authorizedGrantTypes.includes('authorization_code')">
-        <el-input :placeholder="t('client.inputAuthoritiesTip')" v-model="form.authorities"/>
+      <el-form-item :label="t('area.store')" prop="clientSecret">
+        <el-input type="textarea" :placeholder="`${t('area.please')}${t('area.store')}`" v-model="form.clientSecret" />
       </el-form-item>
 
-      <el-form-item :label="t('client.webServerRedirectUri')" prop="webServerRedirectUri"
-                    v-if="form.authorizedGrantTypes.includes('authorization_code')">
-        <el-input :placeholder="t('client.inputWebServerRedirectUriTip')" v-model="form.webServerRedirectUri"/>
+      <el-form-item :label="t('area.image')" prop="authorizedGrantTypes">
+        <el-upload v-model:file-list="fileList" class="w-full"
+          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" list-type="picture">
+          <el-button type="primary" icon="upload">{{ t('common.upload') }}</el-button>
+          <template #tip>
+            <div class="el-upload__tip">
+              JPG/PNG/JPEG{{ $t('common.fileUpload') }}1MB
+            </div>
+          </template>
+        </el-upload>
       </el-form-item>
+
+      <el-form-item :label="t('area.time')" prop="clientSecret">
+        <el-input type="textarea" :placeholder="`${t('common.select')}${t('area.time')}`" v-model="form.clientSecret" />
+      </el-form-item>
+
+
     </el-form>
     <template #footer>
-			<span class="dialog-footer">
-				<el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
-				<el-button @click="onSubmit" type="primary" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
-			</span>
+      <span class="dialog-footer">
+        <el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
+        <el-button @click="onSubmit" type="primary" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
+      </span>
     </template>
   </el-dialog>
 </template>
 
 <script lang="ts" name="SysOauthClientDetailsDialog" setup>
-import {useDict} from '/@/hooks/dict';
-import {useMessage} from '/@/hooks/message';
-import {addObj, getObj, putObj, validateclientId} from '/@/api/admin/client';
-import {useI18n} from 'vue-i18n';
-import {rule} from '/@/utils/validate';
+import { useDict } from '/@/hooks/dict';
+import { useMessage } from '/@/hooks/message';
+import { addObj, getObj, putObj, validateclientId } from '/@/api/admin/client';
+import { useI18n } from 'vue-i18n';
+import { rule } from '/@/utils/validate';
+import { UploadUserFile } from 'element-plus';
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
 
-const {t} = useI18n();
+const { t } = useI18n();
 
 // 定义变量内容
 const dataFormRef = ref();
 const visible = ref(false);
 const loading = ref(false);
+const fileList = ref<UploadUserFile[]>([
+  {
+    name: 'food.jpeg',
+    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+  },
+  {
+    name: 'food2.jpeg',
+    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+  },
+])
 
 // 定义字典
-const {grant_types, common_status} = useDict(
-    'grant_types',
-    'common_status',
+const { grant_types, common_status } = useDict(
+  'grant_types',
+  'common_status',
 );
 
 // 提交表单数据
@@ -78,7 +75,7 @@ const form = reactive({
   id: '',
   clientId: '',
   clientSecret: '',
-  scope: 'server',
+  scope: '',
   authorizedGrantTypes: [] as string[],
   webServerRedirectUri: '',
   authorities: '',
@@ -99,8 +96,8 @@ const form = reactive({
 // 定义校验规则
 const dataRules = ref({
   clientId: [
-    {required: true, message: '编号不能为空', trigger: 'blur'},
-    {validator: rule.validatorLowercase, trigger: 'blur'},
+    { required: true, message: '编号不能为空', trigger: 'blur' },
+    { validator: rule.validatorLowercase, trigger: 'blur' },
     {
       validator: (rule: any, value: any, callback: any) => {
         validateclientId(rule, value, callback, form.id !== '');
@@ -109,21 +106,21 @@ const dataRules = ref({
     },
   ],
   clientSecret: [
-    {required: true, message: '密钥不能为空', trigger: 'blur'},
-    {validator: rule.validatorLower, trigger: 'blur'},
+    { required: true, message: '密钥不能为空', trigger: 'blur' },
+    { validator: rule.validatorLower, trigger: 'blur' },
   ],
-  scope: [{required: true, message: '域不能为空', trigger: 'blur'}],
-  authorizedGrantTypes: [{required: true, message: '授权模式不能为空', trigger: 'blur'}],
+  scope: [{ required: true, message: '域不能为空', trigger: 'blur' }],
+  authorizedGrantTypes: [{ required: true, message: '授权模式不能为空', trigger: 'blur' }],
   accessTokenValidity: [
-    {required: true, message: '令牌时效不能为空', trigger: 'blur'},
-    {type: 'number', min: 1, message: '令牌时效不能小于一小时', trigger: 'blur'},
+    { required: true, message: '令牌时效不能为空', trigger: 'blur' },
+    { type: 'number', min: 1, message: '令牌时效不能小于一小时', trigger: 'blur' },
   ],
   refreshTokenValidity: [
-    {required: true, message: '刷新时效不能为空', trigger: 'blur'},
-    {type: 'number', min: 1, message: '刷新时效不能小于两小时', trigger: 'blur'},
+    { required: true, message: '刷新时效不能为空', trigger: 'blur' },
+    { type: 'number', min: 1, message: '刷新时效不能小于两小时', trigger: 'blur' },
   ],
-  autoapprove: [{required: true, message: '自动放行不能为空', trigger: 'blur'}],
-  webServerRedirectUri: [{required: true, message: '回调地址不能为空', trigger: 'blur'}],
+  autoapprove: [{ required: true, message: '自动放行不能为空', trigger: 'blur' }],
+  webServerRedirectUri: [{ required: true, message: '回调地址不能为空', trigger: 'blur' }],
 });
 
 // 打开弹窗

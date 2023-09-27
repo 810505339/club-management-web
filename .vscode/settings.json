@@ -100,5 +100,8 @@
 		"src/views/pay/record/i18n",
 		"src/views/pay/refund/i18n",
 		"src/views/pay/trade/i18n"
-	]
+	],
+	"editor.quickSuggestions": {
+		"strings": true
+	}
 }

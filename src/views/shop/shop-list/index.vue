@@ -5,15 +5,15 @@
 				<div class="layout-padding-auto layout-padding-view">
 					<el-row v-show="showSearch">
 						<el-form ref="queryRef" :inline="true" :model="state.queryForm" @keyup.enter="getDataList">
-							<el-form-item :label="$t('shopList.username')" prop="username">
-								<el-select v-model="state.queryForm.lockFlag" :placeholder="$t('shopList.inputLockFlag')">
+							<el-form-item :label="$t('shopList.name')" prop="name">
+								<el-select v-model="state.queryForm.lockFlag" :placeholder="$t('shopList.nameSelect')">
 									<el-option v-for="item in lock_flag" :key="item.id" :label="item.label" :value="item.value" clearable>
 									</el-option>
 								</el-select>
 							</el-form-item>
 
-							<el-form-item :label="$t('shopList.lockFlag')" prop="lockFlag">
-								<el-select v-model="state.queryForm.lockFlag" :placeholder="$t('shopList.inputLockFlag')">
+							<el-form-item :label="$t('shopList.state')" prop="lockFlag">
+								<el-select v-model="state.queryForm.lockFlag" :placeholder="$t('shopList.stateSelect')">
 									<el-option v-for="item in lock_flag" :key="item.id" :label="item.label" :value="item.value" clearable>
 									</el-option>
 								</el-select>
@@ -32,7 +32,7 @@
 
 
 							<right-toolbar v-model:showSearch="showSearch" :export="'sys_user_export'" @exportExcel="exportExcel"
-								@queryTable="getDataList" class="ml10 mr20" style="float: right" />
+								@queryTable="getDataList" class="ml10 mr20 " style="float: right" />
 						</div>
 					</el-row>
 					<el-table v-loading="state.loading" :data="state.dataList" @selection-change="handleSelectionChange" border
@@ -40,7 +40,7 @@
 						<el-table-column :label="$t('shopList.index')" type="index" width="60" fixed="left" />
 						<el-table-column :label="$t('shopList.id')" type="id" width="100" fixed="left" />
 						<el-table-column :label="$t('shopList.name')" type="id" width="100" fixed="left" />
-						<el-table-column :label="$t('shopList.address')" type="id" width="100" fixed="left" />
+						<el-table-column :label="$t('shopList.address')" type="id" fixed="left" />
 						<el-table-column :label="$t('shopList.image')" type="id" width="100" fixed="left" />
 						<el-table-column :label="$t('shopList.video')" type="id" width="100" fixed="left" />
 						<el-table-column :label="$t('shopList.state')" type="id" width="100" fixed="left" />
@@ -53,6 +53,13 @@
 								<el-button v-auth="'sys_user_edit'" icon="edit-pen" text type="primary"
 									@click="userDialogRef.openDialog(scope.row.userId)">
 									{{ $t('common.editBtn') }}
+								</el-button>
+
+								<el-button icon="edit-pen" text type="primary">
+									{{ $t('shopList.shelves') }}
+								</el-button>
+								<el-button icon="edit-pen" text type="primary" @click="handleTakedown">
+									{{ $t('shopList.takedown') }}
 								</el-button>
 								<el-tooltip :content="$t('shopList.deleteDisabledTip')" :disabled="scope.row.userId !== '1'"
 									placement="top">
@@ -71,7 +78,7 @@
 			</pane>
 		</splitpanes>
 
-		<user-form ref="userDialogRef" :gender="gender" :lock_flag="lock_flag" @refresh="getDataList(false)" />
+		<user-form ref="userDialogRef" :lock_flag="lock_flag" @refresh="getDataList(false)" />
 
 		<upload-excel ref="excelUploadRef" :title="$t('shopList.importUserTip')"
 			temp-url="/admin/sys-file/local/file/user.xlsx" url="/admin/user/import" @refreshDataList="getDataList" />
@@ -79,8 +86,8 @@
 </template>
 
 <script lang="ts" name="systemUser" setup>
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { delObj, pageList, putObj } from '/@/api/admin/user';
-import { deptTree } from '/@/api/admin/dept';
 import { list } from '/@/api/admin/role';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { useMessage, useMessageBox } from '/@/hooks/message';
@@ -88,52 +95,27 @@ import { useI18n } from 'vue-i18n';
 import { useDict } from '/@/hooks/dict';
 // 动态引入组件
 const UserForm = defineAsyncComponent(() => import('./form.vue'));
-const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'));
-
 const { t } = useI18n();
 const { lock_flag } = useDict('lock_flag');
-const gender = ref([
-	{
-		value: 1,
-		label: '男',
-	},
-	{
-		value: 2,
-		label: '女',
-	},
-]);
 // 定义变量内容
 const userDialogRef = ref();
 const excelUploadRef = ref();
 const queryRef = ref();
 const showSearch = ref(true);
 const optionsRoles = ref([]) as any;
-// 多选rows
-const selectObjs = ref([]) as any;
-// 是否可以多选
-const multiple = ref(true);
+
 
 // 定义表格查询、后台调用的API
 const state: BasicTableProps = reactive<BasicTableProps>({
 	queryForm: {
-		deptId: '',
-		username: '',
-		phone: '',
-		role: '',
-		lockFlag: '',
+		state: '',
+		name: '',
 	},
 	pageList: pageList,
 });
 const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
-// 部门树使用的数据
-const deptData = reactive({
-	queryList: (name: String) => {
-		return deptTree({
-			deptName: name,
-		});
-	},
-});
+
 list().then((res) => {
 	optionsRoles.value = res.data;
 });
@@ -144,27 +126,15 @@ const resetQuery = () => {
 	getDataList();
 };
 
-// 点击树
-const handleNodeClick = (e: any) => {
-	state.queryForm.deptId = e.id;
-	getDataList();
-};
+
 
 // 导出excel
 const exportExcel = () => {
 	downBlobFile('/admin/user/export', state.queryForm, 'users.xlsx');
 };
 
-// 是否可以多选
-const handleSelectable = (row: any) => {
-	return row.username !== 'admin';
-};
 
-// 多选事件
-const handleSelectionChange = (objs: { userId: string }[]) => {
-	selectObjs.value = objs.map(({ userId }) => userId);
-	multiple.value = !objs.length;
-};
+
 
 // 删除操作
 const handleDelete = async (ids: string[]) => {
@@ -183,12 +153,8 @@ const handleDelete = async (ids: string[]) => {
 	}
 };
 
-//表格内开关 (用户状态)
-const changeSwitch = async (row: object) => {
-	row.role = row.roleList.map((d) => d.roleId);
-	row.post = row.postList.map((d) => d.postId);
-	await putObj(row);
-	useMessage().success(t('common.optSuccessText'));
-	getDataList();
-};
+//点击下架
+const handleTakedown = async () => {
+	await useMessageBox().confirm(t('shopList.sureTakedown'),)
+}
 </script>

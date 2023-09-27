@@ -23,10 +23,16 @@ export default {
 		confirmButtonText: 'Confirm',
 		cancelButtonText: 'Cancel',
 		download: 'Download',
+		upload: 'upload',
+		fileUpload: 'files with a size less than',
+		please: 'please input the',
+		select: 'please select the'
+
 	},
 	message: {
 		box: {
 			title: 'System prompt',
+			warning: 'warning'
 		},
 	},
 };
