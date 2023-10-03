@@ -14,6 +14,7 @@ export default {
 		resetBtn: '重置',
 		action: '操作',
 		audit: '审核',
+		dispose: '处理',
 		optSuccessText: '操作成功',
 		editSuccessText: '修改成功',
 		addSuccessText: '添加成功',

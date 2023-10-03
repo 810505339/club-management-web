@@ -1,6 +1,25 @@
+/*
+ * @Author: yxx
+ * @Date: 2023-09-24 11:45:01
+ * @LastEditTime: 2023-10-03 11:15:06
+ * @LastEditors: yxx
+ * @Description: 
+ * @FilePath: \club-management-web\src\views\operating\evaluation\i18n\en.ts
+ */
 export default {
-	job: {
+	evaluation: {
 		index: '#',
+		ID: 'boardID',
+		model: 'boardModel',
+		time: 'boardTime',
+		initiator: 'initiator',
+		appraiser: 'appraiser',
+		msg: 'evaluationContent',
+
+
+
+
+
 		importsysJobTip: 'import SysJob',
 		jobId: 'jobId',
 		jobName: 'jobName',

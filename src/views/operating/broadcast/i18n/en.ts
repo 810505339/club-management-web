@@ -1,6 +1,10 @@
 export default {
-	job: {
+	broadcast: {
 		index: '#',
+		type: 'type',
+
+
+
 		importsysJobTip: 'import SysJob',
 		jobId: 'jobId',
 		jobName: 'jobName',

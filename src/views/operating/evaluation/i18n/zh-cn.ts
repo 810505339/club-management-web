@@ -1,6 +1,18 @@
 export default {
-	job: {
+	evaluation: {
 		index: '#',
+		ID: '酒局ID',
+		model: '酒局模式',
+		time: '酒局时间',
+		initiator: '发起人',
+		appraiser: '评价人',
+		msg: '评价内容',
+
+
+
+
+
+
 		importsysJobTip: '导入定时任务调度表',
 		jobId: '任务id',
 		jobName: '任务名称',

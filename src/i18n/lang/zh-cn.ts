@@ -2,7 +2,7 @@
 export default {
 	router: {
 		home: '首页',
-		client:'客户管理',
+		client: '客户管理',
 		system: '系统设置',
 		systemMenu: '菜单管理',
 		systemRole: '角色管理',
@@ -67,7 +67,7 @@ export default {
 		layoutLinkView: '外链',
 		layoutIframeViewOne: '内嵌 iframe1',
 		layoutIframeViewTwo: '内嵌 iframe2',
-		clientmanager:'客户管理'
+		clientmanager: '客户管理'
 	},
 	staticRoutes: {
 		login: '登录',
@@ -117,7 +117,7 @@ export default {
 	},
 	noAccess: {
 		accessTitle: '您未被授权，没有操作权限~',
-		accessMsg: '联系方式：加QQ群探讨 665452019',
+		accessMsg: '联系方式我',
 		accessBtn: '重新授权',
 	},
 	layout: {

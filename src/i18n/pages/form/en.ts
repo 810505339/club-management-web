@@ -1,3 +1,11 @@
+/*
+ * @Author: yxx
+ * @Date: 2023-09-27 20:06:01
+ * @LastEditTime: 2023-10-03 10:42:26
+ * @LastEditors: yxx
+ * @Description: 
+ * @FilePath: \club-management-web\src\i18n\pages\form\en.ts
+ */
 // Improved versions of each word or sentence
 export default {
 	common: {
@@ -15,6 +23,7 @@ export default {
 		resetBtn: 'Reset',
 		action: 'Action',
 		audit: 'Audit',
+		dispose: 'Dispose',
 		optSuccessText: 'Operation successful',
 		optConfirmText: 'Confirm this operation?',
 		editSuccessText: 'Successfully edited',

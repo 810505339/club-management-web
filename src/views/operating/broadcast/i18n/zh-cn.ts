@@ -1,6 +1,8 @@
 export default {
-	job: {
+	broadcast: {
 		index: '#',
+		type: '上屏类型',
+
 		importsysJobTip: '导入定时任务调度表',
 		jobId: '任务id',
 		jobName: '任务名称',
