@@ -38,7 +38,10 @@ export default {
 		agree: '同意',
 		disagree: '不同意',
 		search: '搜索',
-		searchKey: '输入搜索'
+		searchKey: '输入搜索',
+		shelves: '上架',
+		takedown: '下架',
+		edit: '编辑'
 	},
 	message: {
 		box: {

@@ -45,7 +45,10 @@ export default {
 		agree: 'agree',
 		disagree: 'disagree',
 		search: 'Search',
-		searchKey: 'Please enter a keyword'
+		searchKey: 'Please enter a keyword',
+		shelves: 'shelves',
+		takedown: 'takedown',
+		edit: 'edit'
 
 
 	},
