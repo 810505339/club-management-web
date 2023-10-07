@@ -12,19 +12,19 @@
 				</el-dropdown-menu>
 			</template>
 		</el-dropdown>
-		<div class="layout-navbars-breadcrumb-user-icon" @click="onLockClick">
+		<!-- <div class="layout-navbars-breadcrumb-user-icon" @click="onLockClick">
 			<el-icon :title="$t('layout.threeLockScreenTime')">
 				<ele-Lock />
 			</el-icon>
-		</div>
+		</div> -->
 		<div class="layout-navbars-breadcrumb-user-icon" @click="onSearchClick">
 			<el-icon :title="$t('user.title2')">
 				<ele-Search />
 			</el-icon>
 		</div>
-		<div class="layout-navbars-breadcrumb-user-icon" @click="onLayoutSetingClick">
+		<!-- <div class="layout-navbars-breadcrumb-user-icon" @click="onLayoutSetingClick">
 			<i class="icon-skin iconfont" :title="$t('user.title3')"></i>
-		</div>
+		</div> -->
 		<div class="layout-navbars-breadcrumb-user-icon">
 			<el-popover placement="bottom" trigger="click" transition="el-zoom-in-top" :width="300" :persistent="false">
 				<template #reference>

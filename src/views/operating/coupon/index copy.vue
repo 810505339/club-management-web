@@ -3,17 +3,21 @@
 		<div class="layout-padding-auto layout-padding-view">
 			<el-row class="ml10" v-show="showSearch">
 				<el-form :inline="true" :model="state.queryForm" ref="queryRef">
-					<el-form-item :label="$t('job.jobName')" prop="jobName">
-						<el-input :placeholder="$t('job.inputjobNameTip')" @keyup.enter="getDataList" clearable v-model="state.queryForm.jobName" />
+					<el-form-item :label="$t('coupon.couponName')" prop="jobName">
+						<el-input :placeholder="$t('common.please') + $t('coupon.couponName')" @keyup.enter="getDataList" clearable
+							v-model="state.queryForm.jobName" />
 					</el-form-item>
-					<el-form-item :label="t('job.jobStatus')" prop="jobStatus">
-						<el-select :placeholder="t('job.inputjobStatusTip')" v-model="state.queryForm.jobStatus">
-							<el-option :key="index" :label="item.label" :value="item.value" v-for="(item, index) in job_status"></el-option>
+					<el-form-item :label="t('coupon.couponStatus')" prop="jobStatus">
+						<el-select :placeholder="t('common.select') + t('coupon.couponStatus')" v-model="state.queryForm.jobStatus">
+							<el-option :key="index" :label="item.label" :value="item.value"
+								v-for="(item, index) in job_status"></el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item :label="t('job.jobExecuteStatus')" prop="jobExecuteStatus">
-						<el-select :placeholder="t('job.inputjobExecuteStatusTip')" v-model="state.queryForm.jobExecuteStatus">
-							<el-option :key="index" :label="item.label" :value="item.value" v-for="(item, index) in job_execute_status"></el-option>
+					<el-form-item :label="t('coupon.auditStatus')" prop="jobExecuteStatus">
+						<el-select :placeholder="t('common.select') + t('coupon.auditStatus')"
+							v-model="state.queryForm.jobExecuteStatus">
+							<el-option :key="index" :label="item.label" :value="item.value"
+								v-for="(item, index) in job_execute_status"></el-option>
 						</el-select>
 					</el-form-item>
 
@@ -25,32 +29,18 @@
 			</el-row>
 			<el-row>
 				<div class="mb8" style="width: 100%">
-					<el-button v-auth="'job_sys_job_add'" @click="formDialogRef.openDialog()" class="ml10" icon="folder-add" type="primary">
+					<el-button v-auth="'job_sys_job_add'" @click="formDialogRef.openDialog()" class="ml10" icon="folder-add"
+						type="primary">
 						{{ $t('common.addBtn') }}
 					</el-button>
-					<el-button plain v-auth="'job_sys_job_del'" :disabled="multiple" @click="handleDelete(undefined)" class="ml10" icon="Delete" type="primary">
-						{{ $t('common.delBtn') }}
-					</el-button>
-					<right-toolbar
-						:export="'job_sys_job_add'"
-						@exportExcel="exportExcel"
-						@queryTable="getDataList"
-						class="ml10"
-						style="float: right; margin-right: 20px"
-						v-model:showSearch="showSearch"
-					/>
+
+					<right-toolbar :export="'job_sys_job_add'" @exportExcel="exportExcel" @queryTable="getDataList" class="ml10"
+						style="float: right; margin-right: 20px" v-model:showSearch="showSearch" />
 				</div>
 			</el-row>
-			<el-table
-				:data="state.dataList"
-				@selection-change="handleSelectionChange"
-				style="width: 100%"
-				v-loading="state.loading"
-				border
-				:cell-style="tableStyle.cellStyle"
-				:header-cell-style="tableStyle.headerCellStyle"
-			>
-				<el-table-column align="center" type="selection" width="40" />
+			<el-table :data="state.dataList" @selection-change="handleSelectionChange" style="width: 100%"
+				v-loading="state.loading" border :cell-style="tableStyle.cellStyle"
+				:header-cell-style="tableStyle.headerCellStyle">
 				<el-table-column :label="t('job.index')" fixed="left" type="index" width="60" />
 				<el-table-column :label="t('job.jobName')" fixed="left" prop="jobName" show-overflow-tooltip width="120" />
 				<el-table-column :label="t('job.jobGroup')" prop="jobGroup" show-overflow-tooltip width="120" />
@@ -89,24 +79,22 @@
 					<template #default="scope">
 						<el-button @click="handleJobLog(scope.row)" text type="primary">日志</el-button>
 
-						<el-button v-auth="'job_sys_job_start_job'" @click="handleStartJob(scope.row)" text type="primary" v-if="scope.row.jobStatus !== '2'"
-							>启动
+						<el-button v-auth="'job_sys_job_start_job'" @click="handleStartJob(scope.row)" text type="primary"
+							v-if="scope.row.jobStatus !== '2'">启动
 						</el-button>
 
-						<el-button
-							v-auth="'job_sys_job_shutdown_job'"
-							@click="handleShutDownJob(scope.row)"
-							text
-							type="primary"
-							v-if="scope.row.jobStatus === '2'"
-							>暂停
+						<el-button v-auth="'job_sys_job_shutdown_job'" @click="handleShutDownJob(scope.row)" text type="primary"
+							v-if="scope.row.jobStatus === '2'">暂停
 						</el-button>
 
-						<el-button v-auth="'job_sys_job_edit'" @click="handleEditJob(scope.row)" text type="primary">{{ $t('common.editBtn') }} </el-button>
+						<el-button v-auth="'job_sys_job_edit'" @click="handleEditJob(scope.row)" text type="primary">{{
+							$t('common.editBtn') }} </el-button>
 
-						<el-button v-auth="'job_sys_job_start_job'" @click="handleRunJob(scope.row)" text type="primary">执行</el-button>
+						<el-button v-auth="'job_sys_job_start_job'" @click="handleRunJob(scope.row)" text
+							type="primary">执行</el-button>
 
-						<el-button v-auth="'job_sys_job_del'" @click="handleDelete(scope.row)" text type="primary">{{ $t('common.delBtn') }} </el-button>
+						<el-button v-auth="'job_sys_job_del'" @click="handleDelete(scope.row)" text type="primary">{{
+							$t('common.delBtn') }} </el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -120,6 +108,8 @@
 </template>
 
 <script lang="ts" name="systemSysJob" setup>
+import { pageList, putObj } from '/@/api/admin/user';
+
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { delObj, fetchList, runJobRa, shutDownJobRa, startJobRa } from '/@/api/daemon/job';
 import { useMessage, useMessageBox } from '/@/hooks/message';
@@ -160,7 +150,7 @@ const { job_status, job_execute_status, misfire_policy, job_type } = useDict('jo
 /** 表格状态变量 */
 const state = reactive<BasicTableProps>({
 	queryForm,
-	pageList: fetchList,
+	pageList: pageList,
 });
 
 /** 获取表格数据方法 */

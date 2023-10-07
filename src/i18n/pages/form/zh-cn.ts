@@ -3,7 +3,7 @@ export default {
 	common: {
 		queryBtn: '查询',
 		addBtn: '新 增',
-		editBtn: '修 改',
+		editBtn: '编辑',
 		expandBtn: '展开/折叠',
 		delBtn: '删除',
 		detailBtn: '详情',

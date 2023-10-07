@@ -1,134 +1,55 @@
 <template>
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
-			<el-row class="ml10" v-show="showSearch">
-				<el-form :inline="true" :model="state.queryForm" ref="queryRef">
-					<el-form-item :label="$t('job.jobName')" prop="jobName">
-						<el-input :placeholder="$t('job.inputjobNameTip')" @keyup.enter="getDataList" clearable v-model="state.queryForm.jobName" />
-					</el-form-item>
-					<el-form-item :label="t('job.jobStatus')" prop="jobStatus">
-						<el-select :placeholder="t('job.inputjobStatusTip')" v-model="state.queryForm.jobStatus">
-							<el-option :key="index" :label="item.label" :value="item.value" v-for="(item, index) in job_status"></el-option>
-						</el-select>
-					</el-form-item>
-					<el-form-item :label="t('job.jobExecuteStatus')" prop="jobExecuteStatus">
-						<el-select :placeholder="t('job.inputjobExecuteStatusTip')" v-model="state.queryForm.jobExecuteStatus">
-							<el-option :key="index" :label="item.label" :value="item.value" v-for="(item, index) in job_execute_status"></el-option>
-						</el-select>
-					</el-form-item>
+			<el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+				<el-tab-pane label="消费" name="0">
+					<el-table :data="state.dataList" @selection-change="handleSelectionChange" style="width: 100%"
+						v-loading="state.loading" border :cell-style="tableStyle.cellStyle"
+						:header-cell-style="tableStyle.headerCellStyle">
+						<el-table-column :label="t('ranking.ranking')" fixed="left" width="80px" type="index" />
 
-					<el-form-item>
-						<el-button @click="getDataList" icon="Search" type="primary">{{ $t('common.queryBtn') }} </el-button>
-						<el-button @click="resetQuery" icon="Refresh">{{ $t('common.resetBtn') }}</el-button>
-					</el-form-item>
-				</el-form>
-			</el-row>
-			<el-row>
-				<div class="mb8" style="width: 100%">
-					<el-button v-auth="'job_sys_job_add'" @click="formDialogRef.openDialog()" class="ml10" icon="folder-add" type="primary">
-						{{ $t('common.addBtn') }}
-					</el-button>
-					<el-button plain v-auth="'job_sys_job_del'" :disabled="multiple" @click="handleDelete(undefined)" class="ml10" icon="Delete" type="primary">
-						{{ $t('common.delBtn') }}
-					</el-button>
-					<right-toolbar
-						:export="'job_sys_job_add'"
-						@exportExcel="exportExcel"
-						@queryTable="getDataList"
-						class="ml10"
-						style="float: right; margin-right: 20px"
-						v-model:showSearch="showSearch"
-					/>
-				</div>
-			</el-row>
-			<el-table
-				:data="state.dataList"
-				@selection-change="handleSelectionChange"
-				style="width: 100%"
-				v-loading="state.loading"
-				border
-				:cell-style="tableStyle.cellStyle"
-				:header-cell-style="tableStyle.headerCellStyle"
-			>
-				<el-table-column align="center" type="selection" width="40" />
-				<el-table-column :label="t('job.index')" fixed="left" type="index" width="60" />
-				<el-table-column :label="t('job.jobName')" fixed="left" prop="jobName" show-overflow-tooltip width="120" />
-				<el-table-column :label="t('job.jobGroup')" prop="jobGroup" show-overflow-tooltip width="120" />
-				<el-table-column :label="t('job.jobStatus')" prop="jobStatus" show-overflow-tooltip width="120">
-					<template #default="scope">
-						<dict-tag :options="job_status" :value="scope.row.jobStatus"></dict-tag>
-					</template>
-				</el-table-column>
-				<el-table-column :label="t('job.jobExecuteStatus')" prop="jobExecuteStatus" show-overflow-tooltip width="120">
-					<template #default="scope">
-						<dict-tag :options="job_execute_status" :value="scope.row.jobExecuteStatus"></dict-tag>
-					</template>
-				</el-table-column>
 
-				<el-table-column :label="t('job.startTime')" prop="startTime" show-overflow-tooltip width="120" />
+						<el-table-column :label="t('ranking.userName')" fixed="left" prop="jobName" show-overflow-tooltip />
+						<el-table-column :label="t('ranking.amount')" prop="jobGroup" show-overflow-tooltip />
 
-				<el-table-column :label="t('job.previousTime')" prop="previousTime" show-overflow-tooltip width="120" />
-				<el-table-column :label="t('job.nextTime')" prop="nextTime" show-overflow-tooltip width="120" />
-				<el-table-column :label="t('job.jobType')" prop="jobType" show-overflow-tooltip width="120">
-					<template #default="scope">
-						<dict-tag :options="job_type" :value="scope.row.jobType"></dict-tag>
-					</template>
-				</el-table-column>
-				<el-table-column :label="t('job.executePath')" prop="executePath" show-overflow-tooltip width="120" />
-				<el-table-column :label="t('job.className')" prop="className" show-overflow-tooltip width="120" />
-				<el-table-column :label="t('job.methodName')" prop="methodName" show-overflow-tooltip width="120" />
-				<el-table-column :label="t('job.methodParamsValue')" prop="methodParamsValue" show-overflow-tooltip width="120" />
-				<el-table-column :label="t('job.cronExpression')" prop="cronExpression" show-overflow-tooltip width="120" />
-				<el-table-column :label="t('job.misfirePolicy')" prop="misfirePolicy" show-overflow-tooltip width="200">
-					<template #default="scope">
-						<dict-tag :options="misfire_policy" :value="scope.row.misfirePolicy"></dict-tag>
-					</template>
-				</el-table-column>
+					</el-table>
 
-				<el-table-column :label="$t('common.action')" fixed="right" width="300">
-					<template #default="scope">
-						<el-button @click="handleJobLog(scope.row)" text type="primary">日志</el-button>
+				</el-tab-pane>
+				<el-tab-pane label="畅销商品" name="1">
 
-						<el-button v-auth="'job_sys_job_start_job'" @click="handleStartJob(scope.row)" text type="primary" v-if="scope.row.jobStatus !== '2'"
-							>启动
-						</el-button>
+					<el-table :data="state.dataList" @selection-change="handleSelectionChange" style="width: 100%"
+						v-loading="state.loading" border :cell-style="tableStyle.cellStyle"
+						:header-cell-style="tableStyle.headerCellStyle">
+						<el-table-column :label="t('ranking.ranking')" fixed="left" width="80px" type="index" />
 
-						<el-button
-							v-auth="'job_sys_job_shutdown_job'"
-							@click="handleShutDownJob(scope.row)"
-							text
-							type="primary"
-							v-if="scope.row.jobStatus === '2'"
-							>暂停
-						</el-button>
+						<el-table-column :label="t('ranking.product')" fixed="left" prop="jobName" show-overflow-tooltip />
+						<el-table-column :label="t('ranking.shop')" prop="jobGroup" show-overflow-tooltip />
+						<el-table-column :label="t('ranking.number')" prop="jobGroup" show-overflow-tooltip />
+					</el-table>
 
-						<el-button v-auth="'job_sys_job_edit'" @click="handleEditJob(scope.row)" text type="primary">{{ $t('common.editBtn') }} </el-button>
-
-						<el-button v-auth="'job_sys_job_start_job'" @click="handleRunJob(scope.row)" text type="primary">执行</el-button>
-
-						<el-button v-auth="'job_sys_job_del'" @click="handleDelete(scope.row)" text type="primary">{{ $t('common.delBtn') }} </el-button>
-					</template>
-				</el-table-column>
-			</el-table>
+				</el-tab-pane>
+			</el-tabs>
 			<pagination @current-change="currentChangeHandle" @size-change="sizeChangeHandle" v-bind="state.pagination" />
 		</div>
 
-		<!-- 编辑、新增  -->
-		<form-dialog @refresh="getDataList()" ref="formDialogRef" />
-		<job-log ref="jobLogRef"></job-log>
+
 	</div>
 </template>
 
 <script lang="ts" name="systemSysJob" setup>
+import { pageList, putObj } from '/@/api/admin/user';
+
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { delObj, fetchList, runJobRa, shutDownJobRa, startJobRa } from '/@/api/daemon/job';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useDict } from '/@/hooks/dict';
 import { useI18n } from 'vue-i18n';
+import type { TabsPaneContext } from 'element-plus'
+const activeName = ref('0')
 
-// 引入组件
-const FormDialog = defineAsyncComponent(() => import('./form.vue'));
-const JobLog = defineAsyncComponent(() => import('./job-log.vue'));
+const handleClick = (tab: TabsPaneContext, event: Event) => {
+	console.log(tab, event)
+}
 
 // 获取国际化方法
 const { t } = useI18n();
@@ -160,7 +81,7 @@ const { job_status, job_execute_status, misfire_policy, job_type } = useDict('jo
 /** 表格状态变量 */
 const state = reactive<BasicTableProps>({
 	queryForm,
-	pageList: fetchList,
+	pageList: pageList,
 });
 
 /** 获取表格数据方法 */

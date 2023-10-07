@@ -1,25 +1,12 @@
 export default {
-	coupon: {
-		index: 'ID',
-		couponName: 'couponName',
-		couponStatus: 'coupon status',
-		auditStatus: 'audit status',
-		nominalValue: 'nominalValue',
-		validityTime: 'validityTime',
-		createdTime: 'createdTime',
-		provideMode: '发provideMode券方式',
-		number: 'Used/Issued/Total',
-		creator: 'creator',
-
-
-
-
-
-
-
-
-
-
+	ticket: {
+		index: '#',
+		ticketArea: 'ticketArea',
+		verificationNum: 'verificationNum',
+		ticketFrom: 'ticketFrom',
+		verificationPerson: 'verificationPerson',
+		verificationTime: 'verificationTime',
+		remark: 'remark',
 	},
 	log: {
 		index: '#',
