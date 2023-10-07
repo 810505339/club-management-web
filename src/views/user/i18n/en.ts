@@ -28,7 +28,9 @@ export default {
 		gender: 'gender',
 		selectGender: 'select gender',
 		poolOrder: 'pool order',
-		orderConsume: 'order consume(yuan)'
+		orderConsume: 'order consume(yuan)',
+		consume: 'consumption details',
+		bottle: 'bottle bureau details'
 
 	},
 };

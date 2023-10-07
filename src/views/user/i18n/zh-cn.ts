@@ -29,6 +29,8 @@ export default {
 		gender: '性别',
 		selectGender: '请选择性别',
 		poolOrder: '拼酒次数',
-		orderConsume: '累计消费(元)'
+		orderConsume: '累计消费(元)',
+		consume: '消费明细',
+		bottle: '拼酒局明细'
 	},
 };

@@ -39,6 +39,16 @@
 							show-overflow-tooltip></el-table-column>
 						<el-table-column :label="$t('clientUser.createTime')" prop="createTime" show-overflow-tooltip
 							width="180"></el-table-column>
+						<el-table-column :label="$t('common.action')" prop="createTime" show-overflow-tooltip width="180">
+							<template #default="scope">
+								<el-button text type="primary">
+									{{ t('suer.consume') }}
+								</el-button>
+								<el-button text type="primary">
+									{{ t('suer.bottle') }}
+								</el-button>
+							</template>
+						</el-table-column>
 
 					</el-table>
 					<pagination v-bind="state.pagination" @current-change="currentChangeHandle" @size-change="sizeChangeHandle">
