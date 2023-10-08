@@ -11,6 +11,13 @@
         </el-col>
 
         <el-col :span="20" class="mb20">
+          <el-form-item :label="t('dynamic.store')" prop="jobName">
+            <el-input v-model="form.jobName" :placeholder="titlePlaceholder" />
+          </el-form-item>
+        </el-col>
+
+
+        <el-col :span="20" class="mb20">
           <el-form-item :label="titleChinese" prop="jobName">
             <el-input v-model="form.jobName" :placeholder="titlePlaceholder" />
           </el-form-item>
@@ -24,19 +31,31 @@
 
         <el-col :span="20" class="mb20">
           <el-form-item :label="contextEnglish" prop="jobName">
-            <el-input v-model="form.jobName" :placeholder="titlePlaceholder" />
+            <el-input :rows="2" type="textarea" v-model="form.jobName" :placeholder="titlePlaceholder" />
           </el-form-item>
         </el-col>
 
         <el-col :span="20" class="mb20">
           <el-form-item :label="contextChinese" prop="jobName">
-            <el-input v-model="form.jobName" :placeholder="titlePlaceholder" />
+            <el-input :rows="2" type="textarea" v-model="form.jobName" :placeholder="titlePlaceholder" />
           </el-form-item>
         </el-col>
 
         <el-col :span="20" class="mb20">
-          <el-form-item :label="titleEnglish" prop="jobName">
-            <el-input v-model="form.jobName" :placeholder="titlePlaceholder" />
+          <el-form-item :label="t('dynamic.register')" prop="jobName">
+            <el-switch v-model="form.jobName" />
+          </el-form-item>
+        </el-col>
+
+        <el-col :span="20" class="mb20">
+          <el-form-item :label="t('dynamic.expenses')" prop="jobName">
+            <el-switch v-model="form.jobName" />
+          </el-form-item>
+        </el-col>
+
+        <el-col :span="20" class="mb20">
+          <el-form-item :label="t('dynamic.expiryTime')" prop="jobName">
+            <el-date-picker v-model="form.jobName" type="datetime" placeholder="Select date and time" />
           </el-form-item>
         </el-col>
 

@@ -79,7 +79,7 @@
               $t('common.edit') }} </el-button>
             <el-button v-auth="'job_sys_job_del'" text type="primary">{{
               $t('common.delBtn') }} </el-button>
-            <el-button v-auth="'job_sys_job_del'" text type="primary">{{
+            <el-button v-auth="'job_sys_job_del'" text type="primary" @click="formDrawerRef.openDialog">{{
               $t('dynamic.statistics') }} </el-button>
           </template>
         </el-table-column>
@@ -87,7 +87,7 @@
       <pagination @current-change="currentChangeHandle" @size-change="sizeChangeHandle" v-bind="state.pagination" />
     </div>
     <dynamic-from ref="formDialogRef" />
-
+    <dynamic-drawer ref="formDrawerRef" />
   </div>
 </template>
 
@@ -99,6 +99,7 @@ import { useDict } from '/@/hooks/dict';
 import { useI18n } from 'vue-i18n';
 import { pageList } from '/@/api/admin/user';
 import dynamicFrom from './form.vue';
+import dynamicDrawer from './drawer.vue';
 import { useTranslateText } from './hooks/translate';
 
 
@@ -120,6 +121,7 @@ const { title,
 
 /** 表单弹窗引用 */
 const formDialogRef = ref();
+const formDrawerRef = ref();
 
 
 /** 搜索表单信息 */
