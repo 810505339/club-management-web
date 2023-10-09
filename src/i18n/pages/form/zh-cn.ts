@@ -39,9 +39,14 @@ export default {
 		disagree: '不同意',
 		search: '搜索',
 		searchKey: '输入搜索',
+		state: '状态',
 		shelves: '上架',
 		takedown: '下架',
-		edit: '编辑'
+		edit: '编辑',
+		time: '日期',
+		sum: '数量',
+		duration: '时长',
+		price: '价格',
 	},
 	message: {
 		box: {

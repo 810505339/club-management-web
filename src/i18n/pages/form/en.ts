@@ -45,12 +45,15 @@ export default {
 		agree: 'agree',
 		disagree: 'disagree',
 		search: 'Search',
+		state: 'state',
 		searchKey: 'Please enter a keyword',
 		shelves: 'shelves',
 		takedown: 'takedown',
-		edit: 'edit'
-
-
+		edit: 'edit',
+		time: ' date',
+		sum: ' number',
+		duration: ' duration',
+		price: ' price'
 	},
 	message: {
 		box: {
