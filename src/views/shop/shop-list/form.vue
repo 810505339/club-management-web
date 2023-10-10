@@ -3,37 +3,23 @@
     draggable v-model="visible">
     <el-form :model="form" :rules="dataRules" formDialogRef label-width="120px" ref="dataFormRef" v-loading="loading">
       <el-form-item :label="t('shopList.name')" prop="name">
-        <el-input :placeholder="`${t('shopList.please')}${t('shopList.name')}`" v-model="form.clientId" />
+        <el-input :placeholder="`${t('shopList.please')}${t('shopList.name')}`" v-model="form.name" />
       </el-form-item>
-      <el-form-item :label="t('shopList.introduce')" prop="introduce">
+      <el-form-item :label="t('shopList.introduce')" prop="introduction">
         <el-input type="textarea" :placeholder="`${t('shopList.please')}${t('shopList.introduce')}`"
-          v-model="form.clientSecret" />
+          v-model="form.introduction" />
       </el-form-item>
       <el-form-item :label="t('shopList.address')" prop="address">
-        <el-input type="textarea" :placeholder="`${t('shopList.please')}${t('shopList.address')}`" v-model="form.scope" />
+        <el-input type="textarea" :placeholder="`${t('shopList.please')}${t('shopList.address')}`"
+          v-model="form.address" />
       </el-form-item>
-      <el-form-item :label="t('shopList.image')" prop="image">
-        <el-upload v-model:file-list="fileList" class="w-full"
-          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" list-type="picture">
-          <el-button type="primary" icon="upload">{{ t('common.upload') }}</el-button>
-          <template #tip>
-            <div class="el-upload__tip">
-              JPG/PNG/JPEG{{ $t('common.fileUpload') }}1MB
-            </div>
-          </template>
-        </el-upload>
+      <el-form-item :label="t('shopList.image')" prop="pictureIds">
+        <upload v-bind="IMG_PROPS" class="w-full" v-model="form.pictureIds" />
+
       </el-form-item>
 
-      <el-form-item :label="t('shopList.video')" prop="scope">
-        <el-upload v-model:file-list="fileList" class="w-full"
-          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" list-type="picture">
-          <el-button type="primary" icon="upload">{{ t('common.upload') }}</el-button>
-          <template #tip>
-            <div class="el-upload__tip">
-              mp4{{ $t('common.fileUpload') }}20MB
-            </div>
-          </template>
-        </el-upload>
+      <el-form-item :label="t('shopList.video')" prop="videoIds">
+        <upload v-bind="VIDEO_PROPS" class="w-full" v-model="form.videoIds" />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -48,10 +34,26 @@
 <script lang="ts" name="SysOauthClientDetailsDialog" setup>
 import { useDict } from '/@/hooks/dict';
 import { useMessage } from '/@/hooks/message';
-import { addObj, getObj, putObj, validateclientId } from '/@/api/admin/client';
+// import { addObj, getObj, putObj, validateclientId } from '/@/api/admin/client';
+import { AddStore, EditStore, getStoreById } from '/@/api/admin/store';
 import { useI18n } from 'vue-i18n';
 import { rule } from '/@/utils/validate';
-import { UploadUserFile } from 'element-plus';
+import upload from "/@/components/Upload/index.vue";
+
+//图片props
+const IMG_PROPS = {
+  fileSize: 1,
+  limit: 10,
+  fileType: ['jpg', 'png', 'jpeg']
+
+}
+//视频props
+const VIDEO_PROPS = {
+  limit: 1,
+  fileSize: 20,
+  fileType: ['mp4'],
+
+}
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
@@ -62,16 +64,7 @@ const { t } = useI18n();
 const dataFormRef = ref();
 const visible = ref(false);
 const loading = ref(false);
-const fileList = ref<UploadUserFile[]>([
-  {
-    name: 'food.jpeg',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-  },
-  {
-    name: 'food2.jpeg',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-  },
-])
+
 
 // 定义字典
 const { grant_types, common_status } = useDict(
@@ -81,49 +74,32 @@ const { grant_types, common_status } = useDict(
 
 // 提交表单数据
 const form = reactive({
-  id: '',
-  clientId: '',
-  clientSecret: '',
-  scope: '',
-  authorizedGrantTypes: [] as string[],
-  webServerRedirectUri: '',
-  authorities: '',
-  accessTokenValidity: 43200,
-  refreshTokenValidity: 2592001,
-  autoapprove: 'true',
-  delFlag: '',
-  createBy: '',
-  updateBy: '',
-  createTime: '',
-  updateTime: '',
-  tenantId: '',
-  onlineQuantity: '1',
-  captchaFlag: '1',
-  encFlag: '1',
+  name: '',
+  pictureIds: '',
+  videoIds: '',
+  introduction: '',
+  storeId: '',
+  address: ''
 });
 
 // 定义校验规则
 const dataRules = ref({
   name: [
     { required: true, message: `${t('shopList.name')}${t('common.empty')}`, trigger: 'blur' },
-    { validator: rule.validatorLowercase, trigger: 'blur' },
+
   ],
   introduce: [
-    { validator: rule.validatorLowercase, trigger: 'blur' },
+
   ],
   address: [
     { required: true, message: `${t('shopList.address')}${t('common.empty')}`, trigger: 'blur' },
-    { validator: rule.validatorLowercase, trigger: 'blur' },
   ],
-  image: [],
-  video: []
-
 });
 
 // 打开弹窗
 const openDialog = (id: string) => {
   visible.value = true;
-  form.id = '';
+  form.storeId = '';
   // 重置表单数据
   nextTick(() => {
     dataFormRef.value?.resetFields();
@@ -131,8 +107,8 @@ const openDialog = (id: string) => {
 
   // 获取sysOauthClientDetails信息
   if (id) {
-    form.id = id;
-    getsysOauthClientDetailsData(id);
+    form.storeId = id;
+    getStoreDetail(id);
   }
 };
 
@@ -144,8 +120,9 @@ const onSubmit = async () => {
 
   try {
     loading.value = true;
-    form.id ? await putObj(form) : await addObj(form);
-    useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));
+    console.log(form);
+    form.storeId == '' ? await AddStore(form) : await EditStore({ ...form, videoIds: [form.videoIds] });
+    useMessage().success(t(form.storeId ? 'common.editSuccessText' : 'common.addSuccessText'));
     visible.value = false;
     emit('refresh');
   } catch (err: any) {
@@ -156,9 +133,9 @@ const onSubmit = async () => {
 };
 
 // 初始化表单数据
-const getsysOauthClientDetailsData = (id: string) => {
+const getStoreDetail = (id: string) => {
   // 获取数据
-  getObj(id).then((res: any) => {
+  getStoreById(id).then((res: any) => {
     Object.assign(form, res.data);
   });
 };

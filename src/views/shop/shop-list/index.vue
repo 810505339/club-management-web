@@ -38,27 +38,38 @@
 					<el-table v-loading="state.loading" :data="state.dataList" @selection-change="handleSelectionChange" border
 						:cell-style="tableStyle.cellStyle" :header-cell-style="tableStyle.headerCellStyle">
 						<el-table-column :label="$t('shopList.index')" type="index" width="60" fixed="left" />
-						<el-table-column :label="$t('shopList.id')" type="id" width="100" fixed="left" />
-						<el-table-column :label="$t('shopList.name')" type="id" width="100" fixed="left" />
-						<el-table-column :label="$t('shopList.address')" type="id" fixed="left" />
-						<el-table-column :label="$t('shopList.image')" type="id" width="100" fixed="left" />
-						<el-table-column :label="$t('shopList.video')" type="id" width="100" fixed="left" />
-						<el-table-column :label="$t('shopList.state')" type="id" width="100" fixed="left" />
+						<el-table-column :label="$t('shopList.id')" prop="storeId" width="100" fixed="left" />
+						<el-table-column :label="$t('shopList.name')" prop="name" width="100" fixed="left" />
+						<el-table-column :label="$t('shopList.address')" prop="address" fixed="left" />
+						<el-table-column :label="$t('shopList.introduce')" prop="introduction" fixed="left" />
+						<el-table-column :label="$t('shopList.state')" prop="enabled" width="100" fixed="left">
+							<template #default="scope">
+								<div>
+									{{ scope.row['enabled'] == 1 ? '上架' : '下架' }}
+								</div>
+							</template>
+						</el-table-column>
 
 
 						<el-table-column :label="$t('shopList.createTime')" prop="createTime" show-overflow-tooltip
 							width="180"></el-table-column>
 						<el-table-column :label="$t('common.action')" width="160" fixed="right">
 							<template #default="scope">
+								<el-button icon="InfoFilled" text type="primary">
+									{{ $t('common.detailBtn') }}
+								</el-button>
+
 								<el-button v-auth="'sys_user_edit'" icon="edit-pen" text type="primary"
-									@click="userDialogRef.openDialog(scope.row.userId)">
+									@click="userDialogRef.openDialog(scope.row.storeId)">
 									{{ $t('common.editBtn') }}
 								</el-button>
 
-								<el-button icon="edit-pen" text type="primary">
+
+
+								<el-button icon="Top" text type="primary" v-if="scope.row['enabled'] == 0">
 									{{ $t('shopList.shelves') }}
 								</el-button>
-								<el-button icon="edit-pen" text type="primary" @click="handleTakedown">
+								<el-button icon="Bottom" text type="primary" @click="handleTakedown" v-else>
 									{{ $t('shopList.takedown') }}
 								</el-button>
 								<el-tooltip :content="$t('shopList.deleteDisabledTip')" :disabled="scope.row.userId !== '1'"
@@ -85,9 +96,8 @@
 	</div>
 </template>
 
-<script lang="ts" name="systemUser" setup>
-import { ElMessage, ElMessageBox } from 'element-plus'
-import { delObj, pageList, putObj } from '/@/api/admin/user';
+<script lang="ts" name="shopList" setup>
+import { getStoreList } from '/@/api/admin/store';
 import { list } from '/@/api/admin/role';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { useMessage, useMessageBox } from '/@/hooks/message';
@@ -111,7 +121,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 		state: '',
 		name: '',
 	},
-	pageList: pageList,
+	pageList: getStoreList,
 });
 const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
