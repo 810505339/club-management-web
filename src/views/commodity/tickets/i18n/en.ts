@@ -1,5 +1,6 @@
 export default {
-	client: {
-	
+	tickets: {
+		tickets: 'tickets',
+
 	},
 };

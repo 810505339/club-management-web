@@ -1,8 +1,33 @@
 <template>
-  <el-drawer v-model="drawer" title="I am the title" direction="rtl">
+  <el-drawer v-model="drawer" :title="$t('dynamic.statistics')" direction="rtl">
+
+
+    <el-form ref="dataFormRef" :model="form" formDialogRef label-width="200px">
+      <el-row :gutter="20">
+        <el-col :span="20" class="mb20">
+          <el-form-item :label="t('dynamic.expenses')" prop="jobName">
+            <el-switch v-model="form.jobName" />
+          </el-form-item>
+        </el-col>
+
+        <el-col :span="20" class="mb20">
+          <el-form-item :label="t('dynamic.registrations')" prop="jobName">
+            <div class="text-[#d4d4d4]">0/100</div>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
+
+
+
+
+
     <el-table :data="state.dataList" style="width: 100%" v-loading="state.loading" border
       :cell-style="tableStyle.cellStyle" :header-cell-style="tableStyle.headerCellStyle">
-      <el-table-column align="center" type="selection" width="40" />
+
+      <el-table-column align="center" :label="t('dynamic.userName')" />
+      <el-table-column :label="t('dynamic.userPhone')" />
+
     </el-table>
     <pagination @current-change="currentChangeHandle" @size-change="sizeChangeHandle" v-bind="state.pagination" />
   </el-drawer>
@@ -30,6 +55,14 @@ const state = reactive<BasicTableProps>({
   queryForm,
   pageList: pageList,
 });
+
+
+// 提交表单数据
+const form = reactive({
+  jobId: '',
+  jobName: '',
+});
+
 
 /** 获取表格数据方法 */
 const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);

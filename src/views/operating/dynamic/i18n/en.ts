@@ -12,7 +12,10 @@ export default {
 		expiryTime: 'expiry time',
 		chinese: '(chinese)',
 		english: '(english)',
-		statistics: 'registration statistics'
+		statistics: 'registration statistics',
+		registrations: 'number of registrations / total number of participants',
+		userName: 'user name',
+		userPhone: 'user phone'
 	},
 
 };

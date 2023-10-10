@@ -1,6 +1,6 @@
 export default {
-	
-	clientmanager: {
-	
+
+	tickets: {
+		tickets: '门票',
 	},
 };
