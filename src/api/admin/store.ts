@@ -46,3 +46,20 @@ export const updateEnabled = (data: Object) => {
 
   });
 }
+
+
+export const getStoreName = () => {
+  return request({
+    url: "/admin/store/storeNameList",
+    method: 'get',
+  })
+}
+
+
+export const deleteStoreByIds = (ids: string[]) => {
+  return request({
+    url: "/admin/store",
+    method: 'delete',
+    data: ids,
+  })
+}

@@ -2,30 +2,27 @@
   <el-dialog :close-on-click-modal="false" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" width="600"
     draggable v-model="visible">
     <el-form :model="form" :rules="dataRules" formDialogRef label-width="120px" ref="dataFormRef" v-loading="loading">
-      <el-form-item :label="t('area.name')" prop="clientId">
-        <el-input :placeholder="`${t('area.please')}${t('area.name')}`" v-model="form.clientId" />
+      <el-form-item :label="t('shopList.name')" prop="name">
+        <el-input :placeholder="`${t('shopList.please')}${t('shopList.name')}`" v-model="form.name" />
       </el-form-item>
-      <el-form-item :label="t('area.store')" prop="clientSecret">
-        <el-input type="textarea" :placeholder="`${t('area.please')}${t('area.store')}`" v-model="form.clientSecret" />
+      <el-form-item :label="t('shopList.introduce')" prop="introduction">
+        <el-input type="textarea" :placeholder="`${t('shopList.please')}${t('shopList.introduce')}`"
+          v-model="form.introduction" />
       </el-form-item>
+      <el-form-item :label="t('shopList.address')" prop="address">
+        <el-input type="textarea" :placeholder="`${t('shopList.please')}${t('shopList.address')}`"
+          v-model="form.address" />
+      </el-form-item>
+      <el-form-item :label="t('shopList.image')" prop="pictureIds">
+        <upload v-bind="IMG_PROPS" class="w-full" :model-value="form.pictureIds"
+          @change="(_, fileList) => uploadChange('pictureIds', fileList)" />
 
-      <el-form-item :label="t('area.image')" prop="authorizedGrantTypes">
-        <el-upload v-model:file-list="fileList" class="w-full"
-          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" list-type="picture">
-          <el-button type="primary" icon="upload">{{ t('common.upload') }}</el-button>
-          <template #tip>
-            <div class="el-upload__tip">
-              JPG/PNG/JPEG{{ $t('common.fileUpload') }}1MB
-            </div>
-          </template>
-        </el-upload>
       </el-form-item>
 
-      <el-form-item :label="t('area.time')" prop="clientSecret">
-        <el-input type="textarea" :placeholder="`${t('common.select')}${t('area.store')}`" v-model="form.clientSecret" />
+      <el-form-item :label="t('shopList.video')" prop="videoIds">
+        <upload v-bind="VIDEO_PROPS" class="w-full" :model-value="form.videoIds"
+          @change="(_, fileList) => uploadChange('videoIds', fileList)" />
       </el-form-item>
-
-
     </el-form>
     <template #footer>
       <span class="dialog-footer">
@@ -39,10 +36,28 @@
 <script lang="ts" name="SysOauthClientDetailsDialog" setup>
 import { useDict } from '/@/hooks/dict';
 import { useMessage } from '/@/hooks/message';
-import { addObj, getObj, putObj, validateclientId } from '/@/api/admin/client';
+// import { addObj, getObj, putObj, validateclientId } from '/@/api/admin/client';
+import { AddStore, EditStore, getStoreById } from '/@/api/admin/store';
 import { useI18n } from 'vue-i18n';
 import { rule } from '/@/utils/validate';
-import { UploadUserFile } from 'element-plus';
+import upload from "/@/components/Upload/index.vue";
+
+
+
+//图片props
+const IMG_PROPS = {
+  fileSize: 1,
+  limit: 10,
+  fileType: ['jpg', 'png', 'jpeg']
+
+}
+//视频props
+const VIDEO_PROPS = {
+  limit: 1,
+  fileSize: 20,
+  fileType: ['mp4'],
+
+}
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
@@ -53,16 +68,7 @@ const { t } = useI18n();
 const dataFormRef = ref();
 const visible = ref(false);
 const loading = ref(false);
-const fileList = ref<UploadUserFile[]>([
-  {
-    name: 'food.jpeg',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-  },
-  {
-    name: 'food2.jpeg',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-  },
-])
+
 
 // 定义字典
 const { grant_types, common_status } = useDict(
@@ -72,61 +78,32 @@ const { grant_types, common_status } = useDict(
 
 // 提交表单数据
 const form = reactive({
-  id: '',
-  clientId: '',
-  clientSecret: '',
-  scope: '',
-  authorizedGrantTypes: [] as string[],
-  webServerRedirectUri: '',
-  authorities: '',
-  accessTokenValidity: 43200,
-  refreshTokenValidity: 2592001,
-  autoapprove: 'true',
-  delFlag: '',
-  createBy: '',
-  updateBy: '',
-  createTime: '',
-  updateTime: '',
-  tenantId: '',
-  onlineQuantity: '1',
-  captchaFlag: '1',
-  encFlag: '1',
+  name: '',
+  pictureIds: [],
+  videoIds: [],
+  introduction: '',
+  id: undefined,
+  address: ''
 });
 
 // 定义校验规则
 const dataRules = ref({
-  clientId: [
-    { required: true, message: '编号不能为空', trigger: 'blur' },
-    { validator: rule.validatorLowercase, trigger: 'blur' },
-    {
-      validator: (rule: any, value: any, callback: any) => {
-        validateclientId(rule, value, callback, form.id !== '');
-      },
-      trigger: 'blur',
-    },
+  name: [
+    { required: true, message: `${t('shopList.name')}${t('common.empty')}`, trigger: 'blur' },
+
   ],
-  clientSecret: [
-    { required: true, message: '密钥不能为空', trigger: 'blur' },
-    { validator: rule.validatorLower, trigger: 'blur' },
+  introduce: [
+
   ],
-  scope: [{ required: true, message: '域不能为空', trigger: 'blur' }],
-  authorizedGrantTypes: [{ required: true, message: '授权模式不能为空', trigger: 'blur' }],
-  accessTokenValidity: [
-    { required: true, message: '令牌时效不能为空', trigger: 'blur' },
-    { type: 'number', min: 1, message: '令牌时效不能小于一小时', trigger: 'blur' },
+  address: [
+    { required: true, message: `${t('shopList.address')}${t('common.empty')}`, trigger: 'blur' },
   ],
-  refreshTokenValidity: [
-    { required: true, message: '刷新时效不能为空', trigger: 'blur' },
-    { type: 'number', min: 1, message: '刷新时效不能小于两小时', trigger: 'blur' },
-  ],
-  autoapprove: [{ required: true, message: '自动放行不能为空', trigger: 'blur' }],
-  webServerRedirectUri: [{ required: true, message: '回调地址不能为空', trigger: 'blur' }],
 });
 
 // 打开弹窗
 const openDialog = (id: string) => {
   visible.value = true;
-  form.id = '';
+  form.id = undefined;
   // 重置表单数据
   nextTick(() => {
     dataFormRef.value?.resetFields();
@@ -135,7 +112,7 @@ const openDialog = (id: string) => {
   // 获取sysOauthClientDetails信息
   if (id) {
     form.id = id;
-    getsysOauthClientDetailsData(id);
+    getStoreDetail(id);
   }
 };
 
@@ -147,7 +124,10 @@ const onSubmit = async () => {
 
   try {
     loading.value = true;
-    form.id ? await putObj(form) : await addObj(form);
+    console.log(form);
+    form.pictureIds = form.pictureIds?.map(item => (item.id))
+    form.videoIds = form.videoIds?.map(item => (item.id))
+    form.id ? await EditStore(form) : await AddStore(form);
     useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));
     visible.value = false;
     emit('refresh');
@@ -159,12 +139,20 @@ const onSubmit = async () => {
 };
 
 // 初始化表单数据
-const getsysOauthClientDetailsData = (id: string) => {
+const getStoreDetail = async (id: string) => {
   // 获取数据
-  getObj(id).then((res: any) => {
-    Object.assign(form, res.data);
-  });
+  let { data } = await getStoreById(id)
+  data.pictureIds = data.pictureFileVOs?.map((item: any) => ({ id: item.id, name: item.fileName }))
+  data.videoIds = data.videoFileVOs?.map((item: any) => ({ id: item.id, name: item.fileName }))
+  Object.assign(form, data)
+
 };
+
+const uploadChange = (type: 'pictureIds' | 'videoIds', fileList: any[]) => {
+
+  form[type] = fileList
+
+}
 
 // 暴露变量
 defineExpose({

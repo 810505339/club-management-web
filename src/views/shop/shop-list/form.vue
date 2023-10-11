@@ -14,12 +14,14 @@
           v-model="form.address" />
       </el-form-item>
       <el-form-item :label="t('shopList.image')" prop="pictureIds">
-        <upload v-bind="IMG_PROPS" class="w-full" @change="(_, fileList) => uploadChange('pictureIds', fileList)" />
+        <upload v-bind="IMG_PROPS" class="w-full" :model-value="form.pictureIds"
+          @change="(_, fileList) => uploadChange('pictureIds', fileList)" />
 
       </el-form-item>
 
       <el-form-item :label="t('shopList.video')" prop="videoIds">
-        <upload v-bind="VIDEO_PROPS" class="w-full" @change="(_, fileList) => uploadChange('videoIds', fileList)" />
+        <upload v-bind="VIDEO_PROPS" class="w-full" :model-value="form.videoIds"
+          @change="(_, fileList) => uploadChange('videoIds', fileList)" />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -39,6 +41,8 @@ import { AddStore, EditStore, getStoreById } from '/@/api/admin/store';
 import { useI18n } from 'vue-i18n';
 import { rule } from '/@/utils/validate';
 import upload from "/@/components/Upload/index.vue";
+
+
 
 //图片props
 const IMG_PROPS = {
@@ -121,7 +125,8 @@ const onSubmit = async () => {
   try {
     loading.value = true;
     console.log(form);
-
+    form.pictureIds = form.pictureIds?.map(item => (item.id))
+    form.videoIds = form.videoIds?.map(item => (item.id))
     form.id ? await EditStore(form) : await AddStore(form);
     useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));
     visible.value = false;
@@ -134,16 +139,18 @@ const onSubmit = async () => {
 };
 
 // 初始化表单数据
-const getStoreDetail = (id: string) => {
+const getStoreDetail = async (id: string) => {
   // 获取数据
-  getStoreById(id).then((res: any) => {
-    Object.assign(form, res.data);
-  });
+  let { data } = await getStoreById(id)
+  data.pictureIds = data.pictureFileVOs?.map((item: any) => ({ id: item.id, name: item.fileName }))
+  data.videoIds = data.videoFileVOs?.map((item: any) => ({ id: item.id, name: item.fileName }))
+  Object.assign(form, data)
+
 };
 
 const uploadChange = (type: 'pictureIds' | 'videoIds', fileList: any[]) => {
-  const tempList = fileList.map(item => (item.id))
-  form[type] = tempList
+
+  form[type] = fileList
 
 }
 

@@ -1,0 +1,61 @@
+<template>
+  <el-drawer v-model="drawer" :title="t('common.detailBtn')" direction="rtl" :before-close="handleClose">
+    <div class="text-[#fff]">
+      <el-form :model="userInfo" label-width="120px">
+        <el-form-item :label="t('shopList.id')" prop="id">
+          {{ userInfo.id }}
+        </el-form-item>
+        <el-form-item :label="t('shopList.name')" prop="name">
+          {{ userInfo.name }}
+        </el-form-item>
+        <el-form-item :label="t('shopList.introduce')" prop="introduction">
+          {{ userInfo.introduction }}
+        </el-form-item>
+        <el-form-item :label="t('shopList.address')" prop="address">
+          {{ userInfo.name }}
+        </el-form-item>
+        <el-form-item :label="t('shopList.image')" prop="pictureIds">
+          <el-image class="w-40" fit="cover" v-for="item in userInfo.pictureFileVOs" :key="item.id"
+            :src="`${baseURL}/admin/sys-file/local/file/${item.fileName}`" />
+        </el-form-item>
+        <el-form-item :label="t('shopList.video')" prop="videoIds">
+
+        </el-form-item>
+
+
+      </el-form>
+    </div>
+  </el-drawer>
+</template>
+
+<script setup lang="ts" name="shop-list-info">
+import { useI18n } from 'vue-i18n'
+import { getStoreById } from '/@/api/admin/store'
+const drawer = ref(false)
+const { t } = useI18n()
+
+const userInfo = reactive({
+  name: '',
+  pictureFileVOs: [],
+  videoFileVOs: [],
+  introduction: '',
+  id: undefined,
+  address: ''
+
+})
+async function open(id: string) {
+  await getInfo(id)
+  drawer.value = true
+}
+
+const getInfo = async (id: string) => {
+  const { data } = await getStoreById(id)
+  Object.assign(userInfo, data)
+
+}
+defineExpose({
+  open
+})
+
+
+</script>

@@ -5,16 +5,17 @@
 				<div class="layout-padding-auto layout-padding-view">
 					<el-row v-show="showSearch">
 						<el-form ref="queryRef" :inline="true" :model="state.queryForm" @keyup.enter="getDataList">
-							<el-form-item :label="$t('area.name')" prop="name">
-								<el-select v-model="state.queryForm.lockFlag" :placeholder="$t('area.nameSelect')">
-									<el-option v-for="item in lock_flag" :key="item.id" :label="item.label" :value="item.value" clearable>
+							<el-form-item :label="$t('shopList.name')" prop="name">
+								<el-select v-model="state.queryForm.name" :placeholder="$t('area.nameSelect')">
+									<el-option v-for="item, index in storeNameList" :key="index" :label="item" :value="item" clearable>
 									</el-option>
 								</el-select>
 							</el-form-item>
 
-							<el-form-item :label="$t('area.state')" prop="lockFlag">
-								<el-select v-model="state.queryForm.lockFlag" :placeholder="$t('area.stateSelect')">
-									<el-option v-for="item in lock_flag" :key="item.id" :label="item.label" :value="item.value" clearable>
+							<el-form-item :label="$t('area.state')" prop="enabled">
+								<el-select v-model="state.queryForm.enabled" :placeholder="$t('area.stateSelect')">
+									<el-option v-for="item, index in enabledList" :key="index" :label="item.label" :value="item.value"
+										clearable>
 									</el-option>
 								</el-select>
 							</el-form-item>
@@ -37,30 +38,37 @@
 					</el-row>
 					<el-table v-loading="state.loading" :data="state.dataList" @selection-change="handleSelectionChange" border
 						:cell-style="tableStyle.cellStyle" :header-cell-style="tableStyle.headerCellStyle">
-						<el-table-column :label="$t('area.index')" type="index" width="60" fixed="left" />
-						<el-table-column :label="$t('area.id')" type="id" width="100" fixed="left" />
-						<el-table-column :label="$t('area.name')" type="id" fixed="left" />
-						<el-table-column :label="$t('area.store')" type="id" width="100" fixed="left" />
-						<el-table-column :label="$t('area.image')" type="id" width="100" fixed="left" />
-						<el-table-column :label="$t('area.time')" type="id" width="100" fixed="left" />
-						<el-table-column :label="$t('area.decks')" type="id" width="100" fixed="left" />
-						<el-table-column :label="$t('area.state')" type="id" width="100" fixed="left" />
+						<el-table-column :label="$t('area.index')" prop="index" width="60" fixed="left" />
+						<el-table-column :label="$t('area.id')" prop="id" width="100" fixed="left" />
+						<el-table-column :label="$t('area.name')" prop="name" fixed="left" />
+						<el-table-column :label="$t('area.store')" prop="store" width="100" fixed="left" />
+						<el-table-column :label="$t('area.image')" prop="image" width="100" fixed="left" />
+						<el-table-column :label="$t('area.time')" prop="time" width="100" fixed="left" />
+						<el-table-column :label="$t('area.decks')" prop="decks" width="100" fixed="left" />
 
-
-						<el-table-column :label="$t('area.createTime')" prop="createTime" show-overflow-tooltip
-							width="180"></el-table-column>
-						<el-table-column :label="$t('common.action')" width="160" fixed="right">
+						<el-table-column :label="$t('area.state')" prop="enabled" width="100" fixed="left">
 							<template #default="scope">
+								<div>
+									{{ scope.row['enabled'] == 1 ? '上架' : '下架' }}
+								</div>
+							</template>
+						</el-table-column>
+						<el-table-column :label="$t('common.action')" width="300" fixed="right">
+							<template #default="scope">
+								<el-button icon="InfoFilled" text type="primary" @click="useInfoRef.open(scope.row.id)">
+									{{ $t('common.detailBtn') }}
+								</el-button>
 								<el-button v-auth="'sys_user_edit'" icon="edit-pen" text type="primary"
 									@click="userDialogRef.openDialog(scope.row.userId)">
 									{{ $t('common.editBtn') }}
 								</el-button>
 
-								<el-button icon="edit-pen" text type="primary">
-									{{ $t('area.shelves') }}
+								<el-button icon="Top" text type="primary" @click="handleTakedown(scope.row)"
+									v-if="scope.row['enabled'] == 0">
+									{{ $t('shopList.shelves') }}
 								</el-button>
-								<el-button icon="edit-pen" text type="primary" @click="handleTakedown">
-									{{ $t('area.takedown') }}
+								<el-button icon="Bottom" text type="primary" @click="handleTakedown(scope.row)" v-else>
+									{{ $t('shopList.takedown') }}
 								</el-button>
 								<el-tooltip :content="$t('area.deleteDisabledTip')" :disabled="scope.row.userId !== '1'" placement="top">
 									<span style="margin-left: 12px">
@@ -78,16 +86,17 @@
 			</pane>
 		</splitpanes>
 
-		<user-form ref="userDialogRef" :lock_flag="lock_flag" @refresh="getDataList(false)" />
+		<user-form ref="userDialogRef" @refresh="getDataList(false)" />
 
 		<upload-excel ref="excelUploadRef" :title="$t('area.importUserTip')" temp-url="/admin/sys-file/local/file/user.xlsx"
 			url="/admin/user/import" @refreshDataList="getDataList" />
 	</div>
 </template>
 
-<script lang="ts" name="systemUser" setup>
 
-import { delObj, pageList, putObj } from '/@/api/admin/user';
+<script lang="ts" name="systemUser" setup>
+import { getAreaList, updateEnabled, deleteAreaByIds } from '/@/api/admin/area';
+import { getStoreName } from '/@/api/admin/store';
 import { list } from '/@/api/admin/role';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { useMessage, useMessageBox } from '/@/hooks/message';
@@ -95,23 +104,33 @@ import { useI18n } from 'vue-i18n';
 import { useDict } from '/@/hooks/dict';
 // 动态引入组件
 const UserForm = defineAsyncComponent(() => import('./form.vue'));
+
+
+const enabledList = [
+	{ label: '上架', value: '1' },
+	{ label: '下架', value: '0' },
+]
 const { t } = useI18n();
-const { lock_flag } = useDict('lock_flag');
 // 定义变量内容
 const userDialogRef = ref();
 const excelUploadRef = ref();
+const useInfoRef = ref();
 const queryRef = ref();
 const showSearch = ref(true);
 const optionsRoles = ref([]) as any;
+const storeNameList = ref<any[]>([])
 
 
 // 定义表格查询、后台调用的API
 const state: BasicTableProps = reactive<BasicTableProps>({
 	queryForm: {
-		state: '',
+		enabled: '',
 		name: '',
 	},
-	pageList: pageList,
+	pageList: async (pamars) => {
+		await handleStoreNameList()
+		return await getAreaList(pamars)
+	},
 });
 const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
@@ -133,6 +152,13 @@ const exportExcel = () => {
 	downBlobFile('/admin/user/export', state.queryForm, 'users.xlsx');
 };
 
+//跟新下拉门店名称
+const handleStoreNameList = async () => {
+	const { data } = await getStoreName()
+	storeNameList.value = data
+	console.log(data);
+
+}
 
 
 
@@ -145,7 +171,7 @@ const handleDelete = async (ids: string[]) => {
 	}
 
 	try {
-		await delObj(ids);
+		await deleteAreaByIds(ids);
 		getDataList();
 		useMessage().success(t('common.delSuccessText'));
 	} catch (err: any) {
@@ -154,7 +180,26 @@ const handleDelete = async (ids: string[]) => {
 };
 
 //点击下架
-const handleTakedown = async () => {
-	await useMessageBox().confirm(t('shopList.sureTakedown'),)
+const handleTakedown = async (row: any) => {
+
+	//scope.row['enabled'] == 1 ? '上架' : '下架'
+	//shelves: '上架',
+	//	takedown: '下架',
+	const enabled = row.enabled == 1 ? '0' : '1'
+
+	if (row.enabled == 1) {
+		await useMessageBox().confirm(t('shopList.sureTakedown'))
+	}
+	//1:下架,0:正常
+	await updateEnabled({
+		id: row.id,
+		enabled: enabled
+	})
+	useMessage().success(t('common.optSuccessText'));
+
+	getDataList();
+
+
 }
+
 </script>
