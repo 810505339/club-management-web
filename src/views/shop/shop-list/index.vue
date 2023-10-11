@@ -38,7 +38,7 @@
 					<el-table v-loading="state.loading" :data="state.dataList" @selection-change="handleSelectionChange" border
 						:cell-style="tableStyle.cellStyle" :header-cell-style="tableStyle.headerCellStyle">
 						<el-table-column :label="$t('shopList.index')" type="index" width="60" fixed="left" />
-						<el-table-column :label="$t('shopList.id')" prop="storeId" width="100" fixed="left" />
+						<el-table-column :label="$t('shopList.id')" prop="id" width="100" fixed="left" />
 						<el-table-column :label="$t('shopList.name')" prop="name" width="100" fixed="left" />
 						<el-table-column :label="$t('shopList.address')" prop="address" fixed="left" />
 						<el-table-column :label="$t('shopList.introduce')" prop="introduction" fixed="left" />
@@ -60,16 +60,17 @@
 								</el-button>
 
 								<el-button v-auth="'sys_user_edit'" icon="edit-pen" text type="primary"
-									@click="userDialogRef.openDialog(scope.row.storeId)">
+									@click="userDialogRef.openDialog(scope.row.id)">
 									{{ $t('common.editBtn') }}
 								</el-button>
 
 
 
-								<el-button icon="Top" text type="primary" v-if="scope.row['enabled'] == 0">
+								<el-button icon="Top" text type="primary" @click="handleTakedown(scope.row)"
+									v-if="scope.row['enabled'] == 0">
 									{{ $t('shopList.shelves') }}
 								</el-button>
-								<el-button icon="Bottom" text type="primary" @click="handleTakedown" v-else>
+								<el-button icon="Bottom" text type="primary" @click="handleTakedown(scope.row)" v-else>
 									{{ $t('shopList.takedown') }}
 								</el-button>
 								<el-tooltip :content="$t('shopList.deleteDisabledTip')" :disabled="scope.row.userId !== '1'"
@@ -97,7 +98,7 @@
 </template>
 
 <script lang="ts" name="shopList" setup>
-import { getStoreList } from '/@/api/admin/store';
+import { getStoreList, updateEnabled } from '/@/api/admin/store';
 import { list } from '/@/api/admin/role';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { useMessage, useMessageBox } from '/@/hooks/message';
@@ -164,7 +165,26 @@ const handleDelete = async (ids: string[]) => {
 };
 
 //点击下架
-const handleTakedown = async () => {
-	await useMessageBox().confirm(t('shopList.sureTakedown'),)
+const handleTakedown = async (row: any) => {
+
+	//scope.row['enabled'] == 1 ? '上架' : '下架'
+	//shelves: '上架',
+	//	takedown: '下架',
+	const enabled = row.enabled == 1 ? '0' : '1'
+	
+	if (row.enabled == 1) {
+		await useMessageBox().confirm(t('shopList.sureTakedown'))
+	}
+	//1:下架,0:正常
+	await updateEnabled({
+		id: row.id,
+		enabled: enabled
+	})
+	useMessage().success(t('common.optSuccessText'));
+
+	getDataList();
+
+
 }
+
 </script>

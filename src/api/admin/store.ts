@@ -1,18 +1,18 @@
 import request from '/@/utils/request';
 
-export const AddStore = (params?: Object) => {
+export const AddStore = (data?: Object) => {
   return request({
     url: '/admin/store',
     method: 'post',
-    params,
+    data,
   });
 };
 
-export const EditStore = (params?: Object) => {
+export const EditStore = (data?: Object) => {
   return request({
     url: '/admin/store',
     method: 'put',
-    params,
+    data,
   });
 };
 
@@ -29,5 +29,20 @@ export const getStoreById = (storeId: string) => {
   return request({
     url: `/admin/store/${storeId}`,
     method: 'get',
+  });
+}
+
+//上下架
+/* {
+  "id": 0,
+  "enabled": ""
+}
+ */
+export const updateEnabled = (data: Object) => {
+  return request({
+    url: `/admin/store/updateEnabled`,
+    method: 'put',
+    data
+
   });
 }

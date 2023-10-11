@@ -14,12 +14,12 @@
           v-model="form.address" />
       </el-form-item>
       <el-form-item :label="t('shopList.image')" prop="pictureIds">
-        <upload v-bind="IMG_PROPS" class="w-full" v-model="form.pictureIds" />
+        <upload v-bind="IMG_PROPS" class="w-full" @change="(_, fileList) => uploadChange('pictureIds', fileList)" />
 
       </el-form-item>
 
       <el-form-item :label="t('shopList.video')" prop="videoIds">
-        <upload v-bind="VIDEO_PROPS" class="w-full" v-model="form.videoIds" />
+        <upload v-bind="VIDEO_PROPS" class="w-full" @change="(_, fileList) => uploadChange('videoIds', fileList)" />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -75,10 +75,10 @@ const { grant_types, common_status } = useDict(
 // 提交表单数据
 const form = reactive({
   name: '',
-  pictureIds: '',
-  videoIds: '',
+  pictureIds: [],
+  videoIds: [],
   introduction: '',
-  storeId: '',
+  id: undefined,
   address: ''
 });
 
@@ -99,7 +99,7 @@ const dataRules = ref({
 // 打开弹窗
 const openDialog = (id: string) => {
   visible.value = true;
-  form.storeId = '';
+  form.id = undefined;
   // 重置表单数据
   nextTick(() => {
     dataFormRef.value?.resetFields();
@@ -107,7 +107,7 @@ const openDialog = (id: string) => {
 
   // 获取sysOauthClientDetails信息
   if (id) {
-    form.storeId = id;
+    form.id = id;
     getStoreDetail(id);
   }
 };
@@ -121,8 +121,9 @@ const onSubmit = async () => {
   try {
     loading.value = true;
     console.log(form);
-    form.storeId == '' ? await AddStore(form) : await EditStore({ ...form, videoIds: [form.videoIds] });
-    useMessage().success(t(form.storeId ? 'common.editSuccessText' : 'common.addSuccessText'));
+
+    form.id ? await EditStore(form) : await AddStore(form);
+    useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));
     visible.value = false;
     emit('refresh');
   } catch (err: any) {
@@ -139,6 +140,12 @@ const getStoreDetail = (id: string) => {
     Object.assign(form, res.data);
   });
 };
+
+const uploadChange = (type: 'pictureIds' | 'videoIds', fileList: any[]) => {
+  const tempList = fileList.map(item => (item.id))
+  form[type] = tempList
+
+}
 
 // 暴露变量
 defineExpose({

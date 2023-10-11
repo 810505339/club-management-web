@@ -1,23 +1,10 @@
 <!--文件上传组件-->
 <template>
 	<div class="upload-file">
-		<el-upload
-			ref="fileUpload"
-			v-if="props.type === 'default'"
-			:action="baseURL + other.adaptationUrl(props.uploadFileUrl)"
-			:before-upload="handleBeforeUpload"
-			:file-list="fileList"
-			:headers="headers"
-			:limit="limit"
-			:on-error="handleUploadError"
-			:on-remove="handleRemove"
-			:data="data"
-			:auto-upload="autoUpload"
-			:on-success="handleUploadSuccess"
-			class="upload-file-uploader"
-			drag
-			multiple
-		>
+		<el-upload ref="fileUpload" v-if="props.type === 'default'"
+			:action="baseURL + other.adaptationUrl(props.uploadFileUrl)" :before-upload="handleBeforeUpload"
+			:file-list="fileList" :headers="headers" :limit="limit" :on-error="handleUploadError" :on-remove="handleRemove"
+			:data="data" :auto-upload="autoUpload" :on-success="handleUploadSuccess" class="upload-file-uploader" drag multiple>
 			<i class="el-icon-upload"></i>
 			<div class="el-upload__text">
 				{{ $t('excel.operationNotice') }}
@@ -27,8 +14,7 @@
 				<div class="el-upload__tip" v-if="props.isShowTip">
 					{{ $t('excel.pleaseUpload') }}
 					<template v-if="props.fileSize">
-						{{ $t('excel.size') }} <b style="color: #f56c6c">{{ props.fileSize }}MB</b></template
-					>
+						{{ $t('excel.size') }} <b style="color: #f56c6c">{{ props.fileSize }}MB</b></template>
 					<template v-if="props.fileType">
 						{{ $t('excel.format') }} <b style="color: #f56c6c">{{ props.fileType.join('/') }}</b>
 					</template>
@@ -36,22 +22,10 @@
 				</div>
 			</template>
 		</el-upload>
-		<el-upload
-			ref="fileUpload"
-			v-if="props.type === 'simple'"
-			:action="other.adaptationUrl(props.uploadFileUrl)"
-			:before-upload="handleBeforeUpload"
-			:file-list="fileList"
-			:headers="headers"
-			:limit="limit"
-			:auto-upload="autoUpload"
-			:on-error="handleUploadError"
-			:on-remove="handleRemove"
-			:data="data"
-			:on-success="handleUploadSuccess"
-			class="upload-file-uploader"
-			multiple
-		>
+		<el-upload ref="fileUpload" v-if="props.type === 'simple'" :action="other.adaptationUrl(props.uploadFileUrl)"
+			:before-upload="handleBeforeUpload" :file-list="fileList" :headers="headers" :limit="limit"
+			:auto-upload="autoUpload" :on-error="handleUploadError" :on-remove="handleRemove" :data="data"
+			:on-success="handleUploadSuccess" class="upload-file-uploader" multiple>
 			<el-button type="primary" link>{{ $t('excel.clickUpload') }}</el-button>
 		</el-upload>
 	</div>
@@ -143,7 +117,7 @@ const handleBeforeUpload = (file: File) => {
 // 上传成功回调
 function handleUploadSuccess(res: any, file: any) {
 	if (res.code === 0) {
-		uploadList.value.push({ name: res.data.fileName, url: res.data.url });
+		uploadList.value.push({ name: res.data.fileName, url: res.data.url, id: res.data.id });
 		uploadedSuccessfully();
 	} else {
 		number.value--;
@@ -155,18 +129,19 @@ function handleUploadSuccess(res: any, file: any) {
 
 // 上传结束处理
 const uploadedSuccessfully = () => {
+
 	if (number.value > 0 && uploadList.value.length === number.value) {
 		fileList.value = fileList.value.filter((f) => f.url !== undefined).concat(uploadList.value);
 		uploadList.value = [];
 		number.value = 0;
-		emit('change', listToString(fileList.value));
+		emit('change', listToString(fileList.value), fileList.value);
 		emit('update:modelValue', listToString(fileList.value));
 	}
 };
 
 const handleRemove = (file: any) => {
 	fileList.value = fileList.value.filter((f) => !(f === file.url));
-	emit('change', listToString(fileList.value));
+	emit('change', listToString(fileList.value), fileList.value);
 	emit('update:modelValue', listToString(fileList.value));
 };
 
@@ -201,6 +176,7 @@ watch(
 			let temp = 1;
 			// 首先将值转为数组
 			const list = Array.isArray(val) ? val : props?.modelValue?.split(',');
+
 			// 然后将数组转为对象数组
 			fileList.value = list.map((item) => {
 				if (typeof item === 'string') {

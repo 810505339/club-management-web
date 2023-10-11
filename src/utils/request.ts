@@ -42,7 +42,13 @@ service.interceptors.request.use(
 
 		// 自动适配单体和微服务架构不同的URL
 		config.url = other.adaptationUrl(config.url);
-
+		if (config.method == 'get') {
+			config.paramsSerializer = {
+				serialize: (params) => {
+					return qs.stringify(params, { arrayFormat: 'repeat' });
+				},
+			}
+		}
 		// 处理完毕，返回config对象
 		return config;
 	},
