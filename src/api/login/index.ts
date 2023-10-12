@@ -157,3 +157,13 @@ export const logout = () => {
 		method: 'delete',
 	});
 };
+
+
+
+export const getCommonFileUrl = async () => {
+	const { data } = await request({
+		url: '/admin/sys-file/access/common',
+		method: 'get',
+	});
+	return data
+}

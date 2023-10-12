@@ -63,3 +63,5 @@ export const deleteStoreByIds = (ids: string[]) => {
     data: ids,
   })
 }
+
+

@@ -16,7 +16,7 @@
         </el-form-item>
         <el-form-item :label="t('shopList.image')" prop="pictureIds">
           <el-image class="w-40" fit="cover" v-for="item in userInfo.pictureFileVOs" :key="item.id"
-            :src="`${baseURL}/admin/sys-file/local/file/${item.fileName}`" />
+            :src="`${fileCommonUrl}/${item.fileName}`" />
         </el-form-item>
         <el-form-item :label="t('shopList.video')" prop="videoIds">
 
@@ -31,8 +31,11 @@
 <script setup lang="ts" name="shop-list-info">
 import { useI18n } from 'vue-i18n'
 import { getStoreById } from '/@/api/admin/store'
+import { useUserInfo } from '/@/stores/userInfo'
 const drawer = ref(false)
 const { t } = useI18n()
+const store = useUserInfo()
+const fileCommonUrl = computed(() => store.userInfos.fileCommonUrl)
 
 const userInfo = reactive({
   name: '',
@@ -50,6 +53,7 @@ async function open(id: string) {
 
 const getInfo = async (id: string) => {
   const { data } = await getStoreById(id)
+  console.log(data)
   Object.assign(userInfo, data)
 
 }

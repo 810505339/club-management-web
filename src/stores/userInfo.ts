@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { Session } from '/@/utils/storage';
-import { getUserInfo, login, loginByMobile, loginBySocial, refreshTokenApi } from '/@/api/login/index';
+import { getCommonFileUrl, getUserInfo, login, loginByMobile, loginBySocial, refreshTokenApi } from '/@/api/login/index';
 import other from '/@/utils/other';
 import { useMessage } from '/@/hooks/message';
 
@@ -16,6 +16,7 @@ export const useUserInfo = defineStore('userInfo', {
 			time: 0,
 			roles: [],
 			authBtnList: [],
+			fileCommonUrl: ''
 		},
 	}),
 
@@ -122,15 +123,18 @@ export const useUserInfo = defineStore('userInfo', {
 		 * @async
 		 */
 		async setUserInfos() {
-			getUserInfo().then((res) => {
-				const userInfo: any = {
-					user: res.data.sysUser,
-					time: new Date().getTime(),
-					roles: res.data.roles,
-					authBtnList: res.data.permissions,
-				};
-				this.userInfos = userInfo;
-			});
+			const res = await getUserInfo()
+			const url = await getCommonFileUrl()
+
+
+			const userInfo: any = {
+				user: res.data.sysUser,
+				time: new Date().getTime(),
+				roles: res.data.roles,
+				authBtnList: res.data.permissions,
+				fileCommonUrl: url
+			};
+			this.userInfos = userInfo
 		},
 	},
 });
