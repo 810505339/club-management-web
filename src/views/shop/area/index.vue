@@ -41,10 +41,22 @@
 						<el-table-column :label="$t('area.index')" prop="index" width="60" fixed="left" />
 						<el-table-column :label="$t('area.id')" prop="id" width="100" fixed="left" />
 						<el-table-column :label="$t('area.name')" prop="name" fixed="left" />
-						<el-table-column :label="$t('area.store')" prop="store" width="100" fixed="left" />
+						<el-table-column :label="$t('area.store')" prop="store" width="100" fixed="left">
+							<template #default="scope">
+								{{ scope.row['storeVO']?.name }}
+							</template>
+						</el-table-column>
 						<el-table-column :label="$t('area.image')" prop="image" width="100" fixed="left" />
-						<el-table-column :label="$t('area.time')" prop="time" width="100" fixed="left" />
-						<el-table-column :label="$t('area.decks')" prop="decks" width="100" fixed="left" />
+						<el-table-column :label="$t('area.time')" prop="time" width="100" fixed="left">
+							<template #default="scope">
+								{{ timerFormat(scope.row['businessDateVOS']) }}
+							</template>
+						</el-table-column>
+						<el-table-column :label="$t('area.decks')" prop="decks" width="100" fixed="left">
+							<template #default="scope">
+								{{ scope.row['boothVOS']?.length }}
+							</template>
+						</el-table-column>
 
 						<el-table-column :label="$t('area.state')" prop="enabled" width="100" fixed="left">
 							<template #default="scope">
@@ -202,4 +214,15 @@ const handleTakedown = async (row: any) => {
 
 }
 
+
+//初始化时间
+function timerFormat(list: any[]) {
+
+
+
+	return list.map((item) => {
+		return ``
+	})
+
+}
 </script>

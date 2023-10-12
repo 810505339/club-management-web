@@ -1,5 +1,5 @@
 <template>
-  <el-drawer v-model="drawer" :title="t('common.detailBtn')" direction="rtl" :before-close="handleClose">
+  <el-drawer v-model="drawer" :title="t('common.detailBtn')" direction="rtl" destroy-on-close>
     <div class="text-[#fff]">
       <el-form :model="userInfo" label-width="120px">
         <el-form-item :label="t('shopList.id')" prop="id">
@@ -15,11 +15,12 @@
           {{ userInfo.name }}
         </el-form-item>
         <el-form-item :label="t('shopList.image')" prop="pictureIds">
-          <el-image class="w-40" fit="cover" v-for="item in userInfo.pictureFileVOs" :key="item.id"
+          <el-image class="w-60 my-2 rounded-md" fit="cover" v-for="item in userInfo.pictureFileVOs" :key="item.id"
             :src="`${fileCommonUrl}/${item.fileName}`" />
         </el-form-item>
         <el-form-item :label="t('shopList.video')" prop="videoIds">
-
+          <video :src="`${fileCommonUrl}/${userInfo?.videoFileVOs?.[0]?.fileName}`" controls
+            class="w-60 h-40 my-2 rounded-md" v-if="userInfo.videoFileVOs" />
         </el-form-item>
 
 

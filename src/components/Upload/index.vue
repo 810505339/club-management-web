@@ -79,7 +79,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'change']);
 
 const number = ref(0);
-const fileList = ref([]) as any;
+const fileList = ref(props.modelValue) as any;
 const uploadList = ref([]) as any;
 const fileUpload = ref();
 
@@ -129,11 +129,12 @@ function handleUploadSuccess(res: any, file: any) {
 
 // 上传结束处理
 const uploadedSuccessfully = () => {
-
+	console.log(fileList.value)
 	if (number.value > 0 && uploadList.value.length === number.value) {
-		fileList.value = fileList.value.filter((f) => f.url !== undefined).concat(uploadList.value);
+		fileList.value = fileList.value.concat(uploadList.value);
 		uploadList.value = [];
 		number.value = 0;
+
 		emit('change', listToString(fileList.value), fileList.value);
 		emit('update:modelValue', listToString(fileList.value));
 	}

@@ -125,9 +125,9 @@ const onSubmit = async () => {
   try {
     loading.value = true;
     console.log(form);
-    form.pictureIds = form.pictureIds?.map(item => (item.id))
-    form.videoIds = form.videoIds?.map(item => (item.id))
-    form.id ? await EditStore(form) : await AddStore(form);
+    const pictureIds = form.pictureIds?.map(item => (item.id))
+    const videoIds = form.videoIds?.map(item => (item.id))
+    form.id ? await EditStore({ ...form, pictureIds, videoIds }) : await AddStore({ ...form, pictureIds, videoIds });
     useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));
     visible.value = false;
     emit('refresh');
