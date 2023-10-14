@@ -68,18 +68,19 @@
         <el-table-column :label="$t('common.action')" fixed="right" width="300">
           <template #default="scope">
 
-
-            <el-button v-auth="'job_sys_job_del'" text type="primary">{{
-              $t('common.shelves') }} </el-button>
-            <el-button v-auth="'job_sys_job_del'" text type="primary">{{
-              $t('common.takedown') }} </el-button>
+            <el-button icon="Top" text type="primary" @click="handleTakedown(scope.row)" v-if="scope.row['enabled'] == 0">
+              {{ $t('shopList.shelves') }}
+            </el-button>
+            <el-button icon="Bottom" text type="primary" @click="handleTakedown(scope.row)" v-else>
+              {{ $t('shopList.takedown') }}
+            </el-button>
             <el-button v-auth="'job_sys_job_del'" text type="primary">{{
               $t('common.detailBtn') }} </el-button>
             <el-button v-auth="'job_sys_job_del'" text type="primary">{{
               $t('common.edit') }} </el-button>
             <el-button v-auth="'job_sys_job_del'" text type="primary">{{
               $t('common.delBtn') }} </el-button>
-            <el-button v-auth="'job_sys_job_del'" text type="primary" @click="formDrawerRef.openDialog">{{
+            <el-button v-auth="'job_sys_job_del'" text type="primary" @click="formDrawerRef.openDialog(scope.row.id)">{{
               $t('dynamic.statistics') }} </el-button>
           </template>
         </el-table-column>
@@ -97,7 +98,7 @@ import { BasicTableProps, useTable } from '/@/hooks/table';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useDict } from '/@/hooks/dict';
 import { useI18n } from 'vue-i18n';
-import { pageList } from '/@/api/admin/user';
+import { getDynamicList, updateEnabled, deleteDynamic } from '/@/api/admin/dynamic';
 import dynamicFrom from './form.vue';
 import dynamicDrawer from './drawer.vue';
 import { useTranslateText } from './hooks/translate';
@@ -147,7 +148,7 @@ const { job_status, job_execute_status, misfire_policy, job_type } = useDict('jo
 /** 表格状态变量 */
 const state = reactive<BasicTableProps>({
   queryForm,
-  pageList: pageList,
+  pageList: getDynamicList,
 });
 
 /** 获取表格数据方法 */
@@ -164,6 +165,49 @@ const handleSelectionChange = (rows: any) => {
   selectedRows.value = rows;
   multiple.value = !rows.length;
 };
+
+
+//点击下架
+const handleTakedown = async (row: any) => {
+
+  //scope.row['enabled'] == 1 ? '上架' : '下架'
+  //shelves: '上架',
+  //	takedown: '下架',
+  const enabled = row.enabled == 1 ? '0' : '1'
+
+  if (row.enabled == 1) {
+    await useMessageBox().confirm(t('shopList.sureTakedown'))
+  }
+  //1:下架,0:正常
+  await updateEnabled({
+    id: row.id,
+    enabled: enabled
+  })
+  useMessage().success(t('common.optSuccessText'));
+
+  getDataList();
+
+
+}
+
+
+// 删除操作
+const handleDelete = async (ids: string[]) => {
+  try {
+    await useMessageBox().confirm(t('common.delConfirmText'));
+  } catch {
+    return;
+  }
+
+  try {
+    await deleteDynamic(ids);
+    getDataList();
+    useMessage().success(t('common.delSuccessText'));
+  } catch (err: any) {
+    useMessage().error(err.msg);
+  }
+};
+
 
 
 </script>

@@ -31,13 +31,11 @@
 					<el-table v-loading="state.loading" :data="state.dataList" @selection-change="handleSelectionChange" border
 						:cell-style="tableStyle.cellStyle" :header-cell-style="tableStyle.headerCellStyle">
 						<el-table-column :label="$t('common.index')" type="index" width="60" fixed="left" />
-						<el-table-column :label="$t('goods.id')" type="id" width="100" fixed="left" />
-						<el-table-column :label="$t('goods.name')" type="id" fixed="left" />
-						<el-table-column :label="$t('goods.image')" type="id" width="100" fixed="left" />
-						<el-table-column :label="$t('goods.introduce')" type="id" fixed="left" />
-						<el-table-column :label="$t('goods.createTime')" prop="createTime" show-overflow-tooltip
-							width="180"></el-table-column>
-						<el-table-column :label="$t('common.action')" width="160" fixed="right">
+						<el-table-column :label="$t('goods.id')" prop="id" width="100" fixed="left" />
+						<el-table-column :label="$t('goods.name')" prop="name" fixed="left" />
+						<el-table-column :label="$t('goods.image')" prop="id" width="100" fixed="left" />
+						<el-table-column :label="$t('goods.introduce')" prop="introduction" fixed="left" />
+						<el-table-column :label="$t('common.action')" fixed="right">
 							<template #default="scope">
 								<el-button v-auth="'sys_user_edit'" icon="edit-pen" text type="primary"
 									@click="userDialogRef.openDialog(scope.row.userId)">
@@ -68,7 +66,7 @@
 
 <script lang="ts" name="systemUser" setup>
 
-import { delObj, pageList, putObj } from '/@/api/admin/user';
+import { getdrinksMealList } from '/@/api/admin/commodity';
 import { list } from '/@/api/admin/role';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { useMessage, useMessageBox } from '/@/hooks/message';
@@ -92,7 +90,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 		state: '',
 		name: '',
 	},
-	pageList: pageList,
+	pageList: getdrinksMealList,
 });
 const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
 

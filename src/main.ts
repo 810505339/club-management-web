@@ -18,6 +18,9 @@ import { parseTime, parseDate, dateTimeStr, dateStr, timeStr } from '/@/utils/fo
 import { Splitpanes, Pane } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css';
 
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css';
+
 const app = createApp(App);
 
 // 导入通用自定义组件
@@ -33,6 +36,12 @@ app.component('DelWrap', DelWrap);
 // 导入布局插件
 app.component('Splitpanes', Splitpanes);
 app.component('Pane', Pane);
+
+
+//导入富文本编辑器
+app.component('QuillEditor', QuillEditor)
+
+
 // 全局方法挂载
 app.config.globalProperties.parseTime = parseTime;
 app.config.globalProperties.parseDate = parseDate;
