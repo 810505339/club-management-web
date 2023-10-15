@@ -44,26 +44,40 @@
         v-loading="state.loading" border :cell-style="tableStyle.cellStyle"
         :header-cell-style="tableStyle.headerCellStyle">
         <el-table-column align="center" type="selection" width="40" />
-        <el-table-column :label="titleChinese" fixed="left" type="index" width="120" />
-        <el-table-column :label="titleEnglish" fixed="left" type="index" width="120" />
-        <el-table-column :label="contextChinese" prop="jobName" show-overflow-tooltip width="300" />
-        <el-table-column :label="contextEnglish" prop="jobName" show-overflow-tooltip width="300" />
-        <el-table-column :label="type" prop="jobGroup" show-overflow-tooltip width="120" />
-        <el-table-column :label="t('dynamic.register')" prop="jobStatus" show-overflow-tooltip width="120">
+        <el-table-column :label="titleChinese" fixed="left" prop="dynamicTitleCn" width="120" />
+        <el-table-column :label="titleEnglish" fixed="left" prop="dynamicTitleUk" width="120" />
+        <el-table-column :label="contextChinese" prop="dynamicContentCn" show-overflow-tooltip width="300" />
+        <el-table-column :label="contextEnglish" prop="dynamicContentUk" show-overflow-tooltip width="300" />
+
+
+        <el-table-column :label="type" prop="dynamicTypeVO" show-overflow-tooltip width="120">
           <template #default="scope">
-            <dict-tag :options="job_status" :value="scope.row.jobStatus"></dict-tag>
+            {{ scope.row['dynamicTypeVO']?.name }}
           </template>
         </el-table-column>
-        <el-table-column :label="t('dynamic.expenses')" prop="jobExecuteStatus" show-overflow-tooltip width="120">
+        <el-table-column :label="t('dynamic.register')" prop="apply" show-overflow-tooltip width="120">
           <template #default="scope">
-            <dict-tag :options="job_execute_status" :value="scope.row.jobExecuteStatus"></dict-tag>
+            {{ scope.row['apply'] == 1 ? t('common.yes') : t('common.no') }}
+          </template>
+        </el-table-column>
+        <el-table-column :label="t('dynamic.expenses')" prop="charge" show-overflow-tooltip width="120">
+          <template #default="scope">
+            {{ scope.row['charge'] == 1 ? t('common.yes') : t('common.no') }}
           </template>
         </el-table-column>
 
-        <el-table-column :label="t('dynamic.expiryTime')" prop="startTime" show-overflow-tooltip width="120" />
+        <el-table-column :label="t('dynamic.expiryTime')" prop="expireTime" show-overflow-tooltip width="120" />
 
-        <el-table-column :label="t('dynamic.status')" prop="previousTime" show-overflow-tooltip width="120" />
-        <el-table-column :label="t('dynamic.store')" prop="nextTime" show-overflow-tooltip width="120" />
+        <el-table-column :label="t('dynamic.status')" show-overflow-tooltip width="120">
+          <template #default="scope">
+            {{ scope.row['enabled'] == 1 ? $t('shopList.shelves') : $t('shopList.takedown') }}
+          </template>
+        </el-table-column>
+        <el-table-column :label="t('dynamic.store')" prop="nextTime" show-overflow-tooltip width="120">
+          <template #default="scope">
+            {{ scope.row['storeVOS']?.[0]?.name }}
+          </template>
+        </el-table-column>
 
         <el-table-column :label="$t('common.action')" fixed="right" width="300">
           <template #default="scope">
@@ -102,7 +116,7 @@ import { getDynamicList, updateEnabled, deleteDynamic } from '/@/api/admin/dynam
 import dynamicFrom from './form.vue';
 import dynamicDrawer from './drawer.vue';
 import { useTranslateText } from './hooks/translate';
-
+import { useUserInfo } from '/@/stores/userInfo';
 
 
 

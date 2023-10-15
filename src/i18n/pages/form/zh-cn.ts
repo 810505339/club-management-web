@@ -47,6 +47,15 @@ export default {
 		sum: '数量',
 		duration: '时长',
 		price: '价格',
+		yes: '是',
+		no: '否',
+		week0: '星期天',
+		week1: '星期一',
+		week2: '星期二',
+		week3: '星期三',
+		week4: '星期四',
+		week5: '星期五',
+		week6: '星期六',
 	},
 	message: {
 		box: {

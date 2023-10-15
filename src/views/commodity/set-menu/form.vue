@@ -31,7 +31,7 @@
 import { useDict } from '/@/hooks/dict';
 import { useMessage } from '/@/hooks/message';
 // import { addObj, getObj, putObj, validateclientId } from '/@/api/admin/client';
-import { AdddrinksMeal, EditdrinksMeal, getdrinksMealList } from '/@/api/admin/commodity';
+import { AdddrinksMeal, EditdrinksMeal, getAreaById } from '/@/api/admin/commodity';
 import { useI18n } from 'vue-i18n';
 import { rule } from '/@/utils/validate';
 import upload from "/@/components/Upload/index.vue";
@@ -45,13 +45,7 @@ const IMG_PROPS = {
   fileType: ['jpg', 'png', 'jpeg']
 
 }
-//视频props
-const VIDEO_PROPS = {
-  limit: 1,
-  fileSize: 20,
-  fileType: ['mp4'],
 
-}
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
@@ -132,7 +126,7 @@ const onSubmit = async () => {
 // 初始化表单数据
 const getStoreDetail = async (id: string) => {
   // 获取数据
-  let { data } = await getdrinksMealList(id)
+  let { data } = await getAreaById(id)
   data.pictureIds = data.pictureFileVOs?.map((item: any) => ({ id: item.id, name: item.fileName }))
   Object.assign(form, data)
 

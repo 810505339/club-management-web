@@ -3,58 +3,56 @@
     :title="form.jobId ? $t('common.editBtn') : $t('common.addBtn')" draggable width="600">
     <el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="120px" v-loading="loading">
       <el-row :gutter="20">
-
         <el-col :span="20" class="mb20">
-          <el-form-item :label="type" prop="jobName">
+          <el-form-item :label="titleChinese" prop="dynamicTitleCn">
             <el-input v-model="form.jobName" :placeholder="titlePlaceholder" />
           </el-form-item>
         </el-col>
 
         <el-col :span="20" class="mb20">
-          <el-form-item :label="t('dynamic.store')" prop="jobName">
-            <el-input v-model="form.jobName" :placeholder="titlePlaceholder" />
-          </el-form-item>
-        </el-col>
-
-
-        <el-col :span="20" class="mb20">
-          <el-form-item :label="titleChinese" prop="jobName">
+          <el-form-item :label="titleEnglish" prop="dynamicTitleUk">
             <el-input v-model="form.jobName" :placeholder="titlePlaceholder" />
           </el-form-item>
         </el-col>
 
         <el-col :span="20" class="mb20">
-          <el-form-item :label="titleEnglish" prop="jobName">
-            <el-input v-model="form.jobName" :placeholder="titlePlaceholder" />
-          </el-form-item>
-        </el-col>
-
-        <el-col :span="20" class="mb20">
-          <el-form-item :label="contextEnglish" prop="jobName">
+          <el-form-item :label="contextEnglish" prop="dynamicContentUk">
             <el-input :rows="2" type="textarea" v-model="form.jobName" :placeholder="titlePlaceholder" />
           </el-form-item>
         </el-col>
 
         <el-col :span="20" class="mb20">
-          <el-form-item :label="contextChinese" prop="jobName">
+          <el-form-item :label="contextChinese" prop="dynamicContentCn">
             <el-input :rows="2" type="textarea" v-model="form.jobName" :placeholder="titlePlaceholder" />
           </el-form-item>
         </el-col>
 
         <el-col :span="20" class="mb20">
-          <el-form-item :label="t('dynamic.register')" prop="jobName">
+          <el-form-item :label="type" prop="dynamicTypeId">
+            <el-input v-model="form.jobName" :placeholder="titlePlaceholder" />
+          </el-form-item>
+        </el-col>
+
+        <el-col :span="20" class="mb20">
+          <el-form-item :label="t('dynamic.register')" prop="apply">
             <el-switch v-model="form.jobName" />
           </el-form-item>
         </el-col>
 
         <el-col :span="20" class="mb20">
-          <el-form-item :label="t('dynamic.expenses')" prop="jobName">
+          <el-form-item :label="t('dynamic.store')" prop="storeId">
+            <el-input v-model="form.jobName" :placeholder="titlePlaceholder" />
+          </el-form-item>
+        </el-col>
+
+        <el-col :span="20" class="mb20">
+          <el-form-item :label="t('dynamic.expenses')" prop="charge">
             <el-switch v-model="form.jobName" />
           </el-form-item>
         </el-col>
 
         <el-col :span="20" class="mb20">
-          <el-form-item :label="t('dynamic.expiryTime')" prop="jobName">
+          <el-form-item :label="t('dynamic.expiryTime')" prop="expireTime">
             <el-date-picker v-model="form.jobName" type="datetime" placeholder="Select date and time" />
           </el-form-item>
         </el-col>

@@ -33,18 +33,23 @@
 						<el-table-column :label="$t('common.index')" type="index" width="60" fixed="left" />
 						<el-table-column :label="$t('goods.id')" prop="id" width="100" fixed="left" />
 						<el-table-column :label="$t('goods.name')" prop="name" fixed="left" />
-						<el-table-column :label="$t('goods.image')" prop="id" width="100" fixed="left" />
+						<el-table-column :label="$t('goods.image')" fixed="left">
+							<template #default="scope">
+								<el-image v-for="img in scope.row['pictureFileVOs']" :key="img.id" class="w-40 m-2" fit="cover"
+									:src="`${fileCommonUrl}/${img.fileName}`" />
+							</template>
+						</el-table-column>
 						<el-table-column :label="$t('goods.introduce')" prop="introduction" fixed="left" />
 						<el-table-column :label="$t('common.action')" fixed="right">
 							<template #default="scope">
 								<el-button v-auth="'sys_user_edit'" icon="edit-pen" text type="primary"
-									@click="userDialogRef.openDialog(scope.row.userId)">
+									@click="userDialogRef.openDialog(scope.row.id)">
 									{{ $t('common.editBtn') }}
 								</el-button>
 								<el-tooltip :content="$t('goods.deleteDisabledTip')" :disabled="scope.row.userId !== '1'" placement="top">
 									<span style="margin-left: 12px">
 										<el-button icon="delete" v-auth="'sys_user_del'" :disabled="scope.row.username === 'admin'" text
-											type="primary" @click="handleDelete([scope.row.userId])">{{ $t('common.delBtn') }}
+											type="primary" @click="handleDelete([scope.row.id])">{{ $t('common.delBtn') }}
 										</el-button>
 									</span>
 								</el-tooltip>
@@ -66,12 +71,13 @@
 
 <script lang="ts" name="systemUser" setup>
 
-import { getdrinksMealList } from '/@/api/admin/commodity';
+import { getdrinksMealList, deletedrinksMealByIds } from '/@/api/admin/commodity';
 import { list } from '/@/api/admin/role';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 import { useDict } from '/@/hooks/dict';
+import { useUserInfo } from '/@/stores/userInfo';
 // 动态引入组件
 const UserForm = defineAsyncComponent(() => import('./form.vue'));
 const { t } = useI18n();
@@ -82,6 +88,8 @@ const excelUploadRef = ref();
 const queryRef = ref();
 const showSearch = ref(true);
 const optionsRoles = ref([]) as any;
+const store = useUserInfo()
+const fileCommonUrl = computed(() => store.userInfos.fileCommonUrl)
 
 
 // 定义表格查询、后台调用的API
@@ -124,7 +132,7 @@ const handleDelete = async (ids: string[]) => {
 	}
 
 	try {
-		await delObj(ids);
+		await deletedrinksMealByIds(ids);
 		getDataList();
 		useMessage().success(t('common.delSuccessText'));
 	} catch (err: any) {

@@ -53,7 +53,16 @@ export default {
 		time: ' date',
 		sum: ' number',
 		duration: ' duration',
-		price: ' price'
+		price: ' price',
+		yes: 'yes',
+		no: 'no',
+		week0: 'Sunday',
+		week1: 'Monday',
+		week2: 'Tuesday',
+		week3: 'Wednesday',
+		week4: 'Thursday',
+		week5: 'Friday',
+		week6: 'Saturday',
 	},
 	message: {
 		box: {

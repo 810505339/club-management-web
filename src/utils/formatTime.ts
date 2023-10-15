@@ -233,3 +233,11 @@ export const dateTimeStr: string = 'YYYY-MM-DD HH:mm:ss';
 export const dateStr: string = 'YYYY-MM-DD';
 
 export const timeStr: string = 'HH:mm:ss';
+
+
+
+//weekDay
+export const weekdayFormat = (index: number, t) => {
+	const weekDay = [t('')]
+	return weekDay[index]
+}

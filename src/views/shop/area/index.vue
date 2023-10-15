@@ -5,9 +5,10 @@
 				<div class="layout-padding-auto layout-padding-view">
 					<el-row v-show="showSearch">
 						<el-form ref="queryRef" :inline="true" :model="state.queryForm" @keyup.enter="getDataList">
-							<el-form-item :label="$t('shopList.name')" prop="name">
-								<el-select v-model="state.queryForm.name" :placeholder="$t('area.nameSelect')">
-									<el-option v-for="item, index in storeNameList" :key="index" :label="item" :value="item" clearable>
+							<el-form-item :label="$t('shopList.name')" prop="storeId">
+								<el-select v-model="state.queryForm.storeId" :placeholder="$t('area.nameSelect')" clearable>
+									<el-option v-for="item, index in storeNameList" :key="index" :label="item.name" :value="item.id"
+										clearable>
 									</el-option>
 								</el-select>
 							</el-form-item>
@@ -46,7 +47,7 @@
 								{{ scope.row['storeVO']?.name }}
 							</template>
 						</el-table-column>
-						<el-table-column :label="$t('area.image')" prop="image" width="100" fixed="left" />
+
 						<el-table-column :label="$t('area.time')" prop="time" width="100" fixed="left">
 							<template #default="scope">
 								{{ timerFormat(scope.row['businessDateVOS']) }}
@@ -98,7 +99,7 @@
 			</pane>
 		</splitpanes>
 
-		<user-form ref="userDialogRef" @refresh="getDataList(false)" />
+		<user-form ref="userDialogRef" :storeNameList="storeNameList" @refresh="getDataList(false)" />
 
 		<upload-excel ref="excelUploadRef" :title="$t('area.importUserTip')" temp-url="/admin/sys-file/local/file/user.xlsx"
 			url="/admin/user/import" @refreshDataList="getDataList" />
@@ -137,7 +138,7 @@ const storeNameList = ref<any[]>([])
 const state: BasicTableProps = reactive<BasicTableProps>({
 	queryForm: {
 		enabled: '',
-		name: '',
+
 	},
 	pageList: async (pamars) => {
 		await handleStoreNameList()
@@ -217,11 +218,8 @@ const handleTakedown = async (row: any) => {
 
 //初始化时间
 function timerFormat(list: any[]) {
-
-
-
 	return list.map((item) => {
-		return ``
+		return `${item.weekDay}  ${item.beginTime}-${item.endTime}`
 	})
 
 }

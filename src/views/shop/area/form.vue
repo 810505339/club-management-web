@@ -2,32 +2,43 @@
   <el-dialog :close-on-click-modal="false" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" width="600"
     draggable v-model="visible">
     <el-form :model="form" :rules="dataRules" formDialogRef label-width="120px" ref="dataFormRef" v-loading="loading">
-      <el-form-item :label="t('shopList.name')" prop="name">
-        <el-input :placeholder="`${t('shopList.please')}${t('shopList.name')}`" v-model="form.name" />
+      <el-form-item :label="t('area.name')" prop="name">
+        <el-input :placeholder="`${t('area.please')}${t('area.name')}`" v-model="form.name" />
       </el-form-item>
-      <el-form-item :label="t('shopList.introduce')" prop="introduction">
-        <el-input type="textarea" :placeholder="`${t('shopList.please')}${t('shopList.introduce')}`"
-          v-model="form.introduction" />
+
+      <el-form-item :label="t('area.store')" prop="storeId">
+        <el-select v-model="form.storeId" :placeholder="$t('area.nameSelect')" clearable>
+          <el-option v-for="item, index in storeNameList" :key="index" :label="item.name" :value="item.id" clearable>
+          </el-option>
+        </el-select>
       </el-form-item>
-      <el-form-item :label="t('shopList.address')" prop="address">
-        <el-input type="textarea" :placeholder="`${t('shopList.please')}${t('shopList.address')}`"
-          v-model="form.address" />
-      </el-form-item>
-      <el-form-item :label="t('shopList.image')" prop="pictureIds">
+
+      <el-form-item :label="$t('area.image')" prop="image" width="100">
         <upload v-bind="IMG_PROPS" class="w-full" :model-value="form.pictureIds"
           @change="(_, fileList) => uploadChange('pictureIds', fileList)" />
-
       </el-form-item>
 
-      <el-form-item :label="t('shopList.video')" prop="videoIds">
-        <upload v-bind="VIDEO_PROPS" class="w-full" :model-value="form.videoIds"
-          @change="(_, fileList) => uploadChange('videoIds', fileList)" />
+      <el-form-item :label="t('area.time')" prop="name">
+        <div>
+          <div class="flex my-2" v-for="timer in timerList" :key="timer.id">
+            <el-select v-model="timer.weekDay" clearable class="mr-2">
+              <el-option v-for="item, index in weekDayList" :key="index" :label="item.label" :value="item.value"
+                clearable>
+              </el-option>
+            </el-select>
+            <el-time-picker v-model="timer.time" is-range range-separator="To" start-placeholder="Start time"
+              end-placeholder="End time" />
+          </div>
+          <el-button type="primary" @click="addTimer">{{ t('common.addBtn') }}</el-button>
+        </div>
       </el-form-item>
+
     </el-form>
     <template #footer>
-      <span class="dialog-footer">
+      <span class=" dialog-footer">
         <el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
-        <el-button @click="onSubmit" type="primary" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
+        <el-button @click="onSubmit" type="primary" :disabled="loading">{{ $t('common.confirmButtonText')
+        }}</el-button>
       </span>
     </template>
   </el-dialog>
@@ -37,10 +48,36 @@
 import { useDict } from '/@/hooks/dict';
 import { useMessage } from '/@/hooks/message';
 // import { addObj, getObj, putObj, validateclientId } from '/@/api/admin/client';
-import { AddStore, EditStore, getStoreById } from '/@/api/admin/store';
+import { AddArea, EditArea } from '/@/api/admin/area';
+import { getStoreName } from '/@/api/admin/store';
 import { useI18n } from 'vue-i18n';
 import { rule } from '/@/utils/validate';
 import upload from "/@/components/Upload/index.vue";
+import { generateUUID } from '/@/utils/other';
+
+const weekDayList = [
+  {
+    label: '星期一', value: '1'
+  },
+  {
+    label: '星期二', value: '2'
+  },
+  {
+    label: '星期三', value: '3'
+  },
+  {
+    label: '星期四', value: '4'
+  },
+  {
+    label: '星期五', value: '5'
+  },
+  {
+    label: '星期六', value: '6'
+  },
+  {
+    label: '星期天', value: '7'
+  },
+]
 
 
 
@@ -51,16 +88,11 @@ const IMG_PROPS = {
   fileType: ['jpg', 'png', 'jpeg']
 
 }
-//视频props
-const VIDEO_PROPS = {
-  limit: 1,
-  fileSize: 20,
-  fileType: ['mp4'],
 
-}
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
+defineProps<{ storeNameList: any[] }>()
 
 const { t } = useI18n();
 
@@ -68,7 +100,7 @@ const { t } = useI18n();
 const dataFormRef = ref();
 const visible = ref(false);
 const loading = ref(false);
-
+const storeList = ref([])
 
 // 定义字典
 const { grant_types, common_status } = useDict(
@@ -78,13 +110,22 @@ const { grant_types, common_status } = useDict(
 
 // 提交表单数据
 const form = reactive({
-  name: '',
-  pictureIds: [],
+  name: '',  //区域名称
+  pictureIds: [], //图片文件ID
   videoIds: [],
   introduction: '',
-  id: undefined,
-  address: ''
+  id: undefined, //区域ID
+  address: '',
+  storeId: '' //所属门店
 });
+
+//时间对象
+
+type ITimer = {
+  id: string, weekDay: string, time: [Date, Date]
+}
+
+const timerList = ref<ITimer[]>([])
 
 // 定义校验规则
 const dataRules = ref({
@@ -100,8 +141,18 @@ const dataRules = ref({
   ],
 });
 
+async function getStoreList() {
+  const { data } = await getStoreName()
+  console.log(data);
+
+  storeList.value = data
+
+}
+
 // 打开弹窗
-const openDialog = (id: string) => {
+const openDialog = async (id: string) => {
+
+  await getStoreList()
   visible.value = true;
   form.id = undefined;
   // 重置表单数据
@@ -148,9 +199,24 @@ const getStoreDetail = async (id: string) => {
 
 };
 
-const uploadChange = (type: 'pictureIds' | 'videoIds', fileList: any[]) => {
+const uploadChange = (type: 'pictureIds', fileList: any[]) => {
 
   form[type] = fileList
+
+}
+
+
+//添加时间
+const addTimer = () => {
+  const timer: ITimer = {
+    id: `id_${generateUUID()}`,
+    weekDay: '',
+    time: [
+      new Date(2016, 9, 10, 0, 0),
+      new Date(2016, 9, 10, 0, 0),
+    ]
+  }
+  timerList.value.push(timer)
 
 }
 
