@@ -17,6 +17,7 @@ export default {
 		takedown: '下架',
 		please: '请输入',
 		sureTakedown: '确定要继续操作吗？下架后用户端相关信息将不再显示，请谨慎操作',
+		deck: '卡座',
 
 	},
 };

@@ -4,7 +4,7 @@
 			<pane>
 				<div class="layout-padding-auto layout-padding-view ">
 
-					<div class="flex h-full">
+					<div class="flex h-full text-center">
 						<div class="w-64 bg-[#141414]  h-full">
 							<div v-for="item, index in  ticketsList " :key="item.id">
 								<div class="p-5" :class="activeId === item.id && 'bg-[rgba(64,158,255,0.2)]'" @click="active(item)">
@@ -12,6 +12,9 @@
 									<div class="text-[#ffffff] text-center mt-3">ID:{{ item.id }}</div>
 								</div>
 							</div>
+							<el-button type="primary" class="my-2">
+								{{ $t('common.addBtn') }}
+							</el-button>
 						</div>
 						<div class="flex-auto h-full p-5">
 
@@ -110,7 +113,7 @@ type ITicket = {
 	id: string;
 	img: string
 }
-const ticketsList = ref<ITicket[]>([{ id: '235645682655', img: '', }, { id: '235645682656', img: '', },])
+const ticketsList = ref<ITicket[]>([{ id: '1', img: '' }])
 const activeId = ref('235645682655')
 
 // 定义表格查询、后台调用的API

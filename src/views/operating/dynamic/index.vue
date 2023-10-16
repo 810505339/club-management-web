@@ -3,20 +3,21 @@
     <div class="layout-padding-auto layout-padding-view">
       <el-row class="ml10" v-show="showSearch">
         <el-form :inline="true" :model="state.queryForm" ref="queryRef">
-          <el-form-item :label="title" prop="jobName">
+          <el-form-item :label="title" prop="name">
             <el-input :placeholder="titlePlaceholder" @keyup.enter="getDataList" clearable
-              v-model="state.queryForm.jobName" />
+              v-model="state.queryForm.name" />
           </el-form-item>
-          <el-form-item :label="type" prop="jobStatus">
-            <el-select :placeholder="typePlaceholder" v-model="state.queryForm.jobStatus">
-              <el-option :key="index" :label="item.label" :value="item.value"
-                v-for="( item, index ) in  job_status "></el-option>
+          <el-form-item :label="type" prop="dynamicTypeId">
+            <el-select :placeholder="typePlaceholder" v-model="state.queryForm.dynamicTypeId">
+              <el-option :key="index" :label="item.name" :value="item.id"
+                v-for="( item, index ) in  dynamicTypeList "></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label="status" prop="jobExecuteStatus">
-            <el-select :placeholder="statusPlaceholder" v-model="state.queryForm.jobExecuteStatus">
-              <el-option :key="index" :label="item.label" :value="item.value"
-                v-for="( item, index ) in  job_execute_status "></el-option>
+          <el-form-item :label="$t('area.state')" prop="enabled">
+            <el-select v-model="state.queryForm.enabled" :placeholder="$t('area.stateSelect')">
+              <el-option v-for="item, index in enabledList" :key="index" :label="item.label" :value="item.value"
+                clearable>
+              </el-option>
             </el-select>
           </el-form-item>
 
@@ -101,7 +102,7 @@
       </el-table>
       <pagination @current-change="currentChangeHandle" @size-change="sizeChangeHandle" v-bind="state.pagination" />
     </div>
-    <dynamic-from ref="formDialogRef" />
+    <dynamic-from ref="formDialogRef" :list="dynamicTypeList" :storeNameList="storeNameList" />
     <dynamic-drawer ref="formDrawerRef" />
   </div>
 </template>
@@ -112,11 +113,11 @@ import { BasicTableProps, useTable } from '/@/hooks/table';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useDict } from '/@/hooks/dict';
 import { useI18n } from 'vue-i18n';
-import { getDynamicList, updateEnabled, deleteDynamic } from '/@/api/admin/dynamic';
+import { getDynamicList, updateEnabled, deleteDynamic, getDynamicTypeList } from '/@/api/admin/dynamic';
 import dynamicFrom from './form.vue';
 import dynamicDrawer from './drawer.vue';
 import { useTranslateText } from './hooks/translate';
-import { useUserInfo } from '/@/stores/userInfo';
+import { getStoreName } from '/@/api/admin/store';
 
 
 
@@ -138,14 +139,34 @@ const { title,
 const formDialogRef = ref();
 const formDrawerRef = ref();
 
+const dynamicTypeList = ref<any[]>([]);
+const storeNameList = ref<any[]>([])
+
+async function getDynamicListApi() {
+  const { data } = await getDynamicTypeList()
+  const { data: storeData } = await getStoreName()
+  storeNameList.value = storeData
+  dynamicTypeList.value = data.records
+
+
+
+}
+
+onMounted(async () => {
+  await getDynamicListApi()
+})
+
+const enabledList = [
+  { label: '上架', value: '1' },
+  { label: '下架', value: '0' },
+]
+
 
 /** 搜索表单信息 */
 const queryForm = reactive({
-  deptId: '',
-  username: '',
-  phone: '',
-  role: '',
-  lockFlag: '',
+  enabled: '',
+  name: '',
+
 });
 /** 是否展示搜索表单 */
 const showSearch = ref(true);
@@ -164,6 +185,8 @@ const state = reactive<BasicTableProps>({
   queryForm,
   pageList: getDynamicList,
 });
+
+
 
 /** 获取表格数据方法 */
 const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
@@ -221,6 +244,7 @@ const handleDelete = async (ids: string[]) => {
     useMessage().error(err.msg);
   }
 };
+
 
 
 

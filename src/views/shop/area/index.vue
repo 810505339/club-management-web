@@ -14,9 +14,8 @@
 							</el-form-item>
 
 							<el-form-item :label="$t('area.state')" prop="enabled">
-								<el-select v-model="state.queryForm.enabled" :placeholder="$t('area.stateSelect')">
-									<el-option v-for="item, index in enabledList" :key="index" :label="item.label" :value="item.value"
-										clearable>
+								<el-select v-model="state.queryForm.enabled" :placeholder="$t('area.stateSelect')" clearable>
+									<el-option v-for="item, index in enabledList" :key="index" :label="item.label" :value="item.value">
 									</el-option>
 								</el-select>
 							</el-form-item>
@@ -48,9 +47,11 @@
 							</template>
 						</el-table-column>
 
-						<el-table-column :label="$t('area.time')" prop="time" width="100" fixed="left">
+						<el-table-column :label="$t('area.time')" prop="time" fixed="left">
 							<template #default="scope">
-								{{ timerFormat(scope.row['businessDateVOS']) }}
+								<div v-for="item, index in timerFormat(scope.row['businessDateVOS'])" :key="index" class="my-2">
+									{{ item }}
+								</div>
 							</template>
 						</el-table-column>
 						<el-table-column :label="$t('area.decks')" prop="decks" width="100" fixed="left">
@@ -115,6 +116,7 @@ import { BasicTableProps, useTable } from '/@/hooks/table';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 import { useDict } from '/@/hooks/dict';
+import { weekdayFormat } from '/@/utils/formatTime';
 // 动态引入组件
 const UserForm = defineAsyncComponent(() => import('./form.vue'));
 
@@ -218,8 +220,10 @@ const handleTakedown = async (row: any) => {
 
 //初始化时间
 function timerFormat(list: any[]) {
+
+
 	return list.map((item) => {
-		return `${item.weekDay}  ${item.beginTime}-${item.endTime}`
+		return `${weekdayFormat(Number(item.weekDay), t)}  ${item.beginTime}-${item.endTime}`
 	})
 
 }

@@ -26,10 +26,28 @@
                 clearable>
               </el-option>
             </el-select>
-            <el-time-picker v-model="timer.time" is-range range-separator="To" start-placeholder="Start time"
-              end-placeholder="End time" />
+            <el-time-picker v-model="timer.time" is-range range-separator="To" />
+            <el-icon class="m-2 cursor-pointer" @click.once="deleteTimer(timer.id)">
+              <Minus />
+            </el-icon>
           </div>
           <el-button type="primary" @click="addTimer">{{ t('common.addBtn') }}</el-button>
+        </div>
+      </el-form-item>
+
+      <el-form-item :label="t('area.deck')" prop="name">
+        <div>
+          <div class="flex my-2" v-for="timer in timerList" :key="timer.id">
+            <el-select v-model="timer.weekDay" clearable class="mr-2">
+              <el-option v-for="item, index in weekDayList" :key="index" :label="item.label" :value="item.value"
+                clearable>
+              </el-option>
+            </el-select>
+            <el-time-picker v-model="timer.time" is-range range-separator="To" start-placeholder="Start time"
+              end-placeholder="End time" />
+
+          </div>
+          <el-button type="primary">{{ t('common.addBtn') }}</el-button>
         </div>
       </el-form-item>
 
@@ -218,6 +236,10 @@ const addTimer = () => {
   }
   timerList.value.push(timer)
 
+}
+
+const deleteTimer = (id: string) => {
+  timerList.value = timerList.value.filter((timer) => (timer.id != id))
 }
 
 // 暴露变量

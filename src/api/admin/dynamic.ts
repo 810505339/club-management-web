@@ -1,3 +1,4 @@
+
 import request from '/@/utils/request';
 
 //新增动态管理
@@ -39,10 +40,11 @@ export const getDynamicById = (id: string) => {
 
 
 //分页查询
-export const getDynamicList = () => {
+export const getDynamicList = (params: Object) => {
   return request({
     url: `/operation/dynamicState/page`,
     method: 'get',
+    params
   });
 
 }
@@ -65,5 +67,18 @@ export const updateEnabled = (data: Object) => {
     url: 'operation/dynamicState/updateEnabled',
     method: 'put',
     data,
+  });
+}
+
+
+//查询动态类型列表
+
+export const getDynamicTypeList = () => {
+  return request({
+    url: 'admin/dynamicType/page',
+    method: 'get',
+    params: {
+      size: 99999
+    }
   });
 }

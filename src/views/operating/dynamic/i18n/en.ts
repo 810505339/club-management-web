@@ -15,7 +15,8 @@ export default {
 		statistics: 'registration statistics',
 		registrations: 'number of registrations / total number of participants',
 		userName: 'user name',
-		userPhone: 'user phone'
+		userPhone: 'user phone',
+		expense: 'expenses'
 	},
 
 };

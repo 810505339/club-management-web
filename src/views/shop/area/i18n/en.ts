@@ -7,6 +7,7 @@ export default {
 		image: 'area image',
 		time: 'area time',
 		decks: 'decks number',
+		deck: 'deck',
 		state: 'area state',
 		action: 'action',
 		createTime: 'createTime',

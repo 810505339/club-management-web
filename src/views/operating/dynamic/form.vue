@@ -5,59 +5,67 @@
       <el-row :gutter="20">
         <el-col :span="20" class="mb20">
           <el-form-item :label="titleChinese" prop="dynamicTitleCn">
-            <el-input v-model="form.jobName" :placeholder="titlePlaceholder" />
+            <el-input v-model="form.dynamicTitleCn" :placeholder="titlePlaceholder" />
           </el-form-item>
         </el-col>
 
         <el-col :span="20" class="mb20">
           <el-form-item :label="titleEnglish" prop="dynamicTitleUk">
-            <el-input v-model="form.jobName" :placeholder="titlePlaceholder" />
-          </el-form-item>
-        </el-col>
-
-        <el-col :span="20" class="mb20">
-          <el-form-item :label="contextEnglish" prop="dynamicContentUk">
-            <el-input :rows="2" type="textarea" v-model="form.jobName" :placeholder="titlePlaceholder" />
+            <el-input v-model="form.dynamicTitleUk" :placeholder="titlePlaceholder" />
           </el-form-item>
         </el-col>
 
         <el-col :span="20" class="mb20">
           <el-form-item :label="contextChinese" prop="dynamicContentCn">
-            <el-input :rows="2" type="textarea" v-model="form.jobName" :placeholder="titlePlaceholder" />
+            <el-input :rows="2" type="textarea" v-model="form.dynamicContentCn" :placeholder="titlePlaceholder" />
           </el-form-item>
         </el-col>
 
+        <el-col :span="20" class="mb20">
+          <el-form-item :label="contextEnglish" prop="dynamicContentUk">
+            <el-input :rows="2" type="textarea" v-model="form.dynamicContentUk" :placeholder="titlePlaceholder" />
+          </el-form-item>
+        </el-col>
         <el-col :span="20" class="mb20">
           <el-form-item :label="type" prop="dynamicTypeId">
-            <el-input v-model="form.jobName" :placeholder="titlePlaceholder" />
-          </el-form-item>
-        </el-col>
-
-        <el-col :span="20" class="mb20">
-          <el-form-item :label="t('dynamic.register')" prop="apply">
-            <el-switch v-model="form.jobName" />
+            <el-select :placeholder="typePlaceholder" v-model="form.dynamicTypeId">
+              <el-option :key="index" :label="item.name" :value="item.id" v-for="( item, index ) in  list "></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
 
         <el-col :span="20" class="mb20">
           <el-form-item :label="t('dynamic.store')" prop="storeId">
-            <el-input v-model="form.jobName" :placeholder="titlePlaceholder" />
+            <el-select v-model="form.storeId" :placeholder="$t('shopList.nameSelect')" clearable>
+              <el-option v-for="item, index in storeNameList" :key="index" :label="item.name" :value="item.name" />
+            </el-select>
+          </el-form-item>
+        </el-col>
+
+        <el-col :span="20" class="mb20">
+          <el-form-item :label="t('dynamic.register')" prop="apply">
+            <el-switch v-model="form.apply" />
           </el-form-item>
         </el-col>
 
         <el-col :span="20" class="mb20">
           <el-form-item :label="t('dynamic.expenses')" prop="charge">
-            <el-switch v-model="form.jobName" />
+            <el-switch v-model="form.charge" />
           </el-form-item>
         </el-col>
+
+        <el-col :span="20" class="mb20" v-if="form.charge">
+          <el-form-item :label="t('dynamic.expense') + '($)'" prop="amount">
+            <el-input-number v-model="form.amount" :precision="2" :step="0.1" />
+          </el-form-item>
+        </el-col>
+
 
         <el-col :span="20" class="mb20">
           <el-form-item :label="t('dynamic.expiryTime')" prop="expireTime">
-            <el-date-picker v-model="form.jobName" type="datetime" placeholder="Select date and time" />
+            <el-date-picker v-model="form.expireTime" type="datetime" />
           </el-form-item>
         </el-col>
-
-
       </el-row>
     </el-form>
     <template #footer>
@@ -74,11 +82,12 @@
 // 定义子组件向父组件传值/事件
 import { useDict } from '/@/hooks/dict';
 import { useMessage } from '/@/hooks/message';
-import { addObj, getObj, putObj } from '/@/api/daemon/job';
+import { getDynamicById, AddDynamic, EditDynamic } from '/@/api/admin/dynamic';
 import { useI18n } from 'vue-i18n';
 import { useTranslateText } from './hooks/translate';
 
 const emit = defineEmits(['refresh']);
+const props = defineProps<{ list: any[], storeNameList: any[] }>()
 
 
 const { t } = useI18n();
@@ -104,19 +113,7 @@ const { misfire_policy, job_type } = useDict('job_status', 'job_execute_status',
 
 // 提交表单数据
 const form = reactive({
-  jobId: '',
-  jobName: '',
-  jobGroup: '',
-  jobType: '',
-  executePath: '',
-  className: '',
-  methodName: '',
-  methodParamsValue: '',
-  cronExpression: '',
-  misfirePolicy: '',
-  jobStatus: '',
-  jobExecuteStatus: '',
-  remark: '',
+
 });
 
 const popoverVis = (bol: boolean) => {
@@ -158,10 +155,13 @@ const onSubmit = async () => {
   const valid = await dataFormRef.value.validate().catch(() => { });
   if (!valid) return false;
 
+  console.log(form)
+
   try {
     loading.value = true;
-    form.jobId ? await putObj(form) : await addObj(form);
-    useMessage().success(t(form.jobId ? 'common.editSuccessText' : 'common.addSuccessText'));
+
+    // form.jobId ? await EditDynamic(form) : await AddDynamic(form);
+    useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));
     visible.value = false;
     emit('refresh');
   } catch (err: any) {
