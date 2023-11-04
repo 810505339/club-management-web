@@ -1,26 +1,42 @@
+<!--
+ * @Author: yxx
+ * @Date: 2023-09-24 11:45:01
+ * @LastEditTime: 2023-11-04 16:04:24
+ * @LastEditors: yxx
+ * @Description: 
+ * @FilePath: \club-management-web\src\views\operating\coupon\form.vue
+-->
 <template>
-	<el-dialog v-model="visible" :close-on-click-modal="false" :title="form.jobId ? $t('common.editBtn') : $t('common.addBtn')" draggable>
+	<el-dialog v-model="visible" :close-on-click-modal="false"
+		:title="form.jobId ? $t('common.editBtn') : $t('common.addBtn')" draggable>
 		<el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="120px" v-loading="loading">
 			<el-row :gutter="20">
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('job.jobName')" prop="jobName">
-						<el-input v-model="form.jobName" :placeholder="t('job.inputjobNameTip')" />
-					</el-form-item>
+				<el-col :span="24" class="mb20">
+					{{ t("coupon.msg") }}
 				</el-col>
 				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('job.jobGroup')" prop="jobGroup">
-						<el-input v-model="form.jobGroup" :placeholder="t('job.inputjobGroupTip')" />
+					<el-form-item :label="t('coupon.couponName')" prop="jobName">
+						<el-input v-model="form.jobName" :placeholder="t('common.please') + t('coupon.couponName')" />
 					</el-form-item>
+				</el-col>
+				<el-col :span="24" class="mb20">
+					{{ t("coupon.rule") }}
 				</el-col>
 
+
 				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('job.jobType')" prop="jobType">
-						<el-select v-model="form.jobType" :placeholder="t('job.jobType')">
-							<el-option v-for="(item, index) in job_type" :key="index" :label="item.label" :value="item.value"></el-option>
+					<el-form-item :label="t('coupon.type')" prop="jobType">
+						<el-select v-model="form.jobType" :placeholder="t('coupon.type')">
+							<el-option v-for="(item, index) in job_type" :key="index" :label="item.label"
+								:value="item.value"></el-option>
 						</el-select>
 					</el-form-item>
 				</el-col>
-
+				<el-col :span="12" class="mb20">
+					<el-form-item :label="t('coupon.faceValue')" prop="jobGroup">
+						<el-input v-model="form.jobGroup" :placeholder="t('common.please') + t('coupon.faceValue')" />
+					</el-form-item>
+				</el-col>
 				<el-col :span="12" class="mb20" v-if="['3', '4'].includes(form.jobType)">
 					<el-form-item :label="t('job.executePath')" prop="executePath">
 						<el-input v-model="form.executePath" :placeholder="t('job.inputexecutePathTip')" />
@@ -54,7 +70,8 @@
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('job.misfirePolicy')" prop="misfirePolicy">
 						<el-select v-model="form.misfirePolicy" :placeholder="t('job.inputmisfirePolicyTip')">
-							<el-option v-for="(item, index) in misfire_policy" :key="index" :label="item.label" :value="item.value"></el-option>
+							<el-option v-for="(item, index) in misfire_policy" :key="index" :label="item.label"
+								:value="item.value"></el-option>
 						</el-select>
 					</el-form-item>
 				</el-col>
@@ -68,7 +85,8 @@
 		<template #footer>
 			<span class="dialog-footer">
 				<el-button formDialogRef @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
-				<el-button formDialogRef type="primary" @click="onSubmit" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
+				<el-button formDialogRef type="primary" @click="onSubmit" :disabled="loading">{{ $t('common.confirmButtonText')
+				}}</el-button>
 			</span>
 		</template>
 	</el-dialog>
@@ -147,7 +165,7 @@ const openDialog = (id: string) => {
 
 // 提交
 const onSubmit = async () => {
-	const valid = await dataFormRef.value.validate().catch(() => {});
+	const valid = await dataFormRef.value.validate().catch(() => { });
 	if (!valid) return false;
 
 	try {

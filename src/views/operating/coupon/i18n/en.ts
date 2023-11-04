@@ -1,3 +1,11 @@
+/*
+ * @Author: yxx
+ * @Date: 2023-09-24 11:45:01
+ * @LastEditTime: 2023-11-04 15:58:27
+ * @LastEditors: yxx
+ * @Description: 
+ * @FilePath: \club-management-web\src\views\operating\coupon\i18n\en.ts
+ */
 export default {
 	coupon: {
 		index: 'ID',
@@ -7,11 +15,13 @@ export default {
 		nominalValue: 'nominalValue',
 		validityTime: 'validityTime',
 		createdTime: 'createdTime',
-		provideMode: '发provideMode券方式',
+		provideMode: 'provideMode',
 		number: 'Used/Issued/Total',
 		creator: 'creator',
-
-
+		msg: '基础信息',
+		rule: '使用规则',
+		type: '优惠券类型',
+		faceValue: 'faceValue',
 
 
 

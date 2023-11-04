@@ -10,6 +10,10 @@ export default {
 		provideMode: '发券方式',
 		number: '已使用/已发放/总数量',
 		creator: '创建人',
+		msg: '基础信息',
+		rule: '使用规则',
+		type: '优惠券类型',
+		faceValue: '面额',
 
 	},
 	log: {

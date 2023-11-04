@@ -1,15 +1,21 @@
 <template>
   <el-dialog :close-on-click-modal="false" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" width="600"
     draggable v-model="visible">
+    <el-tabs v-model="form.type" class="demo-tabs">
+      <el-tab-pane :label="t('banner.image')" name="1"> </el-tab-pane>
+      <el-tab-pane :label="t('banner.imageH5')" name="0"> </el-tab-pane>
+    </el-tabs>
     <el-form :model="form" :rules="dataRules" formDialogRef label-width="120px" ref="dataFormRef" v-loading="loading">
       <el-form-item :label="t('adv.name')" prop="name">
-        <el-input :placeholder="`${t('adv.please')}${t('adv.name')}`" v-model="form.name" />
+        <el-input :placeholder="`${t('adv.please')}${t('adv.name')}`" maxlength="30" v-model="form.name" />
       </el-form-item>
-      <el-form-item :label="t('adv.description')" prop="address">
-        <el-input type="textarea" :placeholder="`${t('adv.please')}${t('adv.address')}`" v-model="form.address" />
+      <el-form-item :label="t('adv.description')">
+        <el-input type="textarea" :placeholder="`${t('adv.please')}${t('adv.description')}`" v-model="form.description"
+          maxlength="200" />
       </el-form-item>
-      <el-form-item :label="t('adv.time')" prop="introduction">
-        <el-date-picker v-model="form.time" type="datetime" :placeholder="`${t('common.select')}${t('adv.time')}`" />
+      <el-form-item :label="t('adv.time')" prop="validityTime">
+        <el-date-picker v-model="form.validityTime" type="datetime" value-format="YYYY-MM-DD HH:mm:ss"
+          :placeholder="`${t('common.select')}${t('adv.time')}`" />
       </el-form-item>
       <el-form-item :label="t('adv.image')" prop="pictureIds">
         <upload v-bind="IMG_PROPS" class="w-full" :model-value="form.pictureIds"
@@ -17,8 +23,17 @@
 
       </el-form-item>
 
-      <el-form-item :label="t('banner.address')" prop="address">
-        <el-input type="textarea" :placeholder="`${t('banner.please')}${t('banner.address')}`" v-model="form.address" />
+      <el-form-item :label="t('banner.address')">
+        <el-radio-group v-model="form.jump" class="ml-4">
+          <el-radio label="1" size="large">是</el-radio>
+          <el-radio label="0" size="large">否</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item v-if="form.jump == 1" label=" " prop="dynamicStateId">
+        <el-select v-model="form.dynamicStateId" :placeholder="$t('common.select') + $t('banner.dynamicStateId')">
+          <el-option v-for="item, index in dynamicState" :key="index" :label="item.name" :value="item.id" clearable>
+          </el-option>
+        </el-select>
       </el-form-item>
 
 
@@ -36,8 +51,10 @@
 <script lang="ts" name="SysOauthClientDetailsDialog" setup>
 import { useDict } from '/@/hooks/dict';
 import { useMessage } from '/@/hooks/message';
+import { fetchList, } from '/@/api/operating/dynamic';
+
 // import { addObj, getObj, putObj, validateclientId } from '/@/api/admin/client';
-import { AddStore, EditStore, getStoreById } from '/@/api/admin/store';
+import { addCarousel, EditCarousel, getObj } from '/@/api/operating/adv';
 import { useI18n } from 'vue-i18n';
 import { rule } from '/@/utils/validate';
 import upload from "/@/components/Upload/index.vue";
@@ -78,42 +95,54 @@ const { grant_types, common_status } = useDict(
 
 // 提交表单数据
 const form = reactive({
-  name: '',
-  pictureIds: [],
-  videoIds: [],
-  introduction: '',
-  id: undefined,
-  address: ''
+  id: '',
+  type: '1',
+  jump: '1',
+  dynamicStateId: '',
+  pictureIds: '',
+  weightiness: 1,
+  validityTime: '',
+  storeIds: [],
+  localType: null
 });
 
 // 定义校验规则
 const dataRules = ref({
   name: [
-    { required: true, message: `${t('adv.name')}${t('common.empty')}`, trigger: 'blur' },
-
+    { required: true, message: `${t('banner.introduce')}${t('common.empty')}`, trigger: 'blur' },
   ],
-  introduce: [
-
+  dynamicStateId: [
+    { required: true, type: 'array', message: `${t('banner.address')}${t('common.empty')}`, trigger: 'change' },
   ],
-  address: [
-    { required: true, message: `${t('adv.address')}${t('common.empty')}`, trigger: 'blur' },
+  pictureIds: [
+    { required: true, type: 'array', message: `${t('banner.image')}${t('common.empty')}`, trigger: 'change' },
+  ],
+  weightiness: [
+    { required: true, message: `${t('banner.introduce')}${t('common.empty')}`, trigger: 'blur' },
+  ],
+  validityTime: [
+    { required: true, message: `${t('banner.time')}${t('common.empty')}`, trigger: 'blur' },
+  ],
+  storeIds: [
+    { required: true, type: 'array', message: `${t('banner.name')}${t('common.empty')}`, trigger: 'change' },
   ],
 });
-
+const dynamicState = ref([])
 // 打开弹窗
-const openDialog = (id: string) => {
+const openDialog = async (type: string) => {
   visible.value = true;
-  form.id = undefined;
+  form.localType = type;
   // 重置表单数据
   nextTick(() => {
     dataFormRef.value?.resetFields();
   });
+  await fetchList({
+    current: 1,
+    size: 10
+  }).then(res => {
+    dynamicState.value = res.data.records
+  })
 
-  // 获取sysOauthClientDetails信息
-  if (id) {
-    form.id = id;
-    getStoreDetail(id);
-  }
 };
 
 // 提交
@@ -126,8 +155,7 @@ const onSubmit = async () => {
     loading.value = true;
     console.log(form);
     const pictureIds = form.pictureIds?.map(item => (item.id))
-    const videoIds = form.videoIds?.map(item => (item.id))
-    form.id ? await EditStore({ ...form, pictureIds, videoIds }) : await AddStore({ ...form, pictureIds, videoIds });
+    form.id ? await EditCarousel({ ...form, pictureIds }) : await addCarousel({ ...form, pictureIds });
     useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));
     visible.value = false;
     emit('refresh');
@@ -136,16 +164,6 @@ const onSubmit = async () => {
   } finally {
     loading.value = false;
   }
-};
-
-// 初始化表单数据
-const getStoreDetail = async (id: string) => {
-  // 获取数据
-  let { data } = await getStoreById(id)
-  data.pictureIds = data.pictureFileVOs?.map((item: any) => ({ id: item.id, name: item.fileName }))
-  data.videoIds = data.videoFileVOs?.map((item: any) => ({ id: item.id, name: item.fileName }))
-  Object.assign(form, data)
-
 };
 
 const uploadChange = (type: 'pictureIds' | 'videoIds', fileList: any[]) => {

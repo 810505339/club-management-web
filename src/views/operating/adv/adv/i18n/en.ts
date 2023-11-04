@@ -1,7 +1,7 @@
 /*
  * @Author: yxx
  * @Date: 2023-10-16 22:00:46
- * @LastEditTime: 2023-10-16 22:28:01
+ * @LastEditTime: 2023-11-04 20:27:16
  * @LastEditors: yxx
  * @Description: 
  * @FilePath: \club-management-web\src\views\operating\adv\adv\i18n\en.ts
@@ -11,6 +11,9 @@ export default {
 		index: '#',
 		id: 'store ID',
 		name: 'adv name',
+		type: 'adv type',
+		adv1: '弹窗广告',
+		adv2: '置顶广告',
 		introduce: 'store introduce',
 		address: 'Url',
 		image: 'Web image',

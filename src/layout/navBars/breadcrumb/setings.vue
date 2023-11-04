@@ -524,9 +524,9 @@ const onAddFilterChange = (attr: string) => {
 };
 // 4、界面显示 --> 深色模式
 const onAddDarkChange = () => {
-	const body = document.documentElement as HTMLElement;
-	if (getThemeConfig.value.isIsDark) body.setAttribute('data-theme', 'dark');
-	else body.setAttribute('data-theme', '');
+	// const body = document.documentElement as HTMLElement;
+	// if (getThemeConfig.value.isIsDark) body.setAttribute('data-theme', 'dark');
+	// else body.setAttribute('data-theme', '');
 };
 // 4、界面显示 --> 开启水印
 const onWartermarkChange = () => {

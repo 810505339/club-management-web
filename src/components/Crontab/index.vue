@@ -3,8 +3,8 @@
  * @version: 1.0
  * @Author: sakuya
  * @Date: 2023年05月23日13:04:12
- * @LastEditors:
- * @LastEditTime:
+ * @LastEditors: yxx
+ * @LastEditTime: 2023-11-04 18:55:30
 -->
 
 <template>
@@ -20,9 +20,10 @@
 						<el-dropdown-item command="0 0 0 1 * ?">每月一号零点</el-dropdown-item>
 						<el-dropdown-item command="0 0 0 L * ?">每月最后一天零点</el-dropdown-item>
 						<el-dropdown-item command="0 0 0 ? * 1">每周星期日零点</el-dropdown-item>
-						<el-dropdown-item v-for="(item, index) in shortcuts" :key="item.value" :divided="index == 0" :command="item.value">{{
-							item.text
-						}}</el-dropdown-item>
+						<el-dropdown-item v-for="(item, index) in shortcuts" :key="item.value" :divided="index == 0"
+							:command="item.value">{{
+								item.text
+							}}</el-dropdown-item>
 						<el-dropdown-item icon="el-icon-plus" divided command="custom">自定义</el-dropdown-item>
 					</el-dropdown-menu>
 				</template>
@@ -43,21 +44,25 @@
 					<el-form>
 						<el-form-item label="类型">
 							<el-radio-group v-model="value.second.type">
-								<el-radio border  label="0">任意值</el-radio>
-								<el-radio border  label="1">范围</el-radio>
-								<el-radio border  label="2">间隔</el-radio>
-								<el-radio border  label="3">指定</el-radio>
+								<el-radio border label="0">任意值</el-radio>
+								<el-radio border label="1">范围</el-radio>
+								<el-radio border label="2">间隔</el-radio>
+								<el-radio border label="3">指定</el-radio>
 							</el-radio-group>
 						</el-form-item>
 						<el-form-item label="范围" v-if="value.second.type == 1">
-							<el-input-number v-model="value.second.range.start" :min="0" :max="59" controls-position="right"></el-input-number>
+							<el-input-number v-model="value.second.range.start" :min="0" :max="59"
+								controls-position="right"></el-input-number>
 							<span style="padding: 0 15px">-</span>
-							<el-input-number v-model="value.second.range.end" :min="0" :max="59" controls-position="right"></el-input-number>
+							<el-input-number v-model="value.second.range.end" :min="0" :max="59"
+								controls-position="right"></el-input-number>
 						</el-form-item>
 						<el-form-item label="间隔" v-if="value.second.type == 2">
-							<el-input-number v-model="value.second.loop.start" :min="0" :max="59" controls-position="right"></el-input-number>
+							<el-input-number v-model="value.second.loop.start" :min="0" :max="59"
+								controls-position="right"></el-input-number>
 							秒开始，每
-							<el-input-number v-model="value.second.loop.end" :min="0" :max="59" controls-position="right"></el-input-number>
+							<el-input-number v-model="value.second.loop.end" :min="0" :max="59"
+								controls-position="right"></el-input-number>
 							秒执行一次
 						</el-form-item>
 						<el-form-item label="指定" v-if="value.second.type == 3">
@@ -77,21 +82,25 @@
 					<el-form>
 						<el-form-item label="类型">
 							<el-radio-group v-model="value.minute.type">
-								<el-radio border  label="0">任意值</el-radio>
-								<el-radio border  label="1">范围</el-radio>
-								<el-radio border  label="2">间隔</el-radio>
-								<el-radio border  label="3">指定</el-radio>
+								<el-radio border label="0">任意值</el-radio>
+								<el-radio border label="1">范围</el-radio>
+								<el-radio border label="2">间隔</el-radio>
+								<el-radio border label="3">指定</el-radio>
 							</el-radio-group>
 						</el-form-item>
 						<el-form-item label="范围" v-if="value.minute.type == 1">
-							<el-input-number v-model="value.minute.range.start" :min="0" :max="59" controls-position="right"></el-input-number>
+							<el-input-number v-model="value.minute.range.start" :min="0" :max="59"
+								controls-position="right"></el-input-number>
 							<span style="padding: 0 15px">-</span>
-							<el-input-number v-model="value.minute.range.end" :min="0" :max="59" controls-position="right"></el-input-number>
+							<el-input-number v-model="value.minute.range.end" :min="0" :max="59"
+								controls-position="right"></el-input-number>
 						</el-form-item>
 						<el-form-item label="间隔" v-if="value.minute.type == 2">
-							<el-input-number v-model="value.minute.loop.start" :min="0" :max="59" controls-position="right"></el-input-number>
+							<el-input-number v-model="value.minute.loop.start" :min="0" :max="59"
+								controls-position="right"></el-input-number>
 							分钟开始，每
-							<el-input-number v-model="value.minute.loop.end" :min="0" :max="59" controls-position="right"></el-input-number>
+							<el-input-number v-model="value.minute.loop.end" :min="0" :max="59"
+								controls-position="right"></el-input-number>
 							分钟执行一次
 						</el-form-item>
 						<el-form-item label="指定" v-if="value.minute.type == 3">
@@ -111,21 +120,25 @@
 					<el-form>
 						<el-form-item label="类型">
 							<el-radio-group v-model="value.hour.type">
-								<el-radio border  label="0">任意值</el-radio>
-								<el-radio border  label="1">范围</el-radio>
-								<el-radio border  label="2">间隔</el-radio>
-								<el-radio border  label="3">指定</el-radio>
+								<el-radio border label="0">任意值</el-radio>
+								<el-radio border label="1">范围</el-radio>
+								<el-radio border label="2">间隔</el-radio>
+								<el-radio border label="3">指定</el-radio>
 							</el-radio-group>
 						</el-form-item>
 						<el-form-item label="范围" v-if="value.hour.type == 1">
-							<el-input-number v-model="value.hour.range.start" :min="0" :max="23" controls-position="right"></el-input-number>
+							<el-input-number v-model="value.hour.range.start" :min="0" :max="23"
+								controls-position="right"></el-input-number>
 							<span style="padding: 0 15px">-</span>
-							<el-input-number v-model="value.hour.range.end" :min="0" :max="23" controls-position="right"></el-input-number>
+							<el-input-number v-model="value.hour.range.end" :min="0" :max="23"
+								controls-position="right"></el-input-number>
 						</el-form-item>
 						<el-form-item label="间隔" v-if="value.hour.type == 2">
-							<el-input-number v-model="value.hour.loop.start" :min="0" :max="23" controls-position="right"></el-input-number>
+							<el-input-number v-model="value.hour.loop.start" :min="0" :max="23"
+								controls-position="right"></el-input-number>
 							小时开始，每
-							<el-input-number v-model="value.hour.loop.end" :min="0" :max="23" controls-position="right"></el-input-number>
+							<el-input-number v-model="value.hour.loop.end" :min="0" :max="23"
+								controls-position="right"></el-input-number>
 							小时执行一次
 						</el-form-item>
 						<el-form-item label="指定" v-if="value.hour.type == 3">
@@ -145,23 +158,27 @@
 					<el-form>
 						<el-form-item label="类型">
 							<el-radio-group v-model="value.day.type">
-								<el-radio border  label="0">任意值</el-radio>
-								<el-radio border  label="1">范围</el-radio>
-								<el-radio border  label="2">间隔</el-radio>
-								<el-radio border  label="3">指定</el-radio>
-								<el-radio border  label="4">本月最后一天</el-radio>
-								<el-radio border  label="5">不指定</el-radio>
+								<el-radio border label="0">任意值</el-radio>
+								<el-radio border label="1">范围</el-radio>
+								<el-radio border label="2">间隔</el-radio>
+								<el-radio border label="3">指定</el-radio>
+								<el-radio border label="4">本月最后一天</el-radio>
+								<el-radio border label="5">不指定</el-radio>
 							</el-radio-group>
 						</el-form-item>
 						<el-form-item label="范围" v-if="value.day.type == 1">
-							<el-input-number v-model="value.day.range.start" :min="1" :max="31" controls-position="right"></el-input-number>
+							<el-input-number v-model="value.day.range.start" :min="1" :max="31"
+								controls-position="right"></el-input-number>
 							<span style="padding: 0 15px">-</span>
-							<el-input-number v-model="value.day.range.end" :min="1" :max="31" controls-position="right"></el-input-number>
+							<el-input-number v-model="value.day.range.end" :min="1" :max="31"
+								controls-position="right"></el-input-number>
 						</el-form-item>
 						<el-form-item label="间隔" v-if="value.day.type == 2">
-							<el-input-number v-model="value.day.loop.start" :min="1" :max="31" controls-position="right"></el-input-number>
+							<el-input-number v-model="value.day.loop.start" :min="1" :max="31"
+								controls-position="right"></el-input-number>
 							号开始，每
-							<el-input-number v-model="value.day.loop.end" :min="1" :max="31" controls-position="right"></el-input-number>
+							<el-input-number v-model="value.day.loop.end" :min="1" :max="31"
+								controls-position="right"></el-input-number>
 							天执行一次
 						</el-form-item>
 						<el-form-item label="指定" v-if="value.day.type == 3">
@@ -181,21 +198,25 @@
 					<el-form>
 						<el-form-item label="类型">
 							<el-radio-group v-model="value.month.type">
-								<el-radio border  label="0">任意值</el-radio>
-								<el-radio border  label="1">范围</el-radio>
-								<el-radio border  label="2">间隔</el-radio>
-								<el-radio border  label="3">指定</el-radio>
+								<el-radio border label="0">任意值</el-radio>
+								<el-radio border label="1">范围</el-radio>
+								<el-radio border label="2">间隔</el-radio>
+								<el-radio border label="3">指定</el-radio>
 							</el-radio-group>
 						</el-form-item>
 						<el-form-item label="范围" v-if="value.month.type == 1">
-							<el-input-number v-model="value.month.range.start" :min="1" :max="12" controls-position="right"></el-input-number>
+							<el-input-number v-model="value.month.range.start" :min="1" :max="12"
+								controls-position="right"></el-input-number>
 							<span style="padding: 0 15px">-</span>
-							<el-input-number v-model="value.month.range.end" :min="1" :max="12" controls-position="right"></el-input-number>
+							<el-input-number v-model="value.month.range.end" :min="1" :max="12"
+								controls-position="right"></el-input-number>
 						</el-form-item>
 						<el-form-item label="间隔" v-if="value.month.type == 2">
-							<el-input-number v-model="value.month.loop.start" :min="1" :max="12" controls-position="right"></el-input-number>
+							<el-input-number v-model="value.month.loop.start" :min="1" :max="12"
+								controls-position="right"></el-input-number>
 							月开始，每
-							<el-input-number v-model="value.month.loop.end" :min="1" :max="12" controls-position="right"></el-input-number>
+							<el-input-number v-model="value.month.loop.end" :min="1" :max="12"
+								controls-position="right"></el-input-number>
 							月执行一次
 						</el-form-item>
 						<el-form-item label="指定" v-if="value.month.type == 3">
@@ -216,40 +237,46 @@
 						<el-form>
 							<el-form-item label="类型">
 								<el-radio-group v-model="value.week.type">
-									<el-radio border  label="0">任意值</el-radio>
-									<el-radio border  label="1">范围</el-radio>
-									<el-radio border  label="2">间隔</el-radio>
-									<el-radio border  label="3">指定</el-radio>
-									<el-radio border  label="4">本月最后一周</el-radio>
-									<el-radio border  label="5">不指定</el-radio>
+									<el-radio border label="0">任意值</el-radio>
+									<el-radio border label="1">范围</el-radio>
+									<el-radio border label="2">间隔</el-radio>
+									<el-radio border label="3">指定</el-radio>
+									<el-radio border label="4">本月最后一周</el-radio>
+									<el-radio border label="5">不指定</el-radio>
 								</el-radio-group>
 							</el-form-item>
 							<el-form-item label="范围" v-if="value.week.type == 1">
 								<el-select v-model="value.week.range.start">
-									<el-option v-for="(item, index) in data.week" :key="index" :label="item.label" :value="item.value"></el-option>
+									<el-option v-for="(item, index) in data.week" :key="index" :label="item.label"
+										:value="item.value"></el-option>
 								</el-select>
 								<span style="padding: 0 15px">-</span>
 								<el-select v-model="value.week.range.end">
-									<el-option v-for="(item, index) in data.week" :key="index" :label="item.label" :value="item.value"></el-option>
+									<el-option v-for="(item, index) in data.week" :key="index" :label="item.label"
+										:value="item.value"></el-option>
 								</el-select>
 							</el-form-item>
 							<el-form-item label="间隔" v-if="value.week.type == 2">
 								第
-								<el-input-number v-model="value.week.loop.start" :min="1" :max="4" controls-position="right"></el-input-number>
+								<el-input-number v-model="value.week.loop.start" :min="1" :max="4"
+									controls-position="right"></el-input-number>
 								周的星期
 								<el-select v-model="value.week.loop.end">
-									<el-option v-for="(item, index) in data.week" :key="index" :label="item.label" :value="item.value"></el-option>
+									<el-option v-for="(item, index) in data.week" :key="index" :label="item.label"
+										:value="item.value"></el-option>
 								</el-select>
 								执行一次
 							</el-form-item>
 							<el-form-item label="指定" v-if="value.week.type == 3">
 								<el-select v-model="value.week.appoint" multiple style="width: 100%">
-									<el-option v-for="(item, index) in data.week" :key="index" :label="item.label" :value="item.value"></el-option>
+									<el-option v-for="(item, index) in data.week" :key="index" :label="item.label"
+										:value="item.value"></el-option>
 								</el-select>
 							</el-form-item>
 							<el-form-item label="最后一周" v-if="value.week.type == 4">
 								<el-select v-model="value.week.last">
-									<el-option v-for="(item, index) in data.week" :key="index" :label="item.label" :value="item.value"></el-option>
+									<el-option v-for="(item, index) in data.week" :key="index" :label="item.label"
+										:value="item.value"></el-option>
 								</el-select>
 							</el-form-item>
 						</el-form>
@@ -265,11 +292,11 @@
 					<el-form>
 						<el-form-item label="类型">
 							<el-radio-group v-model="value.year.type">
-								<el-radio border  label="-1">忽略</el-radio>
-								<el-radio border  label="0">任意值</el-radio>
-								<el-radio border  label="1">范围</el-radio>
-								<el-radio border  label="2">间隔</el-radio>
-								<el-radio border  label="3">指定</el-radio>
+								<el-radio border label="-1">忽略</el-radio>
+								<el-radio border label="0">任意值</el-radio>
+								<el-radio border label="1">范围</el-radio>
+								<el-radio border label="2">间隔</el-radio>
+								<el-radio border label="3">指定</el-radio>
 							</el-radio-group>
 						</el-form-item>
 						<el-form-item label="范围" v-if="value.year.type == 1">
@@ -775,16 +802,19 @@ export default {
 	padding: 0 7px;
 	vertical-align: bottom;
 }
+
 .sc-cron-num {
 	text-align: center;
 	margin-bottom: 15px;
 	width: 100%;
 }
+
 .sc-cron-num h2 {
 	font-size: 12px;
 	margin-bottom: 15px;
 	font-weight: normal;
 }
+
 .sc-cron-num h4 {
 	display: block;
 	height: 32px;
@@ -795,12 +825,12 @@ export default {
 	background: var(--el-color-primary-light-9);
 	border-radius: 4px;
 }
+
 .sc-cron:deep(.el-tabs__item.is-active) .sc-cron-num h4 {
 	background: var(--el-color-primary);
 	color: #fff;
 }
 
-[data-theme='dark'] .sc-cron-num h4 {
+/* [data-theme='dark'] .sc-cron-num h4 {
 	background: var(--el-color-white);
-}
-</style>
+} */</style>

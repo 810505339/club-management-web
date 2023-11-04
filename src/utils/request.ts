@@ -1,9 +1,9 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Session } from '/@/utils/storage';
-import { useMessageBox } from '/@/hooks/message';
+import { useMessageBox, useMessage } from '/@/hooks/message';
 import qs from 'qs';
 import other from './other';
-
+import { ElMessage } from 'element-plus'
 /**
  * 创建并配置一个 Axios 实例对象
  */
@@ -65,6 +65,7 @@ service.interceptors.request.use(
  */
 const handleResponse = (response: AxiosResponse<any>) => {
 	if (response.data.code === 1) {
+		ElMessage.error(response.data.msg)
 		throw response.data;
 	}
 

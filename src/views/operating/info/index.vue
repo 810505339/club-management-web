@@ -3,17 +3,17 @@
 		<div class="layout-padding-auto layout-padding-view">
 			<el-row class="ml10" v-show="showSearch">
 				<el-form :inline="true" :model="state.queryForm" ref="queryRef">
-					<el-form-item :label="$t('info.title')" prop="jobName">
+					<el-form-item :label="$t('info.title')" prop="title">
 						<el-input :placeholder="$t('common.please') + $t('info.title')" @keyup.enter="getDataList" clearable
-							v-model="state.queryForm.jobName" />
+							v-model="state.queryForm.title" />
 					</el-form-item>
-					<el-form-item :label="t('info.message')" prop="jobStatus">
+					<el-form-item :label="t('info.message')" prop="content">
 						<el-input :placeholder="$t('common.please') + $t('info.message')" @keyup.enter="getDataList" clearable
-							v-model="state.queryForm.jobName" />
+							v-model="state.queryForm.content" />
 					</el-form-item>
 					<el-form-item :label="t('info.time')" prop="jobExecuteStatus">
-						<el-date-picker v-model="state.queryForm.jobName" type="datetimerange" range-separator="-"
-							:start-placeholder="$t('common.inputTimeTip1')" :end-placeholder="$t('common.inputTimeTip2')" />
+						<el-date-picker v-model="state.queryForm.pushTime" type="datetime" value-format="YYYY-MM-DD HH:mm:ss"
+							:placeholder="$t('common.select') + $t('info.time')" />
 					</el-form-item>
 
 					<el-form-item>
@@ -33,29 +33,34 @@
 						v-model:showSearch="showSearch" />
 				</div>
 			</el-row>
-			<el-table :data="state.dataList" @selection-change="handleSelectionChange" style="width: 100%"
-				v-loading="state.loading" border :cell-style="tableStyle.cellStyle"
+			<el-table :data="state.dataList" v-loading="state.loading" border :cell-style="tableStyle.cellStyle"
 				:header-cell-style="tableStyle.headerCellStyle">
 				<el-table-column :label="t('info.index')" fixed="left" type="index" width="60" />
-				<el-table-column :label="t('info.title')" fixed="left" prop="jobName" show-overflow-tooltip />
-				<el-table-column :label="t('info.message')" fixed="left" prop="jobName" show-overflow-tooltip />
-				<el-table-column :label="t('info.createTime')" prop="jobGroup" show-overflow-tooltip />
-				<el-table-column :label="t('info.time')" prop="jobStatus" show-overflow-tooltip>
+				<el-table-column :label="t('info.title')" fixed="left" prop="title" show-overflow-tooltip />
+				<el-table-column :label="t('info.message')" fixed="left" prop="content" show-overflow-tooltip />
+				<el-table-column :label="t('info.createTime')" prop="createTime" width="170" show-overflow-tooltip />
+				<el-table-column :label="t('info.time')" prop="pushTime" width="170" show-overflow-tooltip>
+
+				</el-table-column>
+				<el-table-column :label="t('info.type')" prop="type" show-overflow-tooltip>
 					<template #default="scope">
-						<dict-tag :options="job_status" :value="scope.row.jobStatus"></dict-tag>
+						{{ scope.row.type == 0 ? t('info.type2') : t('info.type1') }}
 					</template>
 				</el-table-column>
-				<el-table-column :label="t('info.type')" prop="jobExecuteStatus" show-overflow-tooltip>
+				<el-table-column :label="t('info.state')" prop="enabled" show-overflow-tooltip>
+
 					<template #default="scope">
-						<dict-tag :options="job_execute_status" :value="scope.row.jobExecuteStatus"></dict-tag>
+						{{ scope.row.enabled == 0 ? t('info.enabled0') : scope.row.enabled == 1 ? t('info.enabled1') :
+							scope.row.enabled
+								== 2 ? t('info.enabled2') : '' }}
 					</template>
 				</el-table-column>
-				<el-table-column :label="t('info.state')" prop="startTime" show-overflow-tooltip />
 				<el-table-column :label="$t('common.action')" fixed="right" width="150">
 					<template #default="scope">
-						<el-button v-auth="'job_sys_job_edit'" @click="handleEditJob(scope.row)" text type="primary">{{
-							$t('common.editBtn') }} </el-button>
-						<el-button v-auth="'job_sys_job_del'" @click="handleDelete(scope.row)" text type="primary">{{
+						<el-button v-auth="'job_sys_job_edit'" v-if="scope.row.enabled != 1" @click="handleEditJob(scope.row)" text
+							type="primary">{{
+								$t('common.editBtn') }} </el-button>
+						<el-button v-auth="'job_sys_job_del'" @click="handleDelete([scope.row.id])" text type="primary">{{
 							$t('common.delBtn') }} </el-button>
 					</template>
 				</el-table-column>
@@ -70,16 +75,13 @@
 </template>
 
 <script lang="ts" name="systemSysJob" setup>
-import { pageList, putObj } from '/@/api/admin/user';
 import { BasicTableProps, useTable } from '/@/hooks/table';
-import { delObj, fetchList, runJobRa, shutDownJobRa, startJobRa } from '/@/api/daemon/job';
 import { useMessage, useMessageBox } from '/@/hooks/message';
-import { useDict } from '/@/hooks/dict';
 import { useI18n } from 'vue-i18n';
+import { fetchList, deleteObj } from '/@/api/operating/info';
 
 // 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
-const JobLog = defineAsyncComponent(() => import('./job-log.vue'));
 
 // 获取国际化方法
 const { t } = useI18n();
@@ -90,137 +92,48 @@ const formDialogRef = ref();
 const jobLogRef = ref();
 
 /** 搜索表单信息 */
-const queryForm = reactive({
-	jobName: '',
-	jobGroup: '',
-	jobStatus: '',
-	jobExecuteStatus: '',
+const queryForm: any = reactive({
+	title: '',
+	content: '',
+	pushTime: '',
 });
 /** 是否展示搜索表单 */
 const showSearch = ref(true);
 
-// 多选变量
-/** 选中的行 */
-const selectedRows = ref([]);
-/** 是否可以多选 */
-const multiple = ref(true);
 
-/** 查询字典 */
-const { job_status, job_execute_status, misfire_policy, job_type } = useDict('job_status', 'job_execute_status', 'misfire_policy', 'job_type');
 
 /** 表格状态变量 */
 const state = reactive<BasicTableProps>({
 	queryForm,
-	pageList: pageList,
+	pageList: async (pamars) => {
+		return await fetchList(pamars)
+	},
 });
 
 /** 获取表格数据方法 */
-const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, tableStyle } = useTable(state);
 
 /** 重置查询表单 */
 const resetQuery = () => {
 	Object.keys(queryForm).forEach((key) => (queryForm[key] = ''));
 	getDataList();
 };
-
-/** 行选中事件 */
-const handleSelectionChange = (rows: any) => {
-	selectedRows.value = rows;
-	multiple.value = !rows.length;
-};
-
-/** 导出Excel */
-const exportExcel = () => {
-	downBlobFile('/job/sys-job/export', state.queryForm, 'job.xlsx');
-};
-
-/** 查看作业日志 */
-const handleJobLog = (row) => {
-	jobLogRef.value.openDialog(row.jobId);
-};
-
 /** 编辑作业 */
-const handleEditJob = (row) => {
-	formDialogRef.value.openDialog(row.jobId);
+const handleEditJob = (row: any) => {
+	formDialogRef.value.openDialog(row.id);
 };
 
-/** 启动作业 */
-const handleStartJob = async (row) => {
-	const jobStatus = row.jobStatus;
-	if (jobStatus === '1' || jobStatus === '3') {
-		try {
-			await useMessageBox().confirm(`即将发布或启动(任务名称: ${row.jobName}), 是否继续?`);
-		} catch {
-			return;
-		}
-
-		try {
-			await startJobRa(row.jobId);
-			getDataList();
-			useMessage().success(t('common.optSuccessText'));
-		} catch (err: any) {
-			useMessage().error(err.msg);
-		}
-	} else {
-		useMessage().error('定时任务已运行');
-	}
-};
-
-/** 暂停作业 */
-const handleShutDownJob = async (row) => {
-	const jobStatus = row.jobStatus;
-	if (jobStatus === '2') {
-		try {
-			await useMessageBox().confirm(`即将暂停(任务名称: ${row.jobName}), 是否继续?`);
-		} catch {
-			return;
-		}
-
-		try {
-			await shutDownJobRa(row.jobId);
-			getDataList();
-			useMessage().success(t('common.optSuccessText'));
-		} catch (err: any) {
-			useMessage().error(err.msg);
-		}
-	} else {
-		useMessage().error('已暂停，不要重复操作');
-	}
-};
-
-/** 运行作业 */
-const handleRunJob = async (row) => {
-	try {
-		await useMessageBox().confirm(`立刻执行一次任务(任务名称: ${row.jobName}), 是否继续?`);
-	} catch {
-		return;
-	}
-
-	try {
-		await runJobRa(row.jobId);
-		getDataList();
-		useMessage().success(t('common.optSuccessText'));
-	} catch (err: any) {
-		useMessage().error('运行失败');
-	}
-};
 
 /** 删除操作 */
-const handleDelete = async (row) => {
-	if (!row) {
-		selectedRows.value.forEach(handleDelete);
-		return;
-	}
-
-	const { jobId, jobName } = row;
+const handleDelete = async (ids: string[]) => {
 	try {
-		await useMessageBox().confirm(`${t('common.delConfirmText')}(任务名称:${jobName})`);
+		await useMessageBox().confirm(t('common.delConfirmText'));
 	} catch {
 		return;
 	}
 
 	try {
-		await delObj(jobId);
+		await deleteObj(ids);
 		getDataList();
 		useMessage().success(t('common.delSuccessText'));
 	} catch (error: any) {

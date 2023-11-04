@@ -1,58 +1,54 @@
 <!--
  * @Author: yxx
  * @Date: 2023-10-16 22:00:46
- * @LastEditTime: 2023-10-16 22:11:09
+ * @LastEditTime: 2023-11-04 20:06:14
  * @LastEditors: yxx
  * @Description: 
  * @FilePath: \club-management-web\src\views\operating\adv\banner\info.vue
 -->
 <template>
   <el-drawer v-model="drawer" :title="t('common.detailBtn')" direction="rtl" destroy-on-close>
-    <div class="text-[#fff]">
-      <el-form :model="userInfo" label-width="120px">
-        <el-form-item :label="t('banner.id')" prop="id">
-          {{ userInfo.id }}
-        </el-form-item>
-        <el-form-item :label="t('banner.name')" prop="name">
-          {{ userInfo.name }}
-        </el-form-item>
-        <el-form-item :label="t('banner.introduce')" prop="introduction">
-          {{ userInfo.introduction }}
-        </el-form-item>
-        <el-form-item :label="t('banner.address')" prop="address">
-          {{ userInfo.name }}
-        </el-form-item>
-        <el-form-item :label="t('banner.image')" prop="pictureIds">
-          <el-image class="w-60 my-2 rounded-md" fit="cover" v-for="item in userInfo.pictureFileVOs" :key="item.id"
-            :src="`${fileCommonUrl}/${item.fileName}`" />
-        </el-form-item>
-        <el-form-item :label="t('banner.video')" prop="videoIds">
-          <video :src="`${fileCommonUrl}/${userInfo?.videoFileVOs?.[0]?.fileName}`" controls
-            class="w-60 h-40 my-2 rounded-md" v-if="userInfo.videoFileVOs" />
-        </el-form-item>
 
-
-      </el-form>
-    </div>
+    <el-form :model="bannerInfo" label-width="120px">
+      <el-form-item :label="t('banner.id')">
+        {{ bannerInfo.id }}
+      </el-form-item>
+      <el-form-item :label="t('banner.type')">
+        {{ bannerInfo.type == 0 ? t('banner.imageH5') : t('banner.image') }}
+      </el-form-item>
+      <el-form-item :label="t('banner.banner')">
+        <el-image class="h-60 my-2 rounded-md" fit="cover" v-for="item in bannerInfo.pictureFile" :key="item.id"
+          :src="`${fileCommonUrl}/${item.fileName}`" />
+      </el-form-item>
+      <el-form-item :label="t('banner.introduce')">
+        {{ bannerInfo.weightiness }}
+      </el-form-item>
+      <el-form-item :label="t('banner.time')">
+        {{ bannerInfo.validityTime }}
+      </el-form-item>
+      <el-form-item :label="t('banner.address')">
+        {{ bannerInfo.dynamicStateId }}
+      </el-form-item>
+      <el-form-item :label="t('banner.name')">
+        <template v-for="(item, index) in bannerInfo.storeVOS">{{ item.name }}&nbsp;</template>
+      </el-form-item>
+      <el-form-item :label="t('banner.number')">
+        {{ bannerInfo.click_number }}
+      </el-form-item>
+    </el-form>
   </el-drawer>
 </template>
 
 <script setup lang="ts" name="shop-list-info">
 import { useI18n } from 'vue-i18n'
-import { getStoreById } from '/@/api/admin/store'
+import { getCarouselId } from '/@/api/operating/banner';
 import { useUserInfo } from '/@/stores/userInfo'
 const drawer = ref(false)
 const { t } = useI18n()
 const store = useUserInfo()
 const fileCommonUrl = computed(() => store.userInfos.fileCommonUrl)
 
-const userInfo = reactive({
-  name: '',
-  pictureFileVOs: [],
-  videoFileVOs: [],
-  introduction: '',
-  id: undefined,
-  address: ''
+const bannerInfo: any = reactive({
 
 })
 async function open(id: string) {
@@ -61,9 +57,9 @@ async function open(id: string) {
 }
 
 const getInfo = async (id: string) => {
-  const { data } = await getStoreById(id)
+  const { data } = await getCarouselId(id)
   console.log(data)
-  Object.assign(userInfo, data)
+  Object.assign(bannerInfo, data)
 
 }
 defineExpose({

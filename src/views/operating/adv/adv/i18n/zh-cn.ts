@@ -2,8 +2,11 @@ export default {
 
 	adv: {
 		index: '#',
-		id: '门店ID',
+		id: '广告ID',
 		name: '广告名称',
+		type: '广告类型',
+		adv1: '弹窗广告',
+		adv2: '置顶广告',
 		introduce: '权重',
 		address: '跳转地址',
 		image: '图片',

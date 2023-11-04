@@ -1,7 +1,7 @@
 /*
  * @Author: yxx
  * @Date: 2023-10-16 22:00:46
- * @LastEditTime: 2023-10-16 22:07:45
+ * @LastEditTime: 2023-11-04 17:49:39
  * @LastEditors: yxx
  * @Description: 
  * @FilePath: \club-management-web\src\views\operating\adv\banner\i18n\en.ts
@@ -10,6 +10,7 @@ export default {
 	banner: {
 		index: '#',
 		id: 'store ID',
+		type: '轮播图类型',
 		name: 'store name',
 		introduce: 'store introduce',
 		address: 'Url',
@@ -28,6 +29,7 @@ export default {
 		shelves: 'shelves',
 		takedown: 'takedown',
 		please: 'please input the',
-		sureTakedown: 'Are you sure you want to proceed? After the delisting, the relevant information of the user terminal will no longer be displayed, please proceed with caution'
+		sureTakedown: 'Are you sure you want to proceed? After the delisting, the relevant information of the user terminal will no longer be displayed, please proceed with caution',
+		dynamicStateId: 'Dynamic details'
 	},
 };

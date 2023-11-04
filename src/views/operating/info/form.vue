@@ -2,30 +2,21 @@
 	<el-dialog v-model="visible" :close-on-click-modal="false"
 		:title="form.jobId ? $t('common.editBtn') : $t('common.addBtn')" draggable>
 		<el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="120px" v-loading="loading">
-
-			<el-form-item :label="t('info.title')" prop="jobName">
-				<el-input v-model="form.jobName" :placeholder="$t('common.please') + t('info.title')" />
+			<el-form-item :label="t('info.title')" prop="title">
+				<el-input v-model="form.title" :placeholder="$t('common.please') + t('info.title')" />
 			</el-form-item>
-
-			<el-form-item :label="t('info.message')" prop="jobGroup">
-				<el-input v-model="form.jobGroup" :placeholder="$t('common.please') + t('info.message')" />
+			<el-form-item :label="t('info.message')" prop="content">
+				<el-input v-model="form.content" type="textarea" :placeholder="$t('common.please') + t('info.message')" />
 			</el-form-item>
-
-			<el-form-item :label="t('info.time')" prop="jobType">
-				<el-date-picker v-model="form.jobName" type="datetimerange" range-separator="-"
-					:start-placeholder="$t('common.inputTimeTip1')" :end-placeholder="$t('common.inputTimeTip2')" />
-			</el-form-item>
-			<el-form-item :label="t('info.type')" prop="jobType">
-				<el-select v-model="form.jobType" :placeholder="$t('common.select') + t('info.type')">
-					<el-option v-for="(item, index) in job_type" :key="index" :label="item.label" :value="item.value"></el-option>
+			<el-form-item :label="t('info.type')" prop="type">
+				<el-select v-model="form.type" :placeholder="$t('common.select') + t('info.type')">
+					<el-option v-for="(item, index) in types" :key="index" :label="item.label" :value="item.value"></el-option>
 				</el-select>
 			</el-form-item>
-
-
-
-
-
-
+			<el-form-item v-if="form.type == 1" :label="t('info.time')" prop="pushTime">
+				<el-date-picker v-model="form.pushTime" type="datetime" value-format="YYYY-MM-DD HH:mm:ss"
+					:placeholder="$t('common.select') + $t('info.time')" />
+			</el-form-item>
 		</el-form>
 		<template #footer>
 			<span class="dialog-footer">
@@ -38,14 +29,11 @@
 </template>
 
 <script lang="ts" name="SysJobDialog" setup>
-// 定义子组件向父组件传值/事件
-import { useDict } from '/@/hooks/dict';
 import { useMessage } from '/@/hooks/message';
-import { addObj, getObj, putObj } from '/@/api/daemon/job';
 import { useI18n } from 'vue-i18n';
+import { addObj, getObj, putObj } from '/@/api/operating/info';
 
 const emit = defineEmits(['refresh']);
-const Crontab = defineAsyncComponent(() => import('/@/components/Crontab/index.vue'));
 
 const { t } = useI18n();
 
@@ -54,47 +42,31 @@ const dataFormRef = ref();
 const visible = ref(false);
 const loading = ref(false);
 
-// 定义字典
-const { misfire_policy, job_type } = useDict('job_status', 'job_execute_status', 'misfire_policy', 'job_type');
-
+const types = ref([
+	{ "label": t('info.type1'), "value": "1" },
+	{ "label": t('info.type2'), "value": "0" }
+])
 // 提交表单数据
-const form = reactive({
-	jobId: '',
-	jobName: '',
-	jobGroup: '',
-	jobType: '',
-	executePath: '',
-	className: '',
-	methodName: '',
-	methodParamsValue: '',
-	cronExpression: '',
-	misfirePolicy: '',
-	jobStatus: '',
-	jobExecuteStatus: '',
-	remark: '',
+const form: any = reactive({
+	id: null,
+	title: '',
+	content: '',
+	type: '1',
+	pushTime: '',
 });
 
-const popoverVis = (bol: boolean) => {
-	popoverVisible.value = bol;
-};
 
-const popoverVisible = ref(false);
 // 定义校验规则
 const dataRules = reactive({
-	jobName: [{ required: true, message: '任务名称不能为空', trigger: 'blur' }],
-	jobGroup: [{ required: true, message: '任务组名不能为空', trigger: 'blur' }],
-	jobType: [{ required: true, message: '任务类型不能为空', trigger: 'blur' }],
-	cronExpression: [{ required: true, message: 'cron不能为空', trigger: 'blur' }],
-	misfirePolicy: [{ required: true, message: '策略不能为空', trigger: 'blur' }],
-	executePath: [{ required: true, message: '执行路径不能为空', trigger: 'blur' }],
-	className: [{ required: true, message: '执行文件不能为空', trigger: 'blur' }],
-	methodName: [{ required: true, message: '执行方法不能为空', trigger: 'blur' }],
+	title: [{ required: true, message: `${t('info.title')}${t('common.empty')}`, trigger: 'blur' }],
+	content: [{ required: true, message: `${t('info.message')}${t('common.empty')}`, trigger: 'blur' }],
+	pushTime: [{ required: true, message: `${t('info.time')}${t('common.empty')}`, trigger: 'blur' }],
 });
 
 // 打开弹窗
 const openDialog = (id: string) => {
 	visible.value = true;
-	form.jobId = '';
+	// form.id = 0;
 
 	// 重置表单数据
 	nextTick(() => {
@@ -103,7 +75,7 @@ const openDialog = (id: string) => {
 
 	// 获取sysJob信息
 	if (id) {
-		form.jobId = id;
+		form.id = id;
 		getsysJobData(id);
 	}
 };
@@ -115,12 +87,10 @@ const onSubmit = async () => {
 
 	try {
 		loading.value = true;
-		form.jobId ? await putObj(form) : await addObj(form);
-		useMessage().success(t(form.jobId ? 'common.editSuccessText' : 'common.addSuccessText'));
+		form.id ? await putObj(form) : await addObj(form);
+		useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));
 		visible.value = false;
 		emit('refresh');
-	} catch (err: any) {
-		useMessage().error('任务初始化异常');
 	} finally {
 		loading.value = false;
 	}
