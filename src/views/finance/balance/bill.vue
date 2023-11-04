@@ -29,7 +29,7 @@
 						@queryTable="getDataList"></right-toolbar>
 				</div>
 			</el-row>
-			<el-table :data="state.dataList" v-loading="state.loading" class="w-[100%]"
+			<el-table stripe :data="state.dataList" v-loading="state.loading" class="w-[100%]"
 				@selection-change="handleSelectionChange" border :cell-style="tableStyle.cellStyle"
 				:header-cell-style="tableStyle.headerCellStyle">
 				<el-table-column type="selection" width="40" align="center" />

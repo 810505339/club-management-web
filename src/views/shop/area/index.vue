@@ -36,8 +36,8 @@
 								@queryTable="getDataList" class="ml10 mr20 " style="float: right" />
 						</div>
 					</el-row>
-					<el-table v-loading="state.loading" :data="state.dataList" @selection-change="handleSelectionChange" border
-						:cell-style="tableStyle.cellStyle" :header-cell-style="tableStyle.headerCellStyle">
+					<el-table stripe v-loading="state.loading" :data="state.dataList" @selection-change="handleSelectionChange"
+						border :cell-style="tableStyle.cellStyle" :header-cell-style="tableStyle.headerCellStyle">
 						<el-table-column :label="$t('area.index')" prop="index" width="60" fixed="left" />
 						<el-table-column :label="$t('area.id')" prop="id" width="100" fixed="left" />
 						<el-table-column :label="$t('area.name')" prop="name" fixed="left" />

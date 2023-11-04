@@ -71,7 +71,7 @@ onMounted(() => {
 });
 // 页面销毁时，关闭监听布局配置/i18n监听
 onUnmounted(() => {
-	mittBus.off('openSetingsDrawer', () => {});
+	mittBus.off('openSetingsDrawer', () => { });
 });
 // 监听路由的变化，设置网站标题
 watch(

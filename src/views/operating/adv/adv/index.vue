@@ -19,7 +19,7 @@
 								style="float: right" />
 						</div>
 					</el-row>
-					<el-table v-loading="state.loading" :data="state.dataList" border :cell-style="tableStyle.cellStyle"
+					<el-table stripe v-loading="state.loading" :data="state.dataList" border :cell-style="tableStyle.cellStyle"
 						:header-cell-style="tableStyle.headerCellStyle">
 						<el-table-column :label="$t('adv.index')" type="index" width="60" fixed="left" />
 						<el-table-column :label="$t('adv.name')" prop="name" width="100" />

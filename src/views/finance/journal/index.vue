@@ -39,7 +39,7 @@
 						v-model:showSearch="showSearch" />
 				</div>
 			</el-row>
-			<el-table :data="state.dataList" class="w-[100%]" v-loading="state.loading" border
+			<el-table stripe :data="state.dataList" class="w-[100%]" v-loading="state.loading" border
 				:cell-style="tableStyle.cellStyle" :header-cell-style="tableStyle.headerCellStyle">
 
 				<el-table-column :label="t('journal.index')" fixed="left" type="index" />

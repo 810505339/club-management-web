@@ -22,7 +22,7 @@
 						v-model:showSearch="showSearch" />
 				</div>
 			</el-row>
-			<el-table :data="state.dataList" @selection-change="handleSelectionChange" style="width: 100%"
+			<el-table stripe :data="state.dataList" @selection-change="handleSelectionChange" style="width: 100%"
 				v-loading="state.loading" border :cell-style="tableStyle.cellStyle"
 				:header-cell-style="tableStyle.headerCellStyle">
 				<el-table-column :label="t('ticket.index')" fixed="left" type="index" width="60" />
@@ -72,7 +72,6 @@
 
 		<!-- 编辑、新增  -->
 		<form-dialog @refresh="getDataList()" ref="formDialogRef" />
-		<job-log ref="jobLogRef"></job-log>
 	</div>
 </template>
 
@@ -86,7 +85,6 @@ import { useI18n } from 'vue-i18n';
 
 // 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
-const JobLog = defineAsyncComponent(() => import('./job-log.vue'));
 
 // 获取国际化方法
 const { t } = useI18n();

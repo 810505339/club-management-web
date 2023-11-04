@@ -1,19 +1,10 @@
 <!-- excel 导入组件 -->
 <template>
 	<el-dialog :title="prop.title" v-model="state.upload.open" :close-on-click-modal="false" draggable>
-		<el-upload
-			ref="uploadRef"
-			:limit="1"
-			accept=".xlsx, .xls"
-			:headers="headers"
-			:action="baseURL + other.adaptationUrl(url)"
-			:disabled="state.upload.isUploading"
-			:on-progress="handleFileUploadProgress"
-			:on-success="handleFileSuccess"
-			:on-error="handleFileError"
-			:auto-upload="false"
-			drag
-		>
+		<el-upload ref="uploadRef" :limit="1" accept=".xlsx, .xls" :headers="headers"
+			:action="baseURL + other.adaptationUrl(url)" :disabled="state.upload.isUploading"
+			:on-progress="handleFileUploadProgress" :on-success="handleFileSuccess" :on-error="handleFileError"
+			:auto-upload="false" drag>
 			<i class="el-icon-upload"></i>
 			<div class="el-upload__text">
 				{{ $t('excel.operationNotice') }}
@@ -22,8 +13,8 @@
 			<template #tip>
 				<div class="el-upload__tip text-center">
 					<span>{{ $t('excel.fileFormat') }}</span>
-					<el-link type="primary" :underline="false" style="font-size: 12px; vertical-align: baseline" @click="downExcelTemp" v-if="tempUrl"
-						>{{ $t('excel.downloadTemplate') }}
+					<el-link type="primary" :underline="false" style="font-size: 12px; vertical-align: baseline"
+						@click="downExcelTemp" v-if="tempUrl">{{ $t('excel.downloadTemplate') }}
 					</el-link>
 				</div>
 			</template>
@@ -36,7 +27,7 @@
 
 	<!--校验失败错误数据-->
 	<el-dialog :title="$t('excel.validationFailureData')" v-model="state.errorVisible">
-		<el-table :data="state.errorData">
+		<el-table stripe :data="state.errorData">
 			<el-table-column property="lineNum" :label="$t('excel.lineNumbers')" width="100"></el-table-column>
 			<el-table-column property="errors" :label="$t('excel.misDescription')" show-overflow-tooltip>
 				<template v-slot="scope">

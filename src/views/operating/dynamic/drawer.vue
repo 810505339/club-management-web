@@ -22,8 +22,8 @@
 
 
 
-    <el-table :data="getDataList" style="width: 100%" v-loading="state.loading" border :cell-style="tableStyle.cellStyle"
-      :header-cell-style="tableStyle.headerCellStyle">
+    <el-table stripe :data="getDataList" style="width: 100%" v-loading="state.loading" border
+      :cell-style="tableStyle.cellStyle" :header-cell-style="tableStyle.headerCellStyle">
 
       <el-table-column align="center" :label="t('dynamic.userName')" />
       <el-table-column :label="t('dynamic.userPhone')" />

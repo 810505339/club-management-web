@@ -59,7 +59,7 @@
 						@queryTable="getDataList" class="ml10 mr20" style="float: right" />
 				</div>
 			</el-row>
-			<el-table v-loading="state.loading" :data="state.dataList" @selection-change="handleSelectionChange" border
+			<el-table stripe v-loading="state.loading" :data="state.dataList" @selection-change="handleSelectionChange" border
 				:cell-style="tableStyle.cellStyle" :header-cell-style="tableStyle.headerCellStyle">
 				<el-table-column :selectable="handleSelectable" type="selection" width="40" />
 				<el-table-column :label="$t('sysuser.index')" type="index" width="60" fixed="left" />

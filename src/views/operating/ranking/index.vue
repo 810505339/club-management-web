@@ -3,7 +3,7 @@
 		<div class="layout-padding-auto layout-padding-view">
 			<el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
 				<el-tab-pane label="消费" name="0">
-					<el-table :data="state.dataList" @selection-change="handleSelectionChange" style="width: 100%"
+					<el-table stripe :data="state.dataList" @selection-change="handleSelectionChange" style="width: 100%"
 						v-loading="state.loading" border :cell-style="tableStyle.cellStyle"
 						:header-cell-style="tableStyle.headerCellStyle">
 						<el-table-column :label="t('ranking.ranking')" fixed="left" width="80px" type="index" />
@@ -17,7 +17,7 @@
 				</el-tab-pane>
 				<el-tab-pane label="畅销商品" name="1">
 
-					<el-table :data="state.dataList" @selection-change="handleSelectionChange" style="width: 100%"
+					<el-table stripe :data="state.dataList" @selection-change="handleSelectionChange" style="width: 100%"
 						v-loading="state.loading" border :cell-style="tableStyle.cellStyle"
 						:header-cell-style="tableStyle.headerCellStyle">
 						<el-table-column :label="t('ranking.ranking')" fixed="left" width="80px" type="index" />

@@ -89,7 +89,7 @@ onMounted(() => {
 });
 // 页面卸载时
 onUnmounted(() => {
-	mittBus.off('getBreadcrumbIndexSetFilterRoutes', () => {});
+	mittBus.off('getBreadcrumbIndexSetFilterRoutes', () => { });
 });
 </script>
 
@@ -98,7 +98,7 @@ onUnmounted(() => {
 	height: 50px;
 	display: flex;
 	align-items: center;
-	background: var(--next-bg-topBar);
-	border-bottom: 1px solid var(--next-border-color-light);
+	// background: var(--next-bg-topBar);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.25);
 }
 </style>

@@ -8,7 +8,9 @@
 							<el-form-item prop="avatar">
 								<ImageUpload v-model:imageUrl="formData.avatar" borderRadius="50%">
 									<template #empty>
-										<el-icon><Avatar /></el-icon>
+										<el-icon>
+											<Avatar />
+										</el-icon>
 										<span>请上传头像</span>
 									</template>
 								</ImageUpload>
@@ -49,7 +51,8 @@
 				</el-form>
 			</el-tab-pane>
 			<el-tab-pane label="安全信息">
-				<el-form :model="passwordFormData" :rules="passwordRuleForm" label-width="100px" class="mt30" ref="passwordFormdataRef">
+				<el-form :model="passwordFormData" :rules="passwordRuleForm" label-width="100px" class="mt30"
+					ref="passwordFormdataRef">
 					<el-row :gutter="20">
 						<el-col :span="24" class="mb20">
 							<el-form-item label="原密码" prop="password">
@@ -58,19 +61,15 @@
 						</el-col>
 						<el-col :span="24" class="mb20">
 							<el-form-item label="新密码" prop="newpassword1">
-								<strength-meter
-									v-model="passwordFormData.newpassword1"
-									:minlength="6"
-									:maxlength="16"
-									placeholder="请输入新密码"
-									@score="passwordScore"
-								></strength-meter>
+								<strength-meter v-model="passwordFormData.newpassword1" :minlength="6" :maxlength="16"
+									placeholder="请输入新密码" @score="passwordScore"></strength-meter>
 								<!--									<el-input v-model="passwordFormData.newpassword1" clearable type="password"></el-input>-->
 							</el-form-item>
 						</el-col>
 						<el-col :span="24" class="mb20">
 							<el-form-item label="确认密码" prop="newpassword2">
-								<strength-meter v-model="passwordFormData.newpassword2" :minlength="6" :maxlength="16" placeholder="请重复密码"></strength-meter>
+								<strength-meter v-model="passwordFormData.newpassword2" :minlength="6" :maxlength="16"
+									placeholder="请重复密码"></strength-meter>
 							</el-form-item>
 						</el-col>
 						<el-col :span="24" class="mb20">
@@ -82,7 +81,7 @@
 				</el-form>
 			</el-tab-pane>
 			<el-tab-pane label="第三方账号">
-				<el-table :data="socialList" class="mt10">
+				<el-table stripe :data="socialList" class="mt10">
 					<el-table-column type="index" label="序号" width="80"></el-table-column>
 					<el-table-column prop="name" label="平台"></el-table-column>
 					<el-table-column label="状态">

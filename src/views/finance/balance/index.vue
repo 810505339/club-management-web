@@ -21,7 +21,7 @@
 						v-model:showSearch="showSearch" />
 				</div>
 			</el-row>
-			<el-table :data="state.dataList" class="w-[100%]" v-loading="state.loading" border
+			<el-table stripe :data="state.dataList" class="w-[100%]" v-loading="state.loading" border
 				:cell-style="tableStyle.cellStyle" :header-cell-style="tableStyle.headerCellStyle">
 				<el-table-column :label="t('balance.index')" fixed="left" type="index" />
 				<el-table-column :label="t('balance.userName')" fixed="left" prop="jobName" show-overflow-tooltip />

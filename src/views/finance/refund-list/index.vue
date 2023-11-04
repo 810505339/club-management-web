@@ -34,7 +34,7 @@
 						v-model:showSearch="showSearch" />
 				</div>
 			</el-row>
-			<el-table :data="state.dataList" style="width: 100%" v-loading="state.loading" border
+			<el-table stripe :data="state.dataList" style="width: 100%" v-loading="state.loading" border
 				:cell-style="tableStyle.cellStyle" :header-cell-style="tableStyle.headerCellStyle">
 				<el-table-column :label="t('refund.index')" fixed="left" type="index" />
 				<el-table-column :label="t('refund.No')" fixed="left" prop="jobName" show-overflow-tooltip />

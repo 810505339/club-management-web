@@ -22,7 +22,7 @@
 							</el-form-item>
 						</el-form>
 					</el-row>
-					<el-table v-loading="state.loading" :data="state.dataList" border :cell-style="tableStyle.cellStyle"
+					<el-table stripe v-loading="state.loading" :data="state.dataList" border :cell-style="tableStyle.cellStyle"
 						:header-cell-style="tableStyle.headerCellStyle">
 
 						<el-table-column :label="$t('clientUser.index')" type="index" width="60" fixed="left" />

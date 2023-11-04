@@ -33,7 +33,7 @@
 						v-model:showSearch="showSearch" />
 				</div>
 			</el-row>
-			<el-table :data="state.dataList" @selection-change="handleSelectionChange" style="width: 100%"
+			<el-table stripe :data="state.dataList" @selection-change="handleSelectionChange" style="width: 100%"
 				v-loading="state.loading" border :cell-style="tableStyle.cellStyle"
 				:header-cell-style="tableStyle.headerCellStyle">
 				<el-table-column align="center" type="selection" width="40" />

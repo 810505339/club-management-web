@@ -5,8 +5,8 @@
 				<li v-for="(v, k) in state.tagsViewList" :key="k" class="layout-navbars-tagsview-ul-li" :data-url="v.url"
 					:class="{ 'is-active': isActive(v) }" @contextmenu.prevent="onContextmenu(v, $event)"
 					@mousedown="onMousedownMenu(v, $event)" @click="onTagsClick(v, k)" :ref="(el) => {
-							if (el) tagsRefs[k] = el;
-						}
+						if (el) tagsRefs[k] = el;
+					}
 						">
 					<i class="iconfont icon-webicon318 layout-navbars-tagsview-ul-li-iconfont" v-if="isActive(v)"></i>
 					<SvgIcon :name="v.meta.icon" v-if="!isActive(v) && getThemeConfig.isTagsviewIcon" class="pr5" />
@@ -575,8 +575,8 @@ watch(
 
 <style scoped lang="scss">
 .layout-navbars-tagsview {
-	background-color: var(--el-color-white);
-	border-bottom: 1px solid var(--next-border-color-light);
+	// background-color: var(--el-color-white);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.25);
 	position: relative;
 
 	// z-index: 4;
@@ -720,7 +720,8 @@ watch(
 
 		.is-active {
 			@extend .tags-style-five-svg;
-			background: var(--el-color-primary-light-9) !important;
+
+			background: rgba(64, 158, 255, 0.25) !important;
 			color: var(--el-color-primary) !important;
 			z-index: 1;
 		}
@@ -729,4 +730,5 @@ watch(
 
 .layout-navbars-tagsview-shadow {
 	box-shadow: rgb(0 21 41 / 4%) 0px 1px 4px;
-}</style>
+}
+</style>

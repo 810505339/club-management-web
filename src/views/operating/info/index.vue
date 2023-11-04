@@ -33,7 +33,7 @@
 						v-model:showSearch="showSearch" />
 				</div>
 			</el-row>
-			<el-table :data="state.dataList" v-loading="state.loading" border :cell-style="tableStyle.cellStyle"
+			<el-table stripe :data="state.dataList" v-loading="state.loading" border :cell-style="tableStyle.cellStyle"
 				:header-cell-style="tableStyle.headerCellStyle">
 				<el-table-column :label="t('info.index')" fixed="left" type="index" width="60" />
 				<el-table-column :label="t('info.title')" fixed="left" prop="title" show-overflow-tooltip />

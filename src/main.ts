@@ -20,7 +20,7 @@ import 'splitpanes/dist/splitpanes.css';
 
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
-
+import 'element-plus/theme-chalk/dark/css-vars.css'
 const app = createApp(App);
 
 // 导入通用自定义组件

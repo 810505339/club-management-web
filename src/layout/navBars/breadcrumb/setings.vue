@@ -424,6 +424,7 @@ const getThemeConfig = computed(() => {
 });
 // 1、全局主题
 const onColorPickerChange = () => {
+	return
 	if (!getThemeConfig.value.primary) return ElMessage.warning('全局主题 primary 颜色值不能为空');
 	// 颜色加深
 	document.documentElement.style.setProperty('--el-color-primary-dark-2', `${getDarkColor(getThemeConfig.value.primary, 0.1)}`);
@@ -436,6 +437,7 @@ const onColorPickerChange = () => {
 };
 // 2、菜单 / 顶栏
 const onBgColorPickerChange = (bg: string) => {
+	return
 	document.documentElement.style.setProperty(`--next-bg-${bg}`, themeConfig.value[bg]);
 	if (bg === 'menuBar') {
 		document.documentElement.style.setProperty(`--next-bg-menuBar-light-1`, getLightColor(getThemeConfig.value.menuBar, 0.05));
@@ -447,18 +449,22 @@ const onBgColorPickerChange = (bg: string) => {
 };
 // 2、菜单 / 顶栏 --> 顶栏背景渐变
 const onTopBarGradualChange = () => {
+	return
 	setGraduaFun('.layout-navbars-breadcrumb-index', getThemeConfig.value.isTopBarColorGradual, getThemeConfig.value.topBar);
 };
 // 2、菜单 / 顶栏 --> 菜单背景渐变
 const onMenuBarGradualChange = () => {
+	return
 	setGraduaFun('.layout-container .el-aside', getThemeConfig.value.isMenuBarColorGradual, getThemeConfig.value.menuBar);
 };
 // 2、菜单 / 顶栏 --> 分栏菜单背景渐变
 const onColumnsMenuBarGradualChange = () => {
+	return
 	setGraduaFun('.layout-container .layout-columns-aside', getThemeConfig.value.isColumnsMenuBarColorGradual, getThemeConfig.value.columnsMenuBar);
 };
 // 2、菜单 / 顶栏 --> 背景渐变函数
 const setGraduaFun = (el: string, bool: boolean, color: string) => {
+	return
 	setTimeout(() => {
 		let els = document.querySelector(el);
 		if (!els) return false;
@@ -511,6 +517,8 @@ const onShareTagsViewChange = () => {
 };
 // 4、界面显示 --> 灰色模式/色弱模式
 const onAddFilterChange = (attr: string) => {
+
+	return
 	if (attr === 'grayscale') {
 		if (getThemeConfig.value.isGrayscale) getThemeConfig.value.isInvert = false;
 	} else {
@@ -629,11 +637,11 @@ onMounted(() => {
 			// 默认样式
 			onColorPickerChange();
 			// 灰色模式
-			if (getThemeConfig.value.isGrayscale) onAddFilterChange('grayscale');
+			// if (getThemeConfig.value.isGrayscale) onAddFilterChange('grayscale');
 			// 色弱模式
-			if (getThemeConfig.value.isInvert) onAddFilterChange('invert');
+			// if (getThemeConfig.value.isInvert) onAddFilterChange('invert');
 			// 深色模式
-			if (getThemeConfig.value.isIsDark) onAddDarkChange();
+			// if (getThemeConfig.value.isIsDark) onAddDarkChange();
 			// 开启水印
 			onWartermarkChange();
 			// 语言国际化
