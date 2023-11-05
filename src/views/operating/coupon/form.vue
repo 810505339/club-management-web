@@ -1,22 +1,22 @@
 <!--
  * @Author: yxx
  * @Date: 2023-09-24 11:45:01
- * @LastEditTime: 2023-11-04 16:04:24
+ * @LastEditTime: 2023-11-05 19:46:53
  * @LastEditors: yxx
  * @Description: 
  * @FilePath: \club-management-web\src\views\operating\coupon\form.vue
 -->
 <template>
-	<el-dialog v-model="visible" :close-on-click-modal="false"
-		:title="form.jobId ? $t('common.editBtn') : $t('common.addBtn')" draggable>
+	<el-dialog v-model="visible" :close-on-click-modal="false" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')"
+		draggable>
 		<el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="120px" v-loading="loading">
 			<el-row :gutter="20">
 				<el-col :span="24" class="mb20">
 					{{ t("coupon.msg") }}
 				</el-col>
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('coupon.couponName')" prop="jobName">
-						<el-input v-model="form.jobName" :placeholder="t('common.please') + t('coupon.couponName')" />
+				<el-col :span="24" class="mb20">
+					<el-form-item :label="t('coupon.couponName')" prop="name">
+						<el-input v-model="form.name" :placeholder="t('common.please') + t('coupon.couponName')" />
 					</el-form-item>
 				</el-col>
 				<el-col :span="24" class="mb20">
@@ -24,60 +24,114 @@
 				</el-col>
 
 
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('coupon.type')" prop="jobType">
-						<el-select v-model="form.jobType" :placeholder="t('coupon.type')">
-							<el-option v-for="(item, index) in job_type" :key="index" :label="item.label"
-								:value="item.value"></el-option>
-						</el-select>
-					</el-form-item>
-				</el-col>
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('coupon.faceValue')" prop="jobGroup">
-						<el-input v-model="form.jobGroup" :placeholder="t('common.please') + t('coupon.faceValue')" />
-					</el-form-item>
-				</el-col>
-				<el-col :span="12" class="mb20" v-if="['3', '4'].includes(form.jobType)">
-					<el-form-item :label="t('job.executePath')" prop="executePath">
-						<el-input v-model="form.executePath" :placeholder="t('job.inputexecutePathTip')" />
-					</el-form-item>
-				</el-col>
-
-				<el-col :span="12" class="mb20" v-if="['1', '2'].includes(form.jobType)">
-					<el-form-item :label="t('job.className')" prop="className">
-						<el-input v-model="form.className" :placeholder="t('job.inputclassNameTip')" />
-					</el-form-item>
-				</el-col>
-
-				<el-col :span="12" class="mb20" v-if="['1', '2'].includes(form.jobType)">
-					<el-form-item :label="t('job.methodName')" prop="methodName">
-						<el-input v-model="form.methodName" :placeholder="t('job.inputmethodNameTip')" />
-					</el-form-item>
-				</el-col>
-
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('job.methodParamsValue')" prop="methodParamsValue">
-						<el-input v-model="form.methodParamsValue" :placeholder="t('job.inputmethodParamsValueTip')" />
-					</el-form-item>
-				</el-col>
-
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('job.cronExpression')" prop="cronExpression">
-						<crontab clearable @hide="popoverVis(false)" v-model="form.cronExpression"></crontab>
-					</el-form-item>
-				</el-col>
-
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('job.misfirePolicy')" prop="misfirePolicy">
-						<el-select v-model="form.misfirePolicy" :placeholder="t('job.inputmisfirePolicyTip')">
-							<el-option v-for="(item, index) in misfire_policy" :key="index" :label="item.label"
+				<el-col :span="24" class="mb20">
+					<el-form-item :label="t('coupon.type')" prop="typeDetailDTO.type">
+						<el-select v-model="form.typeDetailDTO.type" :placeholder="t('common.select') + t('coupon.type')">
+							<el-option v-for="(item, index) in typeOption" :key="index" :label="item.label"
 								:value="item.value"></el-option>
 						</el-select>
 					</el-form-item>
 				</el-col>
 				<el-col :span="24" class="mb20">
-					<el-form-item :label="t('job.remark')" prop="remark">
-						<el-input v-model="form.remark" :placeholder="t('job.inputremarkTip')" type="textarea" />
+					<el-form-item :label="t('coupon.faceValue')" v-if="form.typeDetailDTO.type === 'CASH_VOUCHERS'"
+						prop="typeDetailDTO.discount">
+						<el-input-number :controls="false" v-model="form.typeDetailDTO.discount" :min="1" />
+					</el-form-item>
+					<el-form-item prop="typeDetailDTO.discount" v-if="form.typeDetailDTO.type === 'MAX_OUT_VOUCHERS'">
+						<div class="flex flex-1">
+							<span class="mr-10">满</span>
+							<el-input-number class="flex-1" :controls="false" v-model="form.typeDetailDTO.doorSill" :min="1" />
+							<span class="mx-10">减</span>
+							<el-input-number class="flex-1" :controls="false" v-model="form.typeDetailDTO.discount" :min="1" />
+						</div>
+					</el-form-item>
+					<el-form-item :label="t('coupon.doorSill')" v-if="form.typeDetailDTO.type === 'DISCOUNT_VOUCHERS'"
+						prop="typeDetailDTO.doorSill">
+						<el-input-number class="flex-1" :controls="false" v-model="form.typeDetailDTO.doorSill" :min="0" />
+					</el-form-item>
+				</el-col>
+				<!-- <el-col :span="24" class="mb20">
+					<el-form-item :label="t('coupon.blockReceive')" prop="blockReceive">
+						<el-radio-group v-model="form.blockReceive">
+							<el-radio label="1">是</el-radio>
+							<el-radio label="0">否</el-radio>
+						</el-radio-group>
+
+					</el-form-item>
+				</el-col> -->
+				<el-col :span="24" class="mb20">
+					<el-form-item :label="t('coupon.couponNumber')" prop="couponNumber">
+						<el-input-number v-model="form.couponNumber" />
+					</el-form-item>
+				</el-col>
+				<el-col :span="24" class="mb20">
+					<el-form-item :label="t('coupon.blockReceive')" prop="blockReceive">
+						<el-radio-group v-model="form.blockReceive">
+							<el-radio label="1">是</el-radio>
+							<el-radio label="0">否</el-radio>
+						</el-radio-group>
+
+					</el-form-item>
+				</el-col>
+				<el-col v-if="form.blockReceive == 1" :span="24" class="mb20">
+					<el-form-item :label="t('coupon.blockNumber')" prop="blockNumber">
+						<el-input-number v-model="form.blockNumber" :min="1" />
+					</el-form-item>
+				</el-col>
+				<el-col :span="24" class="mb20">
+					<el-form-item :label="t('coupon.useExplain')" prop="useExplain">
+						<el-input v-model="form.useExplain" type="textarea" />
+					</el-form-item>
+				</el-col>
+				<el-col :span="24" class="mb20">
+					<el-form-item :label="t('coupon.remark')" prop="remark">
+						<el-input v-model="form.remark" type="textarea" />
+					</el-form-item>
+				</el-col>
+
+				<el-col :span="24" class="mb20">
+					{{ t("coupon.scopeDTOS") }}
+				</el-col>
+				<el-col :span="24" class="mb20">
+					<el-form-item :label="t('coupon.scopeDTOS')" prop="scopeDTOS.useScope">
+						<el-select v-model="form.scopeDTOS.useScope" :placeholder="t('common.select') + t('coupon.scopeDTOS')">
+							<el-option v-for="(item, index) in useScopeOption" :key="index" :label="item.label"
+								:value="item.value"></el-option>
+						</el-select>
+					</el-form-item>
+				</el-col>
+				<!-- 预定门票 -->
+				<el-col v-if="form.scopeDTOS.useScope == 'RESERVE_TICKET'" :span="24" class="mb20">
+
+
+				</el-col>
+				<!-- 拼酒局 -->
+				<el-col v-if="form.scopeDTOS.useScope == 'SHARE_WINE'" :span="24" class="mb20">
+
+
+				</el-col>
+				<!-- 预定卡座 -->
+				<el-col v-if="form.scopeDTOS.useScope == 'RESERVE_BOOTH'" :span="24" class="mb20">
+
+
+				</el-col>
+				<!-- 活动 -->
+				<el-col v-if="form.scopeDTOS.useScope == 'ACTIVITY'" :span="24" class="mb20">
+					<el-form-item prop="scopeDTOS.scopeIds">
+						<el-select v-model="form.scopeDTOS.scopeIds" multiple :placeholder="t('common.select')">
+							<el-option v-for="(item, index) in useScopeOption" :key="index" :label="item.label"
+								:value="item.value"></el-option>
+						</el-select>
+					</el-form-item>
+
+				</el-col>
+
+				<el-col :span="24" class="mb20">
+					<el-form-item :label="t('coupon.issueWay')" prop="issueWay">
+						<el-radio-group v-model="form.issueWay">
+							<el-radio label="1">{{ t('coupon.issueWay1') }}</el-radio>
+							<el-radio label="0">{{ t('coupon.issueWay2') }}</el-radio>
+						</el-radio-group>
 					</el-form-item>
 				</el-col>
 			</el-row>
@@ -93,14 +147,11 @@
 </template>
 
 <script lang="ts" name="SysJobDialog" setup>
-// 定义子组件向父组件传值/事件
-import { useDict } from '/@/hooks/dict';
 import { useMessage } from '/@/hooks/message';
-import { addObj, getObj, putObj } from '/@/api/daemon/job';
+import { addObj, getObj, putObj } from '/@/api/operating/coupon';
 import { useI18n } from 'vue-i18n';
 
 const emit = defineEmits(['refresh']);
-const Crontab = defineAsyncComponent(() => import('/@/components/Crontab/index.vue'));
 
 const { t } = useI18n();
 
@@ -109,47 +160,72 @@ const dataFormRef = ref();
 const visible = ref(false);
 const loading = ref(false);
 
-// 定义字典
-const { misfire_policy, job_type } = useDict('job_status', 'job_execute_status', 'misfire_policy', 'job_type');
-
+const typeOption = ref([
+	{
+		label: t('coupon.typeOption1'),
+		value: 'CASH_VOUCHERS'
+	}, {
+		label: t('coupon.typeOption2'),
+		value: 'MAX_OUT_VOUCHERS'
+	}, {
+		label: t('coupon.typeOption3'),
+		value: 'DISCOUNT_VOUCHERS'
+	},
+])
+const useScopeOption = ref([
+	{
+		label: t('coupon.useScope1'),
+		value: 'RESERVE_TICKET'
+	}, {
+		label: t('coupon.useScope2'),
+		value: 'SHARE_WINE'
+	}, {
+		label: t('coupon.useScope3'),
+		value: 'RESERVE_BOOTH'
+	}, {
+		label: t('coupon.useScope4'),
+		value: 'ACTIVITY'
+	},
+])
 // 提交表单数据
 const form = reactive({
-	jobId: '',
-	jobName: '',
-	jobGroup: '',
-	jobType: '',
-	executePath: '',
-	className: '',
-	methodName: '',
-	methodParamsValue: '',
-	cronExpression: '',
-	misfirePolicy: '',
-	jobStatus: '',
-	jobExecuteStatus: '',
-	remark: '',
+	id: '',
+	name: '',
+	typeDetailDTO: {
+		type: '',
+		discount: '',
+		doorSill: ''
+	},
+	blockReceive: '1',
+	couponNumber: null,
+	blockNumber: 1,
+	useExplain: null,
+	remark: null,
+	scopeDTOS: {
+		useScope: null,
+		scopeIds: []
+	},
+	issueWay: '1'
 });
 
-const popoverVis = (bol: boolean) => {
-	popoverVisible.value = bol;
-};
 
-const popoverVisible = ref(false);
+
 // 定义校验规则
 const dataRules = reactive({
-	jobName: [{ required: true, message: '任务名称不能为空', trigger: 'blur' }],
-	jobGroup: [{ required: true, message: '任务组名不能为空', trigger: 'blur' }],
-	jobType: [{ required: true, message: '任务类型不能为空', trigger: 'blur' }],
-	cronExpression: [{ required: true, message: 'cron不能为空', trigger: 'blur' }],
-	misfirePolicy: [{ required: true, message: '策略不能为空', trigger: 'blur' }],
-	executePath: [{ required: true, message: '执行路径不能为空', trigger: 'blur' }],
-	className: [{ required: true, message: '执行文件不能为空', trigger: 'blur' }],
-	methodName: [{ required: true, message: '执行方法不能为空', trigger: 'blur' }],
+	name: [{ required: true, message: t('coupon.couponName') + t('common.empty'), trigger: 'blur' }],
+	'typeDetailDTO.type': [{ required: true, message: t('coupon.type') + t('common.empty'), trigger: 'change' }],
+	'typeDetailDTO.discount': [{ required: true, message: t('common.empty'), trigger: 'blur' }],
+	'typeDetailDTO.doorSill': [{ required: true, message: t('common.empty'), trigger: 'blur' }],
+	blockNumber: [{ required: true, message: t('coupon.blockNumber') + t('common.empty'), trigger: 'blur' }],
+	useExplain: [{ required: true, message: t('coupon.useExplain') + t('common.empty'), trigger: 'blur' }],
+	'scopeDTOS.useScope': [{ required: true, message: t('coupon.scopeDTOS') + t('common.empty'), trigger: 'change' }],
+	'scopeDTOS.scopeIds': [{ required: true, message: t('common.select'), trigger: 'change' }],
 });
 
 // 打开弹窗
 const openDialog = (id: string) => {
 	visible.value = true;
-	form.jobId = '';
+	form.id = '';
 
 	// 重置表单数据
 	nextTick(() => {
@@ -158,7 +234,7 @@ const openDialog = (id: string) => {
 
 	// 获取sysJob信息
 	if (id) {
-		form.jobId = id;
+		form.id = id;
 		getsysJobData(id);
 	}
 };
@@ -170,8 +246,8 @@ const onSubmit = async () => {
 
 	try {
 		loading.value = true;
-		form.jobId ? await putObj(form) : await addObj(form);
-		useMessage().success(t(form.jobId ? 'common.editSuccessText' : 'common.addSuccessText'));
+		form.id ? await putObj(form) : await addObj(form);
+		useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));
 		visible.value = false;
 		emit('refresh');
 	} catch (err: any) {

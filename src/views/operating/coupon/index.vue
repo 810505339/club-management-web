@@ -3,21 +3,20 @@
 		<div class="layout-padding-auto layout-padding-view">
 			<el-row class="ml10" v-show="showSearch">
 				<el-form :inline="true" :model="state.queryForm" ref="queryRef">
-					<el-form-item :label="$t('coupon.couponName')" prop="jobName">
+					<el-form-item :label="$t('coupon.couponName')" prop="name">
 						<el-input :placeholder="$t('common.please') + $t('coupon.couponName')" @keyup.enter="getDataList" clearable
-							v-model="state.queryForm.jobName" />
+							v-model="state.queryForm.name" />
 					</el-form-item>
-					<el-form-item :label="t('coupon.couponStatus')" prop="jobStatus">
-						<el-select :placeholder="t('common.select') + t('coupon.couponStatus')" v-model="state.queryForm.jobStatus">
+					<!-- <el-form-item :label="t('coupon.couponStatus')" prop="jobStatus">
+						<el-select :placeholder="t('common.select') + t('coupon.couponStatus')" v-model="state.queryForm.status">
 							<el-option :key="index" :label="item.label" :value="item.value"
-								v-for="(item, index) in job_status"></el-option>
+								v-for="(item, index) in statusOption"></el-option>
 						</el-select>
-					</el-form-item>
-					<el-form-item :label="t('coupon.auditStatus')" prop="jobExecuteStatus">
-						<el-select :placeholder="t('common.select') + t('coupon.auditStatus')"
-							v-model="state.queryForm.jobExecuteStatus">
+					</el-form-item> -->
+					<el-form-item :label="t('coupon.auditStatus')" prop="auditState">
+						<el-select :placeholder="t('common.select') + t('coupon.auditStatus')" v-model="state.queryForm.auditState">
 							<el-option :key="index" :label="item.label" :value="item.value"
-								v-for="(item, index) in job_execute_status"></el-option>
+								v-for="(item, index) in auditStateOption"></el-option>
 						</el-select>
 					</el-form-item>
 
@@ -42,31 +41,23 @@
 				v-loading="state.loading" border :cell-style="tableStyle.cellStyle"
 				:header-cell-style="tableStyle.headerCellStyle">
 				<el-table-column :label="t('coupon.index')" fixed="left" type="index" width="60" />
-				<el-table-column :label="t('coupon.couponName')" fixed="left" prop="jobName" show-overflow-tooltip />
+				<el-table-column :label="t('coupon.couponName')" width="120px" prop="jobName" show-overflow-tooltip />
 				<el-table-column :label="t('coupon.nominalValue')" prop="jobGroup" show-overflow-tooltip />
-				<el-table-column :label="t('coupon.validityTime')" prop="jobStatus" show-overflow-tooltip>
-					<template #default="scope">
-						<dict-tag :options="job_status" :value="scope.row.jobStatus"></dict-tag>
-					</template>
-				</el-table-column>
-				<el-table-column :label="t('coupon.createdTime')" prop="jobExecuteStatus" show-overflow-tooltip>
-					<template #default="scope">
-						<dict-tag :options="job_execute_status" :value="scope.row.jobExecuteStatus"></dict-tag>
-					</template>
-				</el-table-column>
-				<el-table-column :label="t('coupon.provideMode')" prop="jobExecuteStatus" show-overflow-tooltip>
-					<template #default="scope">
-						<dict-tag :options="job_execute_status" :value="scope.row.jobExecuteStatus"></dict-tag>
-					</template>
-				</el-table-column>
-				<el-table-column :label="t('coupon.number')" prop="startTime" show-overflow-tooltip />
+				<el-table-column :label="t('coupon.validityTime')" width="170px" prop="jobStatus" show-overflow-tooltip>
 
-				<el-table-column :label="t('coupon.couponStatus')" prop="previousTime" show-overflow-tooltip />
-				<el-table-column :label="t('coupon.auditStatus')" prop="nextTime" show-overflow-tooltip />
+				</el-table-column>
+				<el-table-column :label="t('coupon.createdTime')" width="170px" prop="jobExecuteStatus" show-overflow-tooltip>
+
+				</el-table-column>
+				<el-table-column :label="t('coupon.provideMode')" width="120px" prop="jobExecuteStatus" show-overflow-tooltip>
+
+				</el-table-column>
+				<el-table-column :label="t('coupon.number')" prop="startTime" width="200px" show-overflow-tooltip />
+
+				<el-table-column :label="t('coupon.couponStatus')" width="170px" prop="previousTime" show-overflow-tooltip />
+				<el-table-column :label="t('coupon.auditStatus')" width="170px" prop="nextTime" show-overflow-tooltip />
 				<el-table-column :label="t('coupon.creator')" prop="jobType" show-overflow-tooltip>
-					<template #default="scope">
-						<dict-tag :options="job_type" :value="scope.row.jobType"></dict-tag>
-					</template>
+
 				</el-table-column>
 
 
@@ -98,26 +89,49 @@
 
 		<!-- 编辑、新增  -->
 		<form-dialog @refresh="getDataList()" ref="formDialogRef" />
-		<job-log ref="jobLogRef"></job-log>
 	</div>
 </template>
 
 <script lang="ts" name="systemSysJob" setup>
-import { pageList, putObj } from '/@/api/admin/user';
 
 import { BasicTableProps, useTable } from '/@/hooks/table';
-import { delObj, fetchList, runJobRa, shutDownJobRa, startJobRa } from '/@/api/daemon/job';
+import { delObj, runJobRa, shutDownJobRa, startJobRa } from '/@/api/daemon/job';
 import { useMessage, useMessageBox } from '/@/hooks/message';
-import { useDict } from '/@/hooks/dict';
 import { useI18n } from 'vue-i18n';
+import { fetchList, updateEnabled } from '/@/api/operating/coupon';
 
 // 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
-const JobLog = defineAsyncComponent(() => import('./job-log.vue'));
 
 // 获取国际化方法
 const { t } = useI18n();
-
+const statusOption = ref([
+	{
+		label: t('coupon.status1'),
+		value: '1'
+	}, {
+		label: t('coupon.status1'),
+		value: '0'
+	},
+])
+const auditStateOption = ref([
+	{
+		label: t('coupon.FIRST_INSTANCE'),
+		value: 'FIRST_INSTANCE'
+	}, {
+		label: t('coupon.SECOND_INSTANCE'),
+		value: 'SECOND_INSTANCE'
+	}, {
+		label: t('coupon.THIRD_INSTANCE'),
+		value: 'THIRD_INSTANCE'
+	}, {
+		label: t('coupon.ALREADY_PASSED'),
+		value: 'ALREADY_PASSED'
+	}, {
+		label: t('coupon.REJECTED'),
+		value: 'REJECTED'
+	}
+])
 /** 表单弹窗引用 */
 const formDialogRef = ref();
 /** 作业日志引用 */
@@ -125,10 +139,6 @@ const jobLogRef = ref();
 
 /** 搜索表单信息 */
 const queryForm = reactive({
-	jobName: '',
-	jobGroup: '',
-	jobStatus: '',
-	jobExecuteStatus: '',
 });
 /** 是否展示搜索表单 */
 const showSearch = ref(true);
@@ -139,13 +149,12 @@ const selectedRows = ref([]);
 /** 是否可以多选 */
 const multiple = ref(true);
 
-/** 查询字典 */
-const { job_status, job_execute_status, misfire_policy, job_type } = useDict('job_status', 'job_execute_status', 'misfire_policy', 'job_type');
-
 /** 表格状态变量 */
 const state = reactive<BasicTableProps>({
 	queryForm,
-	pageList: pageList,
+	pageList: async (pamars) => {
+		return await fetchList(pamars)
+	},
 });
 
 /** 获取表格数据方法 */
@@ -163,10 +172,6 @@ const handleSelectionChange = (rows: any) => {
 	multiple.value = !rows.length;
 };
 
-/** 导出Excel */
-const exportExcel = () => {
-	downBlobFile('/job/sys-job/export', state.queryForm, 'job.xlsx');
-};
 
 /** 查看作业日志 */
 const handleJobLog = (row) => {

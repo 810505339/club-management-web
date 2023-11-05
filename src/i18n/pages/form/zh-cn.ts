@@ -62,5 +62,13 @@ export default {
 			title: '系统提示',
 			warning: '警告'
 		},
+		evaluation: {
+			status1: '待审核',
+			status2: '已通过',
+			status3: '不通过',
+			status4: '通过',
+			reason: '原因'
+		},
+
 	},
 };
