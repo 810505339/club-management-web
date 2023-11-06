@@ -17,7 +17,14 @@ export default {
 		takedown: '下架',
 		please: '请输入',
 		sureTakedown: '确定要继续操作吗？下架后用户端相关信息将不再显示，请谨慎操作',
+		deckinfo: '卡座信息',
 		deck: '卡座',
+		deckname: '卡座名称',
+		deckimage: '卡座图片',
+		spend: '最低消费($)',
+		reservation: '预订金额($)',
+		capacity: '最大可容纳(人)',
+
 
 	},
 };

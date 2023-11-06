@@ -49,7 +49,7 @@ export default {
 		price: '价格',
 		yes: '是',
 		no: '否',
-		week0: '星期天',
+		week7: '星期天',
 		week1: '星期一',
 		week2: '星期二',
 		week3: '星期三',
