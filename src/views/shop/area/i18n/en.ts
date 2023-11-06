@@ -7,7 +7,12 @@ export default {
 		image: 'area image',
 		time: 'area time',
 		decks: 'decks number',
+		deckinfo: 'deck info',
 		deck: 'deck',
+		deckname: 'deck name',
+		deckimage: 'deck image',
+		deckstate: 'deck state',
+
 		state: 'area state',
 		action: 'action',
 		createTime: 'createTime',
@@ -17,6 +22,9 @@ export default {
 		shelves: 'shelves',
 		takedown: 'takedown',
 		please: 'please input the',
+		spend: 'minimum spend($)',
+		capacity: 'maximum capacity(person)',
+		reservation: 'the amount of the reservation($)',
 		sureTakedown: 'Are you sure you want to proceed? After the delisting, the relevant information of the user terminal will no longer be displayed, please proceed with caution'
 	},
 };

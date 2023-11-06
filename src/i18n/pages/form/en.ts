@@ -56,7 +56,7 @@ export default {
 		price: ' price',
 		yes: 'yes',
 		no: 'no',
-		week0: 'Sunday',
+		week7: 'Sunday',
 		week1: 'Monday',
 		week2: 'Tuesday',
 		week3: 'Wednesday',

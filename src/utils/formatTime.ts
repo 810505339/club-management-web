@@ -239,13 +239,13 @@ export const timeStr: string = 'HH:mm:ss';
 //weekDay
 export const weekdayFormat = (index: number, t) => {
 	const weekDay = [
-		t('common.week0'),
 		t('common.week1'),
 		t('common.week2'),
 		t('common.week3'),
 		t('common.week4'),
 		t('common.week5'),
 		t('common.week6'),
+		t('common.week7'),
 	]
-	return weekDay[index]
+	return weekDay[index - 1]
 }

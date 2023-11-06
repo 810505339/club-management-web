@@ -35,6 +35,9 @@ dependencies:
   crypto-js:
     specifier: ^3.1.9-1
     version: 3.1.9-1
+  dayjs:
+    specifier: ^1.11.10
+    version: 1.11.10
   driver.js:
     specifier: ^0.9.8
     version: 0.9.8
@@ -1542,8 +1545,8 @@ packages:
       type: 1.2.0
     dev: false
 
-  /dayjs@1.11.9:
-    resolution: {integrity: sha512-QvzAURSbQ0pKdIye2txOzNaHmxtUBXerpY0FJsFXUMKbIZeFm5ht1LS/jFsrncjnmtv8HsG0W2g6c0zUjZWmpA==}
+  /dayjs@1.11.10:
+    resolution: {integrity: sha512-vjAczensTgRcqDERK0SR2XMwsF/tSvnvlv6VcF2GIhg6Sx4yOIt/irsr1RDJsKiIyBzJDpCoXiWWq28MqH2cnQ==}
     dev: false
 
   /debug@4.3.4:
@@ -1686,7 +1689,7 @@ packages:
       '@types/lodash-es': 4.17.9
       '@vueuse/core': 9.13.0(vue@3.2.47)
       async-validator: 4.2.5
-      dayjs: 1.11.9
+      dayjs: 1.11.10
       escape-html: 1.0.3
       lodash: 4.17.21
       lodash-es: 4.17.21

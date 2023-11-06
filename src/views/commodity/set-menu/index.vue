@@ -6,10 +6,8 @@
 					<el-row v-show="showSearch">
 						<el-form ref="queryRef" :inline="true" :model="state.queryForm" @keyup.enter="getDataList">
 							<el-form-item :label="$t('goods.name')" prop="name">
-								<el-select v-model="state.queryForm.lockFlag" :placeholder="$t('goods.nameSelect')">
-									<el-option v-for="item in lock_flag" :key="item.id" :label="item.label" :value="item.value" clearable>
-									</el-option>
-								</el-select>
+								<el-input v-model="state.queryForm.lockFlag" :placeholder="$t('common.please') + $t('goods.name')" />
+
 							</el-form-item>
 							<el-form-item>
 								<el-button icon="Search" type="primary" @click="getDataList">{{ $t('common.queryBtn') }}</el-button>

@@ -221,9 +221,8 @@ const handleTakedown = async (row: any) => {
 //初始化时间
 function timerFormat(list: any[]) {
 
-
 	return list.map((item) => {
-		return `${weekdayFormat(Number(item.weekDay), t)}  ${item.beginTime}-${item.endTime}`
+		return `${weekdayFormat(Number(item.beginWeekDay), t)}  ${item.beginTime}~${weekdayFormat(Number(item.beginWeekDay), t)}  ${item.endTime}`
 	})
 
 }
