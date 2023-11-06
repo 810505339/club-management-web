@@ -611,8 +611,8 @@ watch(
 			justify-content: space-between;
 
 			&:hover {
-				background-color: var(--el-color-primary-light-9);
-				color: var(--el-color-primary);
+				// background-color: var(--el-color-primary-light-9);
+				color: var(--el-color-primary) !important;
 				border-color: var(--el-color-primary-light-5);
 			}
 
@@ -633,7 +633,7 @@ watch(
 
 				&:hover {
 					color: var(--el-color-white);
-					background-color: var(--el-color-primary-light-3);
+					background-color: var(--el-color-primary) !important;
 				}
 			}
 
@@ -712,8 +712,8 @@ watch(
 			}
 
 			&:hover {
-				@extend .tags-style-five-svg;
-				background: var(--el-color-primary-light-9);
+				// @extend .tags-style-five-svg;
+				// background: var(--el-color-primary-light-9);
 				color: unset;
 			}
 		}
