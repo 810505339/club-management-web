@@ -2,7 +2,7 @@ export default {
 	coupon: {
 		index: 'ID',
 		couponName: '优惠券名称',
-		couponStatus: '上线状态',
+		couponStatus: '发放状态',
 		auditStatus: '审核状态',
 		nominalValue: '面额',
 		validityTime: '有效期',
@@ -13,7 +13,7 @@ export default {
 		msg: '基础信息',
 		rule: '使用规则',
 		type: '优惠券类型',
-		faceValue: '面额',
+		faceValue: '面额($)',
 		FIRST_INSTANCE: '待一审',
 		SECOND_INSTANCE: '待二审',
 		THIRD_INSTANCE: '待三审',

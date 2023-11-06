@@ -40,38 +40,41 @@
 			<el-table stripe :data="state.dataList" @selection-change="handleSelectionChange" style="width: 100%"
 				v-loading="state.loading" border :cell-style="tableStyle.cellStyle"
 				:header-cell-style="tableStyle.headerCellStyle">
-				<el-table-column :label="t('coupon.index')" fixed="left" type="index" width="60" />
-				<el-table-column :label="t('coupon.couponName')" width="120px" prop="jobName" show-overflow-tooltip />
+				<el-table-column :label="t('coupon.index')" fixed="left" width="180px" prop="id" show-overflow-tooltip />
+				<el-table-column :label="t('coupon.couponName')" width="120px" prop="name" show-overflow-tooltip />
 				<el-table-column :label="t('coupon.nominalValue')" prop="jobGroup" show-overflow-tooltip />
-				<el-table-column :label="t('coupon.validityTime')" width="170px" prop="jobStatus" show-overflow-tooltip>
+				<el-table-column :label="t('coupon.createdTime')" width="170px" prop="createTime" show-overflow-tooltip />
+				<el-table-column :label="t('coupon.provideMode')" width="120px" prop="issueWay" show-overflow-tooltip>
+					<template #default="scope">
+						{{ scope.row.issueWay == 1 ? t('coupon.issueWay1') : t('coupon.issueWay2') }}
+					</template>
 
 				</el-table-column>
-				<el-table-column :label="t('coupon.createdTime')" width="170px" prop="jobExecuteStatus" show-overflow-tooltip>
-
-				</el-table-column>
-				<el-table-column :label="t('coupon.provideMode')" width="120px" prop="jobExecuteStatus" show-overflow-tooltip>
-
-				</el-table-column>
-				<el-table-column :label="t('coupon.number')" prop="startTime" width="200px" show-overflow-tooltip />
-
-				<el-table-column :label="t('coupon.couponStatus')" width="170px" prop="previousTime" show-overflow-tooltip />
-				<el-table-column :label="t('coupon.auditStatus')" width="170px" prop="nextTime" show-overflow-tooltip />
-				<el-table-column :label="t('coupon.creator')" prop="jobType" show-overflow-tooltip>
-
+				<el-table-column :label="t('coupon.number')" prop="startTime" width="200px" show-overflow-tooltip>
+					<template #default="scope">
+						{{ scope.row.useNumber || 0 }}/ {{ scope.row.surplusNumber || 0 }}/ {{ scope.row.couponNumber || 0 }}
+					</template>
 				</el-table-column>
 
+
+				<el-table-column :label="t('coupon.auditStatus')" width="170px" prop="auditState" show-overflow-tooltip>
+					<template #default="scope">
+						{{ t('coupon.' + scope.row.auditState) }}
+					</template>
+				</el-table-column>
+
+				<el-table-column :label="t('coupon.creator')" prop="createBy" show-overflow-tooltip />
+				<el-table-column :label="t('coupon.couponStatus')" width="170px" prop="status" show-overflow-tooltip>
+					<!-- <template #default="scope">
+
+					</template> -->
+				</el-table-column>
 
 				<el-table-column :label="$t('common.action')" fixed="right" width="300">
 					<template #default="scope">
-						<el-button @click="handleJobLog(scope.row)" text type="primary">日志</el-button>
 
-						<el-button v-auth="'job_sys_job_start_job'" @click="handleStartJob(scope.row)" text type="primary"
-							v-if="scope.row.jobStatus !== '2'">启动
-						</el-button>
 
-						<el-button v-auth="'job_sys_job_shutdown_job'" @click="handleShutDownJob(scope.row)" text type="primary"
-							v-if="scope.row.jobStatus === '2'">暂停
-						</el-button>
+
 
 						<el-button v-auth="'job_sys_job_edit'" @click="handleEditJob(scope.row)" text type="primary">{{
 							$t('common.editBtn') }} </el-button>

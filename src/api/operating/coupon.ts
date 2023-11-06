@@ -1,7 +1,7 @@
 /*
  * @Author: yxx
  * @Date: 2023-10-29 10:40:54
- * @LastEditTime: 2023-11-05 19:23:11
+ * @LastEditTime: 2023-11-06 20:11:32
  * @LastEditors: yxx
  * @Description: 
  * @FilePath: \club-management-web\src\api\operating\coupon.ts
@@ -63,3 +63,25 @@ export const putObj = (data?: Object) => {
 		data,
 	});
 };
+//门店活动级联下拉
+export const getStoreActivity = () => {
+	return request({
+		url: '/operation/dynamicState/getStoreActivity',
+		method: 'get',
+	});
+};
+//门店门票级联下拉
+export const storeTicket = () => {
+	return request({
+		url: '/operation/ticket/storeTicket',
+		method: 'get',
+	});
+};
+//门店卡座级联下拉
+export const storeAreaTree = () => {
+	return request({
+		url: '/admin/store/storeAreaTree',
+		method: 'get',
+	});
+};
+
