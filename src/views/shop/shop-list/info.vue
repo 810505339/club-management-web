@@ -15,8 +15,9 @@
           {{ userInfo.name }}
         </el-form-item>
         <el-form-item :label="t('shopList.image')" prop="pictureIds">
-          <el-image class="w-60 my-2 rounded-md" fit="cover" v-for="item in userInfo.pictureFileVOs" :key="item.id"
-            :src="`${fileCommonUrl}/${item.fileName}`" />
+          <el-image class="w-60 my-2 rounded-md" :zoom-rate="1.2" :max-scale="7" :min-scale="0.2"
+            :preview-src-list="[`${fileCommonUrl}/${item.fileName}`]" :initial-index="4" fit="cover"
+            v-for="item in userInfo.pictureFileVOs" :key="item.id" :src="`${fileCommonUrl}/${item.fileName}`" />
         </el-form-item>
         <el-form-item :label="t('shopList.video')" prop="videoIds">
           <video :src="`${fileCommonUrl}/${userInfo?.videoFileVOs?.[0]?.fileName}`" controls

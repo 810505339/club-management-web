@@ -37,13 +37,13 @@
         <el-col :span="20" class="mb20">
           <el-form-item :label="t('dynamic.store')" prop="storeId">
             <el-select v-model="form.storeId" :placeholder="$t('shopList.nameSelect')" clearable>
-              <el-option v-for="item, index in storeNameList" :key="index" :label="item.name" :value="item.name" />
+              <el-option v-for="item, index in storeNameList" :key="index" :label="item.name" :value="item.id" />
             </el-select>
           </el-form-item>
         </el-col>
 
         <el-col :span="20" class="mb20">
-          <el-form-item :label="t('dynamic.register')" prop="apply">
+          <el-form-item :label="t('dynamic.register')" prop="whetherSignUp">
             <el-switch v-model="form.apply" />
           </el-form-item>
         </el-col>
@@ -75,6 +75,7 @@
         }}</el-button>
       </span>
     </template>
+
   </el-dialog>
 </template>
 
@@ -85,6 +86,7 @@ import { useMessage } from '/@/hooks/message';
 import { getDynamicById, AddDynamic, EditDynamic } from '/@/api/admin/dynamic';
 import { useI18n } from 'vue-i18n';
 import { useTranslateText } from './hooks/translate';
+import dayjs from 'dayjs'
 
 const emit = defineEmits(['refresh']);
 const props = defineProps<{ list: any[], storeNameList: any[] }>()
@@ -113,7 +115,7 @@ const { misfire_policy, job_type } = useDict('job_status', 'job_execute_status',
 
 // 提交表单数据
 const form = reactive({
-
+  storeId: []
 });
 
 const popoverVis = (bol: boolean) => {
@@ -159,9 +161,12 @@ const onSubmit = async () => {
 
   try {
     loading.value = true;
+    const temp = { ...form, storeId: [form.storeId], expireTime: dayjs(form.expireTime).format('YYYY-MM-DD HH:mm:ss') }
 
-    // form.jobId ? await EditDynamic(form) : await AddDynamic(form);
-    useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));
+
+    form.jobId ? await EditDynamic(temp) : await AddDynamic(temp);
+
+    useMessage().success(t(form.jobId ? 'common.editSuccessText' : 'common.addSuccessText'));
     visible.value = false;
     emit('refresh');
   } catch (err: any) {
@@ -174,7 +179,10 @@ const onSubmit = async () => {
 // 初始化表单数据
 const getsysJobData = (id: string) => {
   // 获取数据
-  getObj(id).then((res: any) => {
+  getDynamicById(id).then((res: any) => {
+
+    res.data.storeId = res.data.storeVOS[0].id
+    res.data.dynamicTypeId = res.data.dynamicTypeVO.id
     Object.assign(form, res.data);
   });
 };

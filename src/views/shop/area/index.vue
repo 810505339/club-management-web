@@ -73,7 +73,7 @@
 									{{ $t('common.detailBtn') }}
 								</el-button>
 								<el-button v-auth="'sys_user_edit'" icon="edit-pen" text type="primary"
-									@click="userDialogRef.openDialog(scope.row.userId)">
+									@click="userDialogRef.openDialog(scope.row.id)">
 									{{ $t('common.editBtn') }}
 								</el-button>
 
@@ -86,8 +86,8 @@
 								</el-button>
 								<el-tooltip :content="$t('area.deleteDisabledTip')" :disabled="scope.row.userId !== '1'" placement="top">
 									<span style="margin-left: 12px">
-										<el-button icon="delete" v-auth="'sys_user_del'" :disabled="scope.row.username === 'admin'" text
-											type="primary" @click="handleDelete([scope.row.userId])">{{ $t('common.delBtn') }}
+										<el-button icon="delete" text type="primary" @click="handleDelete([scope.row.id])">{{
+											$t('common.delBtn') }}
 										</el-button>
 									</span>
 								</el-tooltip>
@@ -101,6 +101,7 @@
 		</splitpanes>
 
 		<user-form ref="userDialogRef" :storeNameList="storeNameList" @refresh="getDataList(false)" />
+		<info ref="useInfoRef" />
 
 		<upload-excel ref="excelUploadRef" :title="$t('area.importUserTip')" temp-url="/admin/sys-file/local/file/user.xlsx"
 			url="/admin/user/import" @refreshDataList="getDataList" />
@@ -117,6 +118,7 @@ import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 import { useDict } from '/@/hooks/dict';
 import { weekdayFormat } from '/@/utils/formatTime';
+import info from './info.vue'
 // 动态引入组件
 const UserForm = defineAsyncComponent(() => import('./form.vue'));
 

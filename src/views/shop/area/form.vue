@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :close-on-click-modal="false" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" width="600"
+  <el-dialog :close-on-click-modal="false" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" width="700"
     draggable v-model="visible">
     <el-form :model="form" formDialogRef label-width="120px" ref="dataFormRef" v-loading="loading">
       <el-form-item :label="t('area.name')" prop="name">
@@ -13,64 +13,74 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item :label="$t('area.image')" prop="image" width="100">
+      <el-form-item :label="$t('area.image')" prop="pictureIds" width="100">
         <upload v-bind="IMG_PROPS" class="w-full" :model-value="form.pictureIds"
           @change="(_, fileList) => uploadChange('pictureIds', fileList)" />
       </el-form-item>
 
-      <el-form-item :label="t('area.time')" prop="name">
+      <el-form-item :label="t('area.time')" prop="businessDateDTOList">
         <div>
-          <div class="flex my-2" v-for="timer, index in  form.businessDateDTOList " :key="timer.id">
+          <div class="flex my-2" v-for="timer, index in  form.businessDateDTOList " :key="timer.areaId">
             <div class="flex " :class="{ 'pr-8': index != form.businessDateDTOList.length - 1 }">
               <el-select v-model="timer.beginWeekDay" class="mr-2" :disabled="timer.disabled">
                 <el-option v-for=" item, index  in  weekDayList " :key="index" :label="item.label" :value="item.value"
                   :disabled="item.disabled">
                 </el-option>
               </el-select>
-              <el-time-picker v-model="timer.beginTime" :disabled="timer.disabled" />
+              <el-time-picker v-model="timer.beginTime" :disabled="timer.disabled" class="mr-4" format='HH:mm'
+                value-format='HH:mm' />
 
               <el-select v-model="timer.endWeekDay" class="mr-2" :disabled="timer.disabled">
                 <el-option v-for=" item, index  in  weekDayList " :key="index" :label="item.label" :value="item.value"
                   :disabled="item.disabled">
                 </el-option>
               </el-select>
-              <el-time-picker v-model="timer.endTime" :disabled="timer.disabled" />
+              <el-time-picker v-model="timer.endTime" :disabled="timer.disabled" format='HH:mm' value-format='HH:mm' />
             </div>
 
-            <el-icon class="m-2 cursor-pointer" @click.once="deleteTimer(timer.id)"
-              v-if="index === form.businessDateDTOList.length - 1">
+            <el-icon class="m-2 cursor-pointer" @click.once="deleteTimer(timer.areaId)"
+              v-if="index === form.businessDateDTOList.length - 1 && index !== 0">
               <Minus />
             </el-icon>
           </div>
-          <el-button type="primary" @click="addTimer">{{ t('common.addBtn') }}</el-button>
+          <div class="mt-2">
+            <el-button type="primary" @click="addTimer">{{ t('common.addBtn') }}</el-button>
+          </div>
+
         </div>
       </el-form-item>
 
       <el-form-item :label="t('area.deck')" prop="boothDTOList">
+        <div>
+          <div v-for="item, index in form.boothDTOList" :key="item.id" class="my-5">
+            <div>
+              <el-form-item :label="t('area.deckimage')" prop="item.name" width="100" class="mb-2">
+                <upload v-bind="ITEM_IMG_PROPS" class="w-full" :model-value="item.pictureIds"
+                  @change="(_, fileList) => uploadChange('pictureIds', fileList, index)" />
+              </el-form-item>
 
-        <div v-for="item, index in form.boothDTOList" :key="item.id" class="my-5">
-          <div>
-            <el-form-item :label="t('area.deckimage')" prop="item.name" width="100" class="mb-2">
-              <upload v-bind="ITEM_IMG_PROPS" class="w-full" :model-value="item.pictureIds"
-                @change="(_, fileList) => uploadChange('pictureIds', fileList, index)" />
-            </el-form-item>
+              <el-form-item :label="t('area.deckname')" prop="item.name" width="100" class="mb-2">
+                <el-input v-model="item.name" />
+              </el-form-item>
+              <el-form-item :label="t('area.capacity')" prop="item.name" width="100" class="mb-2">
+                <el-input-number v-model="item.maxAccommodate" :step="1" :min="1" />
+              </el-form-item>
+              <el-form-item :label="t('area.spend')" prop="item.minConsumption" width="100" class="mb-2">
+                <el-input-number v-model="item.minConsumption" :precision="2" :step="0.01" :min="0.00" />
+              </el-form-item>
+              <el-form-item :label="t('area.reservation')" prop="item.reservation" width="100" class="mb-2">
+                <el-input-number v-model="item.reserveAmount" :precision="2" :step="0.01" :min="0.00" />
+              </el-form-item>
+            </div>
 
-            <el-form-item :label="t('area.deckname')" prop="item.name" width="100" class="mb-2">
-              <el-input v-model="item.name" />
-            </el-form-item>
-            <el-form-item :label="t('area.capacity')" prop="item.name" width="100" class="mb-2">
-              <el-input-number v-model="item.maxAccommodate" :step="1" :min="1" />
-            </el-form-item>
-            <el-form-item :label="t('area.spend')" prop="item.minConsumption" width="100" class="mb-2">
-              <el-input-number v-model="item.minConsumption" :precision="2" :step="0.01" :min="0.00" />
-            </el-form-item>
-            <el-form-item :label="t('area.reservation')" prop="item.reservation" width="100" class="mb-2">
-              <el-input-number v-model="item.reserveAmount" :precision="2" :step="0.01" :min="0.00" />
-            </el-form-item>
           </div>
 
+          <div class="mt-2">
+            <el-button type="primary" @click="addDeck">{{ t('common.addBtn') }}</el-button>
+          </div>
         </div>
-        <el-button type="primary" @click="addDeck">{{ t('common.addBtn') }}</el-button>
+
+
       </el-form-item>
 
     </el-form>
@@ -88,10 +98,9 @@
 import { useDict } from '/@/hooks/dict';
 import { useMessage } from '/@/hooks/message';
 // import { addObj, getObj, putObj, validateclientId } from '/@/api/admin/client';
-import { AddArea, EditArea } from '/@/api/admin/area';
+import { AddArea, EditArea, getAreaById } from '/@/api/admin/area';
 import { getStoreName } from '/@/api/admin/store';
 import { useI18n } from 'vue-i18n';
-import { rule } from '/@/utils/validate';
 import upload from "/@/components/Upload/index.vue";
 import { generateUUID } from '/@/utils/other';
 import dayjs from 'dayjs';
@@ -120,7 +129,7 @@ const { t } = useI18n();
 
 
 const weekDayList = Array.from({ length: 7 },
-  (_, index) => ({ label: t(`common.week${index + 1}`), value: `${index + 1}`, disabled: false }))
+  (_, index) => ({ label: t(`common.week${index + 1}`), value: index + 1, disabled: false }))
 
 
 // 定义变量内容
@@ -146,7 +155,7 @@ type IboothDTOListItem = {
 
 const createTimer = () => {
   return {
-    id: `${generateUUID()}`,
+    areaId: `${generateUUID()}`,
     beginWeekDay: '',
     endWeekDay: '',
     endTime: new Date(),
@@ -169,7 +178,7 @@ const form = reactive<{ boothDTOList: IboothDTOListItem[], businessDateDTOList: 
 //时间对象
 
 type ITimer = {
-  id: string, beginWeekDay: string, endWeekDay: string, beginTime: Date, endTime: Date, disabled: boolean
+  areaId: string, beginWeekDay: string, endWeekDay: string, beginTime: Date, endTime: Date, disabled: boolean
 }
 
 
@@ -210,7 +219,7 @@ const openDialog = async (id: string) => {
   // 获取sysOauthClientDetails信息
   if (id) {
     form.id = id;
-    getStoreDetail(id);
+    await getStoreDetail(id);
   }
 };
 
@@ -222,11 +231,21 @@ const onSubmit = async () => {
   console.log(form);
   try {
     loading.value = true;
-    const temp = form.businessDateDTOList.map((item) => ({ ...item, endTime: dayjs(item.endTime).format('HH:mm:ss'), beginTime: dayjs(item.beginTime).format('HH:mm:ss') }))
-    form.id ? await EditArea(form) : await AddArea({
+
+    const temp = {
       ...form,
-      businessDateDTOList: temp
-    });
+      pictureIds: form.pictureIds.map(item => item.id),
+      boothDTOList: form.boothDTOList.map(item => {
+        return {
+          ...item,
+          pictureIds: item.pictureIds.map(item => item.id)
+        }
+      })
+
+    }
+
+
+    form.id ? await EditArea(temp) : await AddArea(temp);
     useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));
     visible.value = false;
 
@@ -241,20 +260,32 @@ const onSubmit = async () => {
 // 初始化表单数据
 const getStoreDetail = async (id: string) => {
   // 获取数据
-  let { data } = await getStoreById(id)
-  data.pictureIds = data.pictureFileVOs?.map((item: any) => ({ id: item.id, name: item.fileName }))
-  data.videoIds = data.videoFileVOs?.map((item: any) => ({ id: item.id, name: item.fileName }))
+  let { data } = await getAreaById(id)
+  console.log(data);
+  data.storeId = data.storeVO.id
+  data.pictureIds = data.pictureFIleVOs?.map((item: any) => ({ id: item.id, name: item.fileName }))
+  data.businessDateDTOList = data.businessDateVOS
+  data.boothDTOList = data.boothVOS.map((item: any) => {
+    return {
+      ...item,
+      pictureIds: item.pictureFileVOs?.map((file: any) => ({ id: file.id, name: file.fileName }))
+
+    }
+  })
+
   Object.assign(form, data)
+
+
 
 };
 
 const uploadChange = (type: 'pictureIds', fileList: any[], index: number | undefined = undefined) => {
 
   if (index !== undefined) {
-    form.boothDTOList[index].pictureIds = fileList.map(item => (item.id))
+    form.boothDTOList[index].pictureIds = fileList
     return
   }
-  form[type] = fileList.map(item => (item.id))
+  form[type] = fileList
 
 }
 
@@ -268,6 +299,8 @@ const addTimer = () => {
   flag = Object.values(form.businessDateDTOList[len]).some(item => {
     return item === ''
   })
+
+  flag = lastItem.endWeekDay < lastItem.beginWeekDay
 
   if (flag) {
     useMessage().error(t('common.please'))
@@ -312,6 +345,7 @@ const addDeck = () => {
     }
   )
 }
+
 
 
 

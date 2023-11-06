@@ -89,9 +89,8 @@
             <el-button icon="Bottom" text type="primary" @click="handleTakedown(scope.row)" v-else>
               {{ $t('shopList.takedown') }}
             </el-button>
-            <el-button v-auth="'job_sys_job_del'" text type="primary">{{
-              $t('common.detailBtn') }} </el-button>
-            <el-button v-auth="'job_sys_job_del'" text type="primary">{{
+
+            <el-button v-auth="'job_sys_job_del'" text type="primary" @click="formDialogRef.openDialog(scope.row.id)">{{
               $t('common.edit') }} </el-button>
             <el-button v-auth="'job_sys_job_del'" text type="primary">{{
               $t('common.delBtn') }} </el-button>
@@ -102,12 +101,16 @@
       </el-table>
       <pagination @current-change="currentChangeHandle" @size-change="sizeChangeHandle" v-bind="state.pagination" />
     </div>
+
     <dynamic-from ref="formDialogRef" :list="dynamicTypeList" :storeNameList="storeNameList" />
     <dynamic-drawer ref="formDrawerRef" />
   </div>
 </template>
 
 <script lang="ts" name="systemSysJob" setup>
+
+
+
 import { BasicTableProps, useTable } from '/@/hooks/table';
 
 import { useMessage, useMessageBox } from '/@/hooks/message';
@@ -118,6 +121,7 @@ import dynamicFrom from './form.vue';
 import dynamicDrawer from './drawer.vue';
 import { useTranslateText } from './hooks/translate';
 import { getStoreName } from '/@/api/admin/store';
+
 
 
 
