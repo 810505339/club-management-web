@@ -28,10 +28,7 @@
 			</el-row>
 			<el-row>
 				<div class="mb8" style="width: 100%">
-					<el-button v-auth="'job_sys_job_add'" @click="formDialogRef.openDialog()" class="ml10" icon="folder-add"
-						type="primary">
-						{{ $t('common.addBtn') }}
-					</el-button>
+
 
 					<right-toolbar @queryTable="getDataList" class="ml10" style="float: right; margin-right: 20px"
 						v-model:showSearch="showSearch" />
@@ -62,38 +59,18 @@
 					<template #default="scope">
 						{{ scope.row.issueWay == 1 ? t('coupon.issueWay1') : t('coupon.issueWay2') }}
 					</template>
-
 				</el-table-column>
-				<el-table-column :label="t('coupon.number')" prop="startTime" width="200px" show-overflow-tooltip>
-					<template #default="scope">
-						{{ scope.row.useNumber || 0 }}/ {{ scope.row.surplusNumber || 0 }}/ {{ scope.row.couponNumber || 0 }}
-					</template>
-				</el-table-column>
+				<el-table-column :label="t('coupon.creator')" prop="createBy" show-overflow-tooltip />
 				<el-table-column :label="t('coupon.auditStatus')" width="170px" prop="auditState" show-overflow-tooltip>
 					<template #default="scope">
 						{{ t('coupon.' + scope.row.auditState) }}
 					</template>
 				</el-table-column>
-				<el-table-column :label="t('coupon.creator')" prop="createBy" show-overflow-tooltip />
-				<el-table-column :label="t('coupon.couponStatus')" width="170px" prop="status" show-overflow-tooltip>
-					<template #default="scope">
-						{{ scope.row.status ? t('coupon.' + scope.row.status) : '-' }}
-					</template>
-				</el-table-column>
 				<el-table-column :label="$t('common.action')" fixed="right" width="150">
 					<template #default="scope">
-						<!-- issueWay 发放方式,1:指定用户发放 ==手动发放，0:按条件发放===系统发放 -->
 						<template v-if="scope.row.auditState != 'ALREADY_PASSED'">
 							<el-button v-auth="'job_sys_job_edit'" @click="handleDelete(scope.row)" text type="primary">{{
-								$t('coupon.audit') }} </el-button>
-							<el-button v-auth="'job_sys_job_edit'" @click="handleEditJob(scope.row)" text type="primary">{{
-								$t('common.editBtn') }} </el-button>
-						</template>
-						<template v-else>
-							<el-button v-if="scope.row.status == 'HAVE_NOT_STARTED'" v-auth="'job_sys_job_start_job'"
-								@click="handleRunJob(scope.row, 1)" text type="primary">发放</el-button>
-							<el-button v-if="scope.row.status == 'UNDER_RELEASE'" v-auth="'job_sys_job_start_job'"
-								@click="handleRunJob(scope.row, 0)" text type="primary">停止发放</el-button>
+								$t('common.audit') }} </el-button>
 						</template>
 					</template>
 				</el-table-column>
@@ -178,26 +155,14 @@ const rules = reactive<FormRules<RuleForm>>({
 	],
 })
 /** 审核操作 */
-const handleDelete = async (row) => {
+const handleDelete = (row) => {
 	form.value = {
 		id: row.id,
 		msg: '',
 		state: '1'
 	}
-	try {
-		await useMessageBox().confirm(`${t('coupon.audit')}(${t('coupon.couponName')}: ${row.name}), 是否继续?`);
-	} catch {
-		return;
-	}
 
-	try {
-		await runJobRa(row.id);
-		getDataList();
-		useMessage().success(t('common.optSuccessText'));
-	} catch (err: any) {
-		useMessage().error('运行失败');
-	}
-	// dialogVisible.value = true
+	dialogVisible.value = true
 
 
 };

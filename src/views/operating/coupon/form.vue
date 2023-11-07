@@ -1,7 +1,7 @@
 <!--
  * @Author: yxx
  * @Date: 2023-09-24 11:45:01
- * @LastEditTime: 2023-11-06 22:31:32
+ * @LastEditTime: 2023-11-07 20:46:39
  * @LastEditors: yxx
  * @Description: 
  * @FilePath: \club-management-web\src\views\operating\coupon\form.vue
@@ -173,7 +173,7 @@
 
 <script lang="ts" name="SysJobDialog" setup>
 import { useMessage } from '/@/hooks/message';
-import { addObj, getObj, putObj, getStoreActivity, storeTicket, storeAreaTree } from '/@/api/operating/coupon';
+import { addObj, getObj, putObj, getStoreActivity, storeTicket } from '/@/api/operating/coupon';
 import { useI18n } from 'vue-i18n';
 
 const emit = defineEmits(['refresh']);
@@ -187,19 +187,19 @@ const props = {
 const dataFormRef = ref();
 const visible = ref(false);
 const loading = ref(false);
-const reserveTicket = ref([])
-const shareWine = ref([])
-const reserveBooth = ref([])
-const activity = ref([])
+const reserveTicket: any = ref([])
+const shareWine: any = ref([])
+const reserveBooth: any = ref([])
+const activity: any = ref([])
 const typeOption = ref([
 	{
-		label: t('coupon.typeOption1'),
+		label: t('coupon.CASH_VOUCHERS'),
 		value: 'CASH_VOUCHERS'
 	}, {
-		label: t('coupon.typeOption2'),
+		label: t('coupon.MAX_OUT_VOUCHERS'),
 		value: 'MAX_OUT_VOUCHERS'
 	}, {
-		label: t('coupon.typeOption3'),
+		label: t('coupon.DISCOUNT_VOUCHERS'),
 		value: 'DISCOUNT_VOUCHERS'
 	},
 ])
@@ -219,7 +219,7 @@ const useScopeOption = ref([
 	},
 ])
 // 提交表单数据
-const form = reactive({
+const form: any = reactive({
 	id: '',
 	name: '',
 	typeDetailDTO: {
@@ -258,7 +258,7 @@ const dataRules = reactive({
 	reserveBooths: [{ required: true, message: t('common.select'), trigger: 'change' }],
 	activities: [{ required: true, message: t('common.select'), trigger: 'change' }],
 });
-getStoreActivity().then(res => {
+getStoreActivity().then((res: any) => {
 	res.data.forEach((d, i) => {
 		activity.value.push({
 			label: d.storeName,
@@ -341,7 +341,27 @@ const onSubmit = async () => {
 const getsysJobData = (id: string) => {
 	// 获取数据
 	getObj(id).then((res: any) => {
-		Object.assign(form, res.data);
+		let _data = {
+			...res.data,
+			typeDetailDTO: res.data.couponTypeDetailVO,
+			useScopes: []
+		}
+		res.data.couponScopeVOS.forEach(d => {
+			if (d.useScope == 'ACTIVITY') {
+				_data.activities = d.scopeIds
+			}
+			if (d.useScope == 'RESERVE_BOOTH') {
+				_data.reserveBooths = d.scopeIds
+			}
+			if (d.useScope == 'SHARE_WINE') {
+				_data.shareWines = d.scopeIds
+			}
+			if (d.useScope == 'RESERVE_TICKET') {
+				_data.reserveTickets = d.scopeIds
+			}
+			_data.useScopes.push(d.useScope)
+		});
+		Object.assign(form, _data);
 	});
 };
 

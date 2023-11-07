@@ -1,7 +1,7 @@
 /*
  * @Author: yxx
  * @Date: 2023-10-29 10:40:54
- * @LastEditTime: 2023-11-06 20:11:32
+ * @LastEditTime: 2023-11-08 00:38:45
  * @LastEditors: yxx
  * @Description: 
  * @FilePath: \club-management-web\src\api\operating\coupon.ts
@@ -44,7 +44,7 @@ export const updateEnabled = (data: Object) => {
 
 export function getObj(id?: Object) {
 	return request({
-		url: `/operation/messageManage/${id}`,
+		url: `/operation/coupon/${id}`,
 		method: 'get',
 	});
 }
@@ -86,3 +86,26 @@ export const storeAreaTree = (type: any) => {
 	});
 };
 
+// 优惠券发放
+export const couponIssue = (obj: any) => {
+	return request({
+		url: '/operation/coupon/couponIssue',
+		method: 'post',
+		data: obj,
+	});
+};
+export function getList(query?: Object) {
+	return request({
+		url: '/operation/coupon/page/couponCustomer',
+		method: 'get',
+		params: query,
+	});
+}
+
+export const couponCustomerState = (data?: Object) => {
+	return request({
+		url: '/operation/coupon/couponCustomerState',
+		method: 'put',
+		data,
+	});
+};

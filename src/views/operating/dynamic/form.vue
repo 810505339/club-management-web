@@ -86,7 +86,6 @@ import { useMessage } from '/@/hooks/message';
 import { getDynamicById, AddDynamic, EditDynamic } from '/@/api/admin/dynamic';
 import { useI18n } from 'vue-i18n';
 import { useTranslateText } from './hooks/translate';
-import dayjs from 'dayjs'
 
 const emit = defineEmits(['refresh']);
 const props = defineProps<{ list: any[], storeNameList: any[] }>()
@@ -161,7 +160,7 @@ const onSubmit = async () => {
 
   try {
     loading.value = true;
-    const temp = { ...form, storeId: [form.storeId], expireTime: dayjs(form.expireTime).format('YYYY-MM-DD HH:mm:ss') }
+    const temp = { ...form, storeId: [form.storeId], expireTime: form.expireTime }
 
 
     form.jobId ? await EditDynamic(temp) : await AddDynamic(temp);

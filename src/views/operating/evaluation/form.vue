@@ -1,5 +1,6 @@
 <template>
-	<el-dialog v-model="visible" :close-on-click-modal="false" :title="form.jobId ? $t('common.editBtn') : $t('common.addBtn')" draggable>
+	<el-dialog v-model="visible" :close-on-click-modal="false" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')"
+		draggable>
 		<el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="120px" v-loading="loading">
 			<el-row :gutter="20">
 				<el-col :span="12" class="mb20">
@@ -15,9 +16,10 @@
 
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('job.jobType')" prop="jobType">
-						<el-select v-model="form.jobType" :placeholder="t('job.jobType')">
-							<el-option v-for="(item, index) in job_type" :key="index" :label="item.label" :value="item.value"></el-option>
-						</el-select>
+						<!-- <el-select v-model="form.jobType" :placeholder="t('job.jobType')">
+							<el-option v-for="(item, index) in job_type" :key="index" :label="item.label"
+								:value="item.value"></el-option>
+						</el-select> -->
 					</el-form-item>
 				</el-col>
 
@@ -53,9 +55,10 @@
 
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('job.misfirePolicy')" prop="misfirePolicy">
-						<el-select v-model="form.misfirePolicy" :placeholder="t('job.inputmisfirePolicyTip')">
-							<el-option v-for="(item, index) in misfire_policy" :key="index" :label="item.label" :value="item.value"></el-option>
-						</el-select>
+						<!-- <el-select v-model="form.misfirePolicy" :placeholder="t('job.inputmisfirePolicyTip')">
+							<el-option v-for="(item, index) in misfire_policy" :key="index" :label="item.label"
+								:value="item.value"></el-option>
+						</el-select> -->
 					</el-form-item>
 				</el-col>
 				<el-col :span="24" class="mb20">
@@ -68,7 +71,8 @@
 		<template #footer>
 			<span class="dialog-footer">
 				<el-button formDialogRef @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
-				<el-button formDialogRef type="primary" @click="onSubmit" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
+				<el-button formDialogRef type="primary" @click="onSubmit" :disabled="loading">{{ $t('common.confirmButtonText')
+				}}</el-button>
 			</span>
 		</template>
 	</el-dialog>
@@ -91,12 +95,10 @@ const dataFormRef = ref();
 const visible = ref(false);
 const loading = ref(false);
 
-// 定义字典
-const { misfire_policy, job_type } = useDict('job_status', 'job_execute_status', 'misfire_policy', 'job_type');
 
 // 提交表单数据
 const form = reactive({
-	jobId: '',
+	id: '',
 	jobName: '',
 	jobGroup: '',
 	jobType: '',
@@ -131,7 +133,6 @@ const dataRules = reactive({
 // 打开弹窗
 const openDialog = (id: string) => {
 	visible.value = true;
-	form.jobId = '';
 
 	// 重置表单数据
 	nextTick(() => {
@@ -140,20 +141,19 @@ const openDialog = (id: string) => {
 
 	// 获取sysJob信息
 	if (id) {
-		form.jobId = id;
 		getsysJobData(id);
 	}
 };
 
 // 提交
 const onSubmit = async () => {
-	const valid = await dataFormRef.value.validate().catch(() => {});
+	const valid = await dataFormRef.value.validate().catch(() => { });
 	if (!valid) return false;
 
 	try {
 		loading.value = true;
-		form.jobId ? await putObj(form) : await addObj(form);
-		useMessage().success(t(form.jobId ? 'common.editSuccessText' : 'common.addSuccessText'));
+		form.id ? await putObj(form) : await addObj(form);
+		useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));
 		visible.value = false;
 		emit('refresh');
 	} catch (err: any) {

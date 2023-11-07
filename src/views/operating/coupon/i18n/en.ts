@@ -1,7 +1,7 @@
 /*
  * @Author: yxx
  * @Date: 2023-09-24 11:45:01
- * @LastEditTime: 2023-11-05 19:07:53
+ * @LastEditTime: 2023-11-08 00:46:57
  * @LastEditors: yxx
  * @Description: 
  * @FilePath: \club-management-web\src\views\operating\coupon\i18n\en.ts
@@ -17,6 +17,7 @@ export default {
 		createdTime: 'createdTime',
 		provideMode: 'provideMode',
 		number: 'Used/Issued/Total',
+		surplusNumber: 'surplus',
 		creator: 'creator',
 		msg: '基础信息',
 		rule: '使用规则',
@@ -29,13 +30,13 @@ export default {
 		REJECTED: '被驳回',
 		status1: '上线中',
 		status2: '已下线',
-		typeOption1: '现金券',
-		typeOption2: '满减券',
-		typeOption3: '折扣券',
+		CASH_VOUCHERS: '现金券',
+		MAX_OUT_VOUCHERS: '满减券',
+		DISCOUNT_VOUCHERS: '折扣券',
 		doorSill: 'doorSill',
-		blockReceive: '是否限制数量',
+		blockReceive: '每人限量',
 		couponNumber: '优惠券数量',
-		blockNumber: '限制数量',
+		blockNumber: '限领数量',
 		useExplain: '使用说明',
 		remark: 'remark',
 		issueWay: '发放方式',
@@ -45,6 +46,28 @@ export default {
 		useScope2: '拼酒局',
 		useScope3: '预订卡座',
 		useScope4: '活动',
-		scopeDTOS: '使用范围'
+		scopeDTOS: '使用范围',
+		HAVE_NOT_STARTED: "未开始",
+		UNDER_RELEASE: "发放中",
+		SENT_OUT: "已发完",
+		STOP_ISSUE: "停止发放",
+		GENDER_AUTHENTICATION_SUCCESS: '性别认证成功',
+		SHARE_WINE_SUCCESS: '拼酒局成功',
+		RESERVE_TICKET_SUCCESS: '预订门票成功',
+		RESERVE_BOOTH_SUCCESS: '预订卡座成功',
+		audit: '提交审核',
+		gender: 'gender',
+		useState: '使用状态',
+		issueDate: '领券时间',
+		issuePerson: '发券人',
+		validity: '有效期',
+		useState1: '已使用',
+		useState0: '未使用',
+		useTime: '使用时间',
+		couponStateRemark: '回收原因',
+		couponState: '状态',
+		CANCELLATION: '已作废',
+		RECYCLE: '已回收',
+		NORMAL: '正常',
 	},
 };
