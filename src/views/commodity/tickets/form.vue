@@ -7,22 +7,35 @@
       </el-form-item>
 
 
-      <el-form-item :label="areaName" prop="areaList">
-        <el-cascader :options="options" v-model="form.areaList" :props="cascaderProps" :show-all-levels="false" />
+
+
+      <el-form-item :label="time" prop="sum">
+        <el-date-picker :end-placeholder="$t('syslog.inputEndPlaceholderTip')"
+          :start-placeholder="$t('syslog.inputStartPlaceholderTip')" range-separator="To" type="datetimerange"
+          value-format="YYYY-MM-DD HH:mm:ss" />
       </el-form-item>
 
-      <el-form-item :label="detail" prop="description">
-        <el-input v-model="form.description" :rows="2" type="textarea" />
+      <el-form-item :label="duration" prop="sum">
+        <el-date-picker :end-placeholder="$t('syslog.inputEndPlaceholderTip')"
+          :start-placeholder="$t('syslog.inputStartPlaceholderTip')" range-separator="To" type="datetimerange"
+          value-format="YYYY-MM-DD HH:mm:ss" />
       </el-form-item>
-      <el-form-item :label="image" prop="pictureIds">
-        <upload v-bind="IMG_PROPS" class="w-full" :model-value="form.pictureIds"
-          @change="(_, fileList) => uploadChange('pictureIds', fileList)" />
+
+
+
+      <el-form-item :label="sum" prop="sum">
+        <el-input-number :step="1" :min="0" />
       </el-form-item>
+      <el-form-item :label="price + '($)'" prop="sum">
+        <el-input-number :precision="2" :step="0.01" :min="0.00" />
+      </el-form-item>
+
+
+
     </el-form>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
-        <el-button type="primary" @click="handleDelete">{{ $t('common.delBtn') }}</el-button>
         <el-button @click="onSubmit" type="primary" :disabled="loading">{{ $t('common.confirmButtonText')
         }}</el-button>
       </span>
@@ -63,7 +76,11 @@ const {
   duration,
   price,
   detail,
-  image
+  image,
+  beginTime,
+  endTime,
+  shelvesTime,
+  takedownTime
 } = useTranslateText(t)
 
 // 定义变量内容

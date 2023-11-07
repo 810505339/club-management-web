@@ -10,6 +10,10 @@ export function useTranslateText(t: any) {
   const price = computed(() => t('common.shelves') + t('common.price'))
   const detail = computed(() => t('tickets.tickets') + t('common.detail'))
   const image = computed(() => t('tickets.tickets') + t('common.image'))
+  const beginTime = computed(() => t('common.inputTimeTip1'))
+  const endTime = computed(() => t('common.inputTimeTip2'))
+  const shelvesTime = computed(() => t('common.shelves') + t('common.time'))
+  const takedownTime = computed(() => t('common.takedown') + t('common.time'))
 
   return {
     name,
@@ -20,7 +24,11 @@ export function useTranslateText(t: any) {
     duration,
     price,
     detail,
-    image
+    image,
+    beginTime,
+    endTime,
+    shelvesTime,
+    takedownTime
   }
 
 }
