@@ -56,6 +56,10 @@ export default {
 		week4: '星期四',
 		week5: '星期五',
 		week6: '星期六',
+		name: '名称',
+		detail: '详情',
+		image: '图片',
+
 	},
 	message: {
 		box: {

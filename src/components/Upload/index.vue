@@ -4,7 +4,8 @@
 		<el-upload ref="fileUpload" v-if="props.type === 'default'"
 			:action="baseURL + other.adaptationUrl(props.uploadFileUrl)" :before-upload="handleBeforeUpload"
 			:file-list="fileList" :headers="headers" :limit="limit" :on-error="handleUploadError" :on-remove="handleRemove"
-			:data="data" :auto-upload="autoUpload" :on-success="handleUploadSuccess" class="upload-file-uploader" drag multiple>
+			:on-preview="handlePreview" :data="data" :auto-upload="autoUpload" :on-success="handleUploadSuccess"
+			class="upload-file-uploader" drag multiple>
 			<i class="el-icon-upload"></i>
 			<div class="el-upload__text">
 				{{ $t('excel.operationNotice') }}
@@ -28,6 +29,9 @@
 			:on-success="handleUploadSuccess" class="upload-file-uploader" multiple>
 			<el-button type="primary" link>{{ $t('excel.clickUpload') }}</el-button>
 		</el-upload>
+
+		<el-image style="width: 100px; height: 100px" ref="imgRef" :src="previewurl" :zoom-rate="1.2" :max-scale="7"
+			:min-scale="0.2" :preview-src-list="[previewurl]" :initial-index="4" fit="cover" v-show="false" />
 	</div>
 </template>
 
@@ -35,6 +39,11 @@
 import { useMessage } from '/@/hooks/message';
 import { Session } from '/@/utils/storage';
 import other from '/@/utils/other';
+import { useUserInfo } from '/@/stores/userInfo';
+
+const store = useUserInfo()
+const fileCommonUrl = computed(() => store.userInfos.fileCommonUrl)
+
 const props = defineProps({
 	modelValue: [String, Array],
 	// 数量限制
@@ -82,6 +91,9 @@ const number = ref(0);
 const fileList = ref(props.modelValue) as any;
 const uploadList = ref([]) as any;
 const fileUpload = ref();
+
+const previewurl = ref('')
+const imgRef = ref()
 
 const headers = computed(() => {
 	return {
@@ -197,6 +209,13 @@ watch(
 const submit = () => {
 	fileUpload.value.submit();
 };
+
+const handlePreview = (uploadFile: any) => {
+	previewurl.value = `${fileCommonUrl}/${uploadFile.name}`
+	console.log(imgRef.value);
+
+	// imgRef.value.click()
+}
 
 defineExpose({
 	submit,

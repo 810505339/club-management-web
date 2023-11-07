@@ -6,15 +6,25 @@
 
 					<div class="flex h-full text-center">
 						<div class="w-64 bg-[#141414]  h-full">
-							<div v-for="item, index in  ticketsList " :key="item.id">
-								<div class="p-5" :class="activeId === item.id && 'bg-[rgba(64,158,255,0.2)]'" @click="active(item)">
-									<el-image class="w-52 h-32" />
-									<div class="text-[#ffffff] text-center mt-3">ID:{{ item.id }}</div>
+
+							<el-scrollbar max-height="800px">
+								<div v-for="item, index in  ticketsList " :key="item.id">
+									<div class="p-5" :class="activeId === item.id && 'bg-[rgba(64,158,255,0.2)]'" @click="active(item)"
+										@dblclick="userDialogRef.openDialog(item.id)">
+										<el-image class="w-52 h-32" fit="cover" :src="item.img" v-if="item.img" />
+										<div v-else class="w-52 h-32 flex justify-center items-center bg-[#1d1d1f]">暂无封面</div>
+
+										<div class="text-[#ffffff] text-center mt-3">{{ name }}:{{ item.name }}</div>
+									</div>
 								</div>
+							</el-scrollbar>
+							<div>
+								<el-button type="primary" class="my-2" @click="userDialogRef.openDialog()">
+									{{ $t('common.addBtn') }}
+								</el-button>
 							</div>
-							<el-button type="primary" class="my-2">
-								{{ $t('common.addBtn') }}
-							</el-button>
+
+
 						</div>
 						<div class="flex-auto h-full p-5">
 
@@ -80,7 +90,7 @@
 			</pane>
 		</splitpanes>
 
-		<user-form ref="userDialogRef" @refresh="getDataList(false)" />
+		<user-form ref="userDialogRef" @refresh="handlegetTicketList" />
 
 		<upload-excel ref="excelUploadRef" :title="$t('sysuser.importUserTip')"
 			temp-url="/admin/sys-file/local/file/user.xlsx" url="/admin/user/import" @refreshDataList="getDataList" />
@@ -91,8 +101,12 @@
 import { useI18n } from 'vue-i18n';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { useTranslateText } from './hooks/translate';
-import { delObj, pageList, putObj } from '/@/api/admin/user';
 import userForm from "./form.vue";
+import { getStoreName } from '/@/api/admin/store';
+import { getTicketAll } from '/@/api/admin/commodity';
+import { useUserInfo } from '/@/stores/userInfo';
+const store = useUserInfo()
+const fileCommonUrl = computed(() => store.userInfos.fileCommonUrl)
 
 
 const { t } = useI18n();
@@ -108,12 +122,12 @@ const queryRef = ref();
 // 定义变量内容
 const userDialogRef = ref();
 const showSearch = ref(true);
-
+const storeNameList = ref<any[]>([])
 type ITicket = {
 	id: string;
 	img: string
 }
-const ticketsList = ref<ITicket[]>([{ id: '1', img: '' }])
+const ticketsList = ref<ITicket[]>([])
 const activeId = ref('235645682655')
 
 // 定义表格查询、后台调用的API
@@ -122,11 +136,40 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 		state: '',
 		name: '',
 	},
-	pageList: pageList,
+	pageList: async (pamars) => {
+		await handleStoreNameList()
+		// return await getAreaList(pamars)
+	},
 });
 const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
 function active(item: ITicket) {
 	activeId.value = item.id
 }
+//跟新下拉门店名称
+const handleStoreNameList = async () => {
+	const { data } = await getStoreName()
+	storeNameList.value = data
+
+
+}
+
+const handlegetTicketList = async () => {
+	const { data } = await getTicketAll()
+	ticketsList.value = data.map(item => {
+		return {
+			...item,
+			img: item.pictureFileVOs[0] ? `${fileCommonUrl.value}/${item.pictureFileVOs[0]?.fileName}` : undefined
+		}
+	})
+}
+
+onMounted(async () => {
+	await handlegetTicketList()
+})
 
 </script>
+<style scoped>
+:deep(.el-scrollbar) {
+	height: 90%;
+}
+</style>

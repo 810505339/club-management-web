@@ -78,10 +78,11 @@ export const storeTicket = () => {
 	});
 };
 //门店卡座级联下拉
-export const storeAreaTree = () => {
+export const storeAreaTree = (type: any) => {
 	return request({
 		url: '/admin/store/storeAreaTree',
 		method: 'get',
+		params: type
 	});
 };
 

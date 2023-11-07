@@ -1,3 +1,4 @@
+import { getTicketById } from './commodity';
 import request from '/@/utils/request';
 
 //新增
@@ -58,3 +59,47 @@ export const deletedrinksMealByIds = (ids: string[]) => {
     data: ids,
   })
 }
+
+
+
+export const addTicket = (data: any) => {
+  return request({
+    url: "/operation/ticket",
+    method: 'POST',
+    data: data
+  })
+}
+
+export const putTicket = (data: any) => {
+  return request({
+    url: "/operation/ticket",
+    method: 'PUT',
+    data: data
+  })
+}
+
+export const deleteTicketByIds = (ids: string[]) => {
+  return request({
+    url: "/operation/ticket",
+    method: 'DELETE',
+    data: ids
+  })
+}
+
+export const getTicketById = (id: string) => {
+  return request({
+    url: `/operation/ticket/${id}`,
+    method: 'get',
+  })
+}
+
+
+
+
+export const getTicketAll = () => {
+  return request({
+    url: `/operation/ticket/getAll`,
+    method: 'get',
+  })
+}
+

@@ -63,6 +63,9 @@ export default {
 		week4: 'Thursday',
 		week5: 'Friday',
 		week6: 'Saturday',
+		name: ' name',
+		detail: ' detail',
+		image: ' image',
 	},
 	message: {
 		box: {

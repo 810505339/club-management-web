@@ -1,44 +1,57 @@
 <template>
   <el-dialog :close-on-click-modal="false" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" width="600"
     draggable v-model="visible">
-    <el-form :model="form" :rules="dataRules" formDialogRef label-width="120px" ref="dataFormRef" v-loading="loading">
-      <el-form-item :label="areaName" prop="clientId">
-        <el-cascader class="w-full" />
+    <el-form :model="form" formDialogRef label-width="120px" ref="dataFormRef" v-loading="loading">
+      <el-form-item :label="name" prop="name">
+        <el-input v-model="form.name" />
       </el-form-item>
-      <el-form-item :label="time" prop="clientSecret">
-        <el-date-picker />
+
+
+      <el-form-item :label="areaName" prop="areaList">
+        <el-cascader :options="options" v-model="form.areaList" :props="cascaderProps" :show-all-levels="false" />
       </el-form-item>
-      <el-form-item :label="sum" prop="scope">
-        <el-input-number />
+
+      <el-form-item :label="detail" prop="description">
+        <el-input v-model="form.description" :rows="2" type="textarea" />
       </el-form-item>
-      <el-form-item :label="price" prop="authorizedGrantTypes">
-        <el-input>
-          <template #append>$</template>
-        </el-input>
-      </el-form-item>
-      <el-form-item :label="duration" prop="accessTokenValidity">
-        <el-date-picker />
+      <el-form-item :label="image" prop="pictureIds">
+        <upload v-bind="IMG_PROPS" class="w-full" :model-value="form.pictureIds"
+          @change="(_, fileList) => uploadChange('pictureIds', fileList)" />
       </el-form-item>
     </el-form>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
-        <el-button @click="onSubmit" type="primary" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
+        <el-button type="primary" @click="handleDelete">{{ $t('common.delBtn') }}</el-button>
+        <el-button @click="onSubmit" type="primary" :disabled="loading">{{ $t('common.confirmButtonText')
+        }}</el-button>
       </span>
     </template>
   </el-dialog>
 </template>
 
 <script lang="ts" name="SysOauthClientDetailsDialog" setup>
-import { useDict } from '/@/hooks/dict';
-import { useMessage } from '/@/hooks/message';
-import { addObj, getObj, putObj, validateclientId } from '/@/api/admin/client';
+import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 import { rule } from '/@/utils/validate';
 import { useTranslateText } from './hooks/translate';
-
+import { storeAreaTree } from '/@/api/operating/coupon'
+import { addTicket, putTicket, getTicketById, deleteTicketByIds } from '/@/api/admin/commodity'
+import upload from "/@/components/Upload/index.vue";
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
+//图片props
+const IMG_PROPS = {
+  fileSize: 1,
+  limit: 1,
+  fileType: ['jpg', 'png', 'jpeg']
+}
+
+const cascaderProps = {
+  label: "name",
+  value: 'id',
+  children: 'list',
+}
 
 const { t } = useI18n();
 const {
@@ -48,7 +61,9 @@ const {
   state,
   sum,
   duration,
-  price
+  price,
+  detail,
+  image
 } = useTranslateText(t)
 
 // 定义变量内容
@@ -56,33 +71,27 @@ const dataFormRef = ref();
 const visible = ref(false);
 const loading = ref(false);
 
-// 定义字典
-const { grant_types, common_status } = useDict(
-  'grant_types',
-  'common_status',
-);
+defineProps<{ storeNameList: any[] }>()
 
+
+type IForm = {
+  id: undefined | string;
+  name: string;
+  storeId: string;
+  description: string
+  pictureIds: any[]
+  areaId: string
+  areaList: any[]
+}
 // 提交表单数据
-const form = reactive({
-  id: '',
-  clientId: '',
-  clientSecret: '',
-  scope: 'server',
-  authorizedGrantTypes: [] as string[],
-  webServerRedirectUri: '',
-  authorities: '',
-  accessTokenValidity: 43200,
-  refreshTokenValidity: 2592001,
-  autoapprove: 'true',
-  delFlag: '',
-  createBy: '',
-  updateBy: '',
-  createTime: '',
-  updateTime: '',
-  tenantId: '',
-  onlineQuantity: '1',
-  captchaFlag: '1',
-  encFlag: '1',
+const form = reactive<IForm>({
+  id: undefined,
+  storeId: '',
+  name: '',
+  description: '',
+  pictureIds: [],
+  areaList: [],
+  areaId: ''
 });
 
 // 定义校验规则
@@ -115,10 +124,22 @@ const dataRules = ref({
   webServerRedirectUri: [{ required: true, message: '回调地址不能为空', trigger: 'blur' }],
 });
 
+const options = ref([])
+
+
+
+const getstoreAreaTree = async () => {
+  const { data } = await storeAreaTree({ type: 0 })
+  options.value = data
+}
+
 // 打开弹窗
-const openDialog = (id: string) => {
+const openDialog = async (id: string) => {
+
+  await getstoreAreaTree()
   visible.value = true;
   form.id = '';
+
   // 重置表单数据
   nextTick(() => {
     dataFormRef.value?.resetFields();
@@ -126,8 +147,10 @@ const openDialog = (id: string) => {
 
   // 获取sysOauthClientDetails信息
   if (id) {
+    loading.value = true;
     form.id = id;
-    getsysOauthClientDetailsData(id);
+    await getInfo(id);
+    loading.value = false;
   }
 };
 
@@ -139,7 +162,14 @@ const onSubmit = async () => {
 
   try {
     loading.value = true;
-    form.id ? await putObj(form) : await addObj(form);
+    const temp = {
+      ...form,
+      pictureIds: form.id ? form.pictureIds : form.pictureIds.map(item => item.id),
+      storeId: Number(form.areaList[0]),
+      areaId: String(form.areaList[1])
+    }
+    form.id ? await putTicket(temp) : await addTicket(temp);
+
     useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));
     visible.value = false;
     emit('refresh');
@@ -151,12 +181,37 @@ const onSubmit = async () => {
 };
 
 // 初始化表单数据
-const getsysOauthClientDetailsData = (id: string) => {
-  // 获取数据
-  getObj(id).then((res: any) => {
-    Object.assign(form, res.data);
+const getInfo = async (id: string) => {
+  const { data } = await getTicketById(id)
+
+
+
+  Object.assign(form, {
+    ...data,
+    areaList: [data.areaVO.storeVO.id, data.areaVO.id],
+    pictureIds: data.pictureFileVOs.map((item) => (item.id))
+
   });
+  console.log(form);
+
 };
+
+
+const uploadChange = (type: 'pictureIds', fileList: any[]) => {
+  form[type] = fileList
+}
+
+const handleDelete = async () => {
+
+  await useMessageBox().confirm('确认删除')
+  const { data } = await deleteTicketByIds([form.id])
+  if (data) {
+    visible.value = false
+    emit('refresh')
+
+  }
+}
+
 
 // 暴露变量
 defineExpose({

@@ -57,3 +57,6 @@ export const deleteAreaByIds = (ids: string[]) => {
     data: ids,
   })
 }
+
+
+
