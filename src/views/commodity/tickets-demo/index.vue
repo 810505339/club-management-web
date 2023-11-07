@@ -133,13 +133,13 @@
 	</div>
 </template>
 
-<script lang="ts" name="systemUser" setup>
+<script lang="ts" name="tickets-demo" setup>
 import { useI18n } from 'vue-i18n';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { useTranslateText } from './hooks/translate';
 import userForm from "./form.vue";
 import { getStoreName } from '/@/api/admin/store';
-import { getTicketAll, getTicketDetail, updateEnabledByTicketDetail } from '/@/api/admin/commodity';
+import { getTicketAll, getTicketDetail, updateEnabled } from '/@/api/admin/commodity';
 import { useUserInfo } from '/@/stores/userInfo';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 const store = useUserInfo()
@@ -216,7 +216,7 @@ const handleTakedown = async (row: any) => {
 		await useMessageBox().confirm(t('shopList.sureTakedown'))
 	}
 	//1:下架,0:正常
-	await updateEnabledByTicketDetail({
+	await updateEnabled({
 		id: row.id,
 		enabled: enabled
 	})

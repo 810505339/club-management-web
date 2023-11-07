@@ -103,3 +103,23 @@ export const getTicketAll = () => {
   })
 }
 
+
+
+
+//分页
+export const getTicketDetail = (data: any) => {
+  return request({
+    url: `/operation/ticketDetail/page`,
+    method: 'get',
+    data
+  })
+}
+
+export const updateEnabledByTicketDetail = (data: Object) => {
+  return request({
+    url: `/operation/ticketDetail/enabledById`,
+    method: 'put',
+    params: data
+
+  });
+}

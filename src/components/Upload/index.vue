@@ -30,8 +30,7 @@
 			<el-button type="primary" link>{{ $t('excel.clickUpload') }}</el-button>
 		</el-upload>
 
-		<el-image style="width: 100px; height: 100px" ref="imgRef" :src="previewurl" :zoom-rate="1.2" :max-scale="7"
-			:min-scale="0.2" :preview-src-list="[previewurl]" :initial-index="4" fit="cover" v-show="false" />
+		<el-image-viewer :url-list="[previewurl]" @close="close" v-if="showViewer" ref="domRef" />
 	</div>
 </template>
 
@@ -93,7 +92,8 @@ const uploadList = ref([]) as any;
 const fileUpload = ref();
 
 const previewurl = ref('')
-const imgRef = ref()
+const domRef = ref()
+const showViewer = ref(false)
 
 const headers = computed(() => {
 	return {
@@ -211,10 +211,18 @@ const submit = () => {
 };
 
 const handlePreview = (uploadFile: any) => {
-	previewurl.value = `${fileCommonUrl}/${uploadFile.name}`
-	console.log(imgRef.value);
+	console.log(uploadFile);
+
+	previewurl.value = `${fileCommonUrl.value}/${uploadFile.name}`
+	showViewer.value = true
 
 	// imgRef.value.click()
+}
+
+const close = () => {
+	showViewer.value = false
+	console.log(domRef.value);
+
 }
 
 defineExpose({
