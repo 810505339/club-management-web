@@ -44,7 +44,7 @@
 
 						<el-table-column :label="$t('banner.state')" prop="enabled" width="100">
 							<template #default="scope">
-								<el-tag class="ml-2" :type="scope.row['enabled'] == 0 ? 'success' : 'danger'">{{ scope.row['enabled'] == 1
+								<el-tag class="ml-2" :type="scope.row['enabled'] == 1 ? 'success' : 'danger'">{{ scope.row['enabled'] == 0
 									?
 									$t('banner.takedown') : $t('banner.shelves') }} </el-tag>
 
@@ -65,18 +65,18 @@
 									{{ $t('common.detailBtn') }}
 								</el-button>
 
-								<el-button v-auth="'sys_user_edit'" v-if="scope.row['enabled'] == 1" text type="primary"
+								<el-button v-auth="'sys_user_edit'" v-if="scope.row['enabled'] == 0" text type="primary"
 									@click="userDialogRef.openDialog(scope.row.id)">
 									{{ $t('common.editBtn') }}
 								</el-button>
-								<el-button text type="primary" @click="handleTakedown(scope.row)" v-if="scope.row['enabled'] == 1">
+								<el-button text type="primary" @click="handleTakedown(scope.row)" v-if="scope.row['enabled'] == 0">
 									{{ $t('banner.shelves') }}
 								</el-button>
 								<el-button text type="primary" @click="handleTakedown(scope.row)" v-else>
 									{{ $t('banner.takedown') }}
 								</el-button>
-								<el-tooltip :content="$t('banner.deleteDisabledTip')" :disabled="scope.row.userId !== '1'"
-									placement="top">
+								<el-tooltip :content="$t('banner.deleteDisabledTip')" v-if="scope.row['enabled'] == 0"
+									:disabled="scope.row.userId !== '0'" placement="top">
 									<span style="margin-left: 12px">
 										<el-button v-auth="'sys_user_del'" :disabled="scope.row.username === 'admin'" text type="primary"
 											@click="handleDelete([scope.row.id])">{{ $t('common.delBtn') }}
@@ -112,8 +112,8 @@ const UserForm = defineAsyncComponent(() => import('./form.vue'));
 const info = defineAsyncComponent(() => import('./info.vue'))
 
 const enabledList = [
-	{ label: '上架', value: '0' },
-	{ label: '下架', value: '1' },
+	{ label: '上架', value: '1' },
+	{ label: '下架', value: '0' },
 ]
 const { t } = useI18n();
 // 定义变量内容
@@ -161,7 +161,7 @@ const handleDelete = async (ids: string[]) => {
 //点击下架
 const handleTakedown = async (row: any) => {
 
-	if (row.enabled == 0) {
+	if (row.enabled == 1) {
 		await useMessageBox().confirm(t('banner.sureTakedown'))
 	}
 	//1:下架,0:正常

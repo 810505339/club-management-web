@@ -66,7 +66,7 @@
 				</el-table-column>
 				<el-table-column :label="t('coupon.number')" prop="startTime" width="200px" show-overflow-tooltip>
 					<template #default="scope">
-						{{ scope.row.useNumber || 0 }}/ {{ scope.row.surplusNumber || 0 }}/ {{ scope.row.couponNumber || 0 }}
+						{{ scope.row.useNumber || 0 }}/ {{ scope.row.issueNumber || 0 }}/ {{ scope.row.couponNumber || 0 }}
 					</template>
 				</el-table-column>
 				<el-table-column :label="t('coupon.auditStatus')" width="170px" prop="auditState" show-overflow-tooltip>
@@ -127,10 +127,9 @@
 <script lang="ts" name="systemSysJob" setup>
 
 import { BasicTableProps, useTable } from '/@/hooks/table';
-import { delObj, runJobRa, shutDownJobRa, startJobRa } from '/@/api/daemon/job';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
-import { fetchList, updateEnabled } from '/@/api/operating/coupon';
+import { fetchList, updateEnabled, couponStopIssue } from '/@/api/operating/coupon';
 import type { FormInstance, FormRules } from 'element-plus'
 const ruleFormRef = ref<FormInstance>()
 // 引入组件
@@ -191,11 +190,11 @@ const handleDelete = async (row) => {
 	}
 
 	try {
-		await runJobRa(row.id);
+		// await runJobRa(row.id);
 		getDataList();
 		useMessage().success(t('common.optSuccessText'));
 	} catch (err: any) {
-		useMessage().error('运行失败');
+		// useMessage().error('运行失败');
 	}
 	// dialogVisible.value = true
 
@@ -277,18 +276,14 @@ const handleRunJob = async (row, type) => {
 	if (type) {
 		couponIssueDialogRef.value.openDialog(row);
 	} else {
-		try {
-			await useMessageBox().confirm(`立刻执行一次任务(任务名称: ${row.jobName}), 是否继续?`);
-		} catch {
-			return;
-		}
+
 
 		try {
-			await runJobRa(row.id);
+			await couponStopIssue(row.id);
 			getDataList();
 			useMessage().success(t('common.optSuccessText'));
 		} catch (err: any) {
-			useMessage().error('运行失败');
+			// useMessage().error('运行失败');
 		}
 	}
 

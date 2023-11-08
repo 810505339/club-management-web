@@ -1,7 +1,7 @@
 /*
  * @Author: yxx
  * @Date: 2023-10-29 10:40:54
- * @LastEditTime: 2023-11-08 00:38:45
+ * @LastEditTime: 2023-11-08 20:27:14
  * @LastEditors: yxx
  * @Description: 
  * @FilePath: \club-management-web\src\api\operating\coupon.ts
@@ -107,5 +107,13 @@ export const couponCustomerState = (data?: Object) => {
 		url: '/operation/coupon/couponCustomerState',
 		method: 'put',
 		data,
+	});
+};
+
+//优惠券停止发放
+export const couponStopIssue = (id: any) => {
+	return request({
+		url: `/operation/coupon/couponStopIssue/${id}`,
+		method: 'post',
 	});
 };

@@ -32,7 +32,7 @@
 							</template></el-table-column>
 						<el-table-column :label="$t('adv.state')" prop="enabled" width="100">
 							<template #default="scope">
-								<el-tag class="ml-2" :type="scope.row['enabled'] == 0 ? 'success' : 'danger'">{{ scope.row['enabled'] == 1
+								<el-tag class="ml-2" :type="scope.row['enabled'] == 1 ? 'success' : 'danger'">{{ scope.row['enabled'] == 0
 									?
 									$t('adv.takedown') : $t('adv.shelves') }} </el-tag>
 
@@ -44,7 +44,7 @@
 								<el-button text type="primary" @click="useInfoRef.open(scope.row.id)">
 									{{ $t('common.detailBtn') }}
 								</el-button>
-								<el-button text type="primary" @click="handleTakedown(scope.row)" v-if="scope.row['enabled'] == 1">
+								<el-button text type="primary" @click="handleTakedown(scope.row)" v-if="scope.row['enabled'] == 0">
 									{{ $t('adv.shelves') }}
 								</el-button>
 								<el-button text type="primary" @click="handleTakedown(scope.row)" v-else>
@@ -114,7 +114,7 @@ const handleClick = (tab: TabsPaneContext) => {
 
 //点击下架
 const handleTakedown = async (row: any) => {
-	if (row.enabled == 0) {
+	if (row.enabled == 1) {
 		await useMessageBox().confirm(t('adv.sureTakedown'))
 	}
 	//1:下架,0:正常

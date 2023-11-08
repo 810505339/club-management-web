@@ -53,15 +53,15 @@
 				<!-- issueWay 发放方式,1:指定用户发放 ==手动发放，0:按条件发放===系统发放 -->
 				<template v-if="couponInfo.issueWay == 0">
 					<el-col :span="24" class="mb20">
-						<el-form-item :label="'用户'" prop="customerIsNew">
+						<el-form-item :label="t('coupon.customerIsNew')" prop="customerIsNew">
 							<el-radio-group v-model="form.customerIsNew">
-								<el-radio label="1">新用户</el-radio>
-								<el-radio label="0">老用户</el-radio>
+								<el-radio label="1">{{ t('coupon.customerIsNew1') }}</el-radio>
+								<el-radio label="0">{{ t('coupon.customerIsNew0') }}</el-radio>
 							</el-radio-group>
 						</el-form-item>
 					</el-col>
 					<el-col :span="24" class="mb20">
-						<el-form-item :label="'行为'" prop="behavior">
+						<el-form-item :label="t('coupon.behavior')" prop="behavior">
 							<el-select v-model="form.behavior" :placeholder="t('common.select')">
 								<el-option v-for="(item, index) in behaviorOption" :key="index" :label="item.label"
 									:value="item.value"></el-option>
@@ -69,18 +69,18 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="24" class="mb20">
-						<el-form-item :label="'性别'" prop="customerGender">
+						<el-form-item :label="t('coupon.gender')" prop="customerGender">
 							<el-radio-group v-model="form.customerGender">
-								<el-radio label="">全部</el-radio>
-								<el-radio label="1">男</el-radio>
-								<el-radio label="2">女</el-radio>
+								<!-- <el-radio label="">全部</el-radio> -->
+								<el-radio label="1">{{ t('coupon.gender1') }}</el-radio>
+								<el-radio label="2">{{ t('coupon.gender1') }}</el-radio>
 							</el-radio-group>
 						</el-form-item>
 					</el-col>
 				</template>
 				<template v-else>
 					<el-col :span="24" class="mb20">
-						<el-form-item :label="'发放用户'" prop="customerInfos">
+						<el-form-item :label="t('coupon.customerInfos')" prop="customerInfos">
 							<el-space wrap>
 								<el-tag closable @close="closeUser(item)" type="info" v-for="(item, index) in form.customerInfos"
 									:key=index>{{ item.name
@@ -95,31 +95,31 @@
 
 				</template>
 				<el-col :span="24" class="mb20">
-					<el-form-item :label="'有效期配置方式'" prop="validType">
+					<el-form-item :label="t('coupon.validType')" prop="validType">
 						<el-radio-group v-model="form.validType">
-							<el-radio label="1">时间区间有效</el-radio>
-							<el-radio label="0">x天内有效</el-radio>
+							<el-radio label="1">{{ t('coupon.validType1') }}</el-radio>
+							<el-radio label="0">{{ t('coupon.validType0') }}</el-radio>
 						</el-radio-group>
 					</el-form-item>
 				</el-col>
 				<template v-if="form.validType == 0">
 					<el-col :span="24" class="mb20">
-						<el-form-item :label="'生效期'" prop="effectiveDate">
+						<el-form-item :label="t('coupon.effectiveDate')" prop="effectiveDate">
 							<el-radio-group v-model="form.effectiveDate">
-								<el-radio label="1">立即</el-radio>
-								<el-radio label="0">次日</el-radio>
+								<el-radio label="1">{{ t('coupon.effectiveDate1') }}</el-radio>
+								<el-radio label="0">{{ t('coupon.effectiveDate0') }}</el-radio>
 							</el-radio-group>
 						</el-form-item>
 					</el-col>
 					<el-col :span="24" class="mb20">
-						<el-form-item :label="'有效天数'" prop="validDay">
+						<el-form-item :label="t('coupon.validDay')" prop="validDay">
 							<el-input-number :controls="false" v-model="form.validDay" :min="1" />
 						</el-form-item>
 					</el-col>
 				</template>
 				<template v-else>
 					<el-col :span="24" class="mb20">
-						<el-form-item :label="'生效时间区间'" prop="times">
+						<el-form-item :label="t('coupon.times')" prop="times">
 							<el-date-picker v-model="form.times" type="datetimerange" start-placeholder="开始时间" end-placeholder="结束时间"
 								value-format="YYYY-MM-DD HH:mm:ss" />
 						</el-form-item>

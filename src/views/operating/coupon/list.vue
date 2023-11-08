@@ -3,20 +3,28 @@
 		<div class="layout-padding-auto layout-padding-view">
 			<el-row class="ml10" v-show="showSearch">
 				<el-form :inline="true" :model="state.queryForm" ref="queryRef">
-					<el-form-item :label="$t('coupon.couponName')" prop="name">
-						<el-input :placeholder="$t('common.please') + $t('coupon.couponName')" @keyup.enter="getDataList" clearable
-							v-model="state.queryForm.name" />
+					<el-form-item :label="$t('ranking.userName')" prop="customerName">
+						<el-input :placeholder="$t('common.please') + $t('ranking.userName')" clearable
+							v-model="state.queryForm.customerName" />
 					</el-form-item>
-					<!-- <el-form-item :label="t('coupon.couponStatus')" prop="jobStatus">
-						<el-select :placeholder="t('common.select') + t('coupon.couponStatus')" v-model="state.queryForm.status">
+					<el-form-item :label="$t('opinion.phone')" prop="phoneNumber">
+						<el-input :placeholder="$t('common.please') + $t('opinion.phone')" clearable
+							v-model="state.queryForm.phoneNumber" />
+					</el-form-item>
+					<el-form-item :label="$t('coupon.couponName')" prop="couponName">
+						<el-input :placeholder="$t('common.please') + $t('coupon.couponName')" clearable
+							v-model="state.queryForm.couponName" />
+					</el-form-item>
+					<el-form-item :label="t('coupon.gender')" prop="gender">
+						<el-select :placeholder="t('common.select') + t('coupon.gender')" v-model="state.queryForm.gender">
 							<el-option :key="index" :label="item.label" :value="item.value"
-								v-for="(item, index) in statusOption"></el-option>
+								v-for="(item, index) in genderOption"></el-option>
 						</el-select>
-					</el-form-item> -->
-					<el-form-item :label="t('coupon.auditStatus')" prop="auditState">
-						<el-select :placeholder="t('common.select') + t('coupon.auditStatus')" v-model="state.queryForm.auditState">
+					</el-form-item>
+					<el-form-item :label="t('coupon.useState')" prop="useState">
+						<el-select :placeholder="t('common.select') + t('coupon.useState')" v-model="state.queryForm.useState">
 							<el-option :key="index" :label="item.label" :value="item.value"
-								v-for="(item, index) in auditStateOption"></el-option>
+								v-for="(item, index) in useStateOption"></el-option>
 						</el-select>
 					</el-form-item>
 
@@ -45,7 +53,7 @@
 				<el-table-column :label="t('opinion.phone')" width="170px" prop="phoneNumber" show-overflow-tooltip />
 				<el-table-column :label="t('coupon.gender')" width="60px" prop="gender" show-overflow-tooltip>
 					<template #default="scope">
-						{{ scope.row.gender == 1 ? '男' : '女' }}
+						{{ scope.row.gender == 1 ? t('coupon.gender1') : t('coupon.gender2') }}
 					</template>
 
 				</el-table-column>
@@ -124,22 +132,22 @@ const ruleFormRef = ref<FormInstance>()
 const btnLoading = ref(false)
 // 获取国际化方法
 const { t } = useI18n();
-const auditStateOption = ref([
+const useStateOption = ref([
 	{
-		label: t('coupon.FIRST_INSTANCE'),
-		value: 'FIRST_INSTANCE'
+		label: t('coupon.useState1'),
+		value: '1'
 	}, {
-		label: t('coupon.SECOND_INSTANCE'),
-		value: 'SECOND_INSTANCE'
+		label: t('coupon.useState0'),
+		value: '0'
+	}
+])
+const genderOption = ref([
+	{
+		label: t('coupon.gender1'),
+		value: '1'
 	}, {
-		label: t('coupon.THIRD_INSTANCE'),
-		value: 'THIRD_INSTANCE'
-	}, {
-		label: t('coupon.ALREADY_PASSED'),
-		value: 'ALREADY_PASSED'
-	}, {
-		label: t('coupon.REJECTED'),
-		value: 'REJECTED'
+		label: t('coupon.gender2'),
+		value: '2'
 	}
 ])
 const dialogVisible = ref(false)

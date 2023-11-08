@@ -45,8 +45,24 @@
 						{{ scope.row.storeVO.name }}
 					</template>
 				</el-table-column>
-				<el-table-column :label="t('broadcast.type')" prop="upperScreenType" show-overflow-tooltip />
-				<el-table-column :label="t('sysuser.lockFlag')" prop="broadcastState" show-overflow-tooltip />
+				<!-- <el-table-column :label="t('broadcast.type')" prop="upperScreenType" show-overflow-tooltip>
+					<template #default="scope">
+						{{ scope.row.storeVO.upperScreenType == 1 ? t('broadcast.type2') : t('broadcast.type1') }}
+					</template>
+				</el-table-column> -->
+				<el-table-column :label="t('broadcast.upperScreenContent')" prop="upperScreenContent" show-overflow-tooltip>
+					<!-- <template #default="scope">
+						{{ scope.row.storeVO.upperScreenType == 1 ? t('broadcast.type2') : t('broadcast.type1') }}
+					</template> -->
+				</el-table-column>
+				<el-table-column :label="t('sysuser.lockFlag')" prop="broadcastState" show-overflow-tooltip>
+					<template #default="scope">
+						<el-tag class="ml-2" :type="scope.row['enabled'] == 1 ? 'success' : 'danger'">{{ scope.row['enabled'] == 0
+							?
+							$t('banner.takedown') : $t('banner.shelves') }} </el-tag>
+
+					</template>
+				</el-table-column>
 				<el-table-column :label="$t('common.action')" fixed="right" width="120">
 					<template #default="scope">
 						<el-button text type="primary">{{ t('common.download') }}</el-button>
@@ -121,10 +137,6 @@ const upperScreenTypes = ref([
 
 /** 搜索表单信息 */
 const queryForm = reactive({
-	jobName: '',
-	jobGroup: '',
-	jobStatus: '',
-	jobExecuteStatus: '',
 });
 /** 是否展示搜索表单 */
 const showSearch = ref(true);

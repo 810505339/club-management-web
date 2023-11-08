@@ -10,11 +10,9 @@ export default {
 	broadcast: {
 		index: '#',
 		type: 'type',
-
 		type1: '文字',
 		type2: '图片',
-
-
+		upperScreenContent: '上屏内容',
 	},
 
 };

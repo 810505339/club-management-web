@@ -1,11 +1,3 @@
-/*
- * @Author: yxx
- * @Date: 2023-09-24 11:45:01
- * @LastEditTime: 2023-11-08 00:46:57
- * @LastEditors: yxx
- * @Description: 
- * @FilePath: \club-management-web\src\views\operating\coupon\i18n\en.ts
- */
 export default {
 	coupon: {
 		index: 'ID',
@@ -40,7 +32,7 @@ export default {
 		useExplain: '使用说明',
 		remark: 'remark',
 		issueWay: '发放方式',
-		issueWay1: '手动发',
+		issueWay1: '手动发放',
 		issueWay2: '系统发放',
 		useScope1: '预订门票',
 		useScope2: '拼酒局',
@@ -69,5 +61,20 @@ export default {
 		CANCELLATION: '已作废',
 		RECYCLE: '已回收',
 		NORMAL: '正常',
+		gender1: '男',
+		gender2: '女',
+		behavior: '行为',
+		customerIsNew: '用户',
+		customerIsNew1: '新用户',
+		customerIsNew0: '老用户',
+		customerInfos: '发放用户',
+		effectiveDate: '生效期',
+		effectiveDate1: '立即',
+		effectiveDate0: '次日',
+		validType: '有效期配置方式',
+		validType1: '时间区间有效',
+		validType0: 'x天内有效',
+		validDay: '有效天数',
+		times: '生效时间区间'
 	},
 };
