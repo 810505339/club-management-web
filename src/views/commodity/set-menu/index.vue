@@ -40,6 +40,16 @@
 						<el-table-column :label="$t('goods.introduce')" prop="introduction" fixed="left" />
 						<el-table-column :label="$t('common.action')" fixed="right">
 							<template #default="scope">
+
+								<el-button icon="Top" text type="primary" @click="handleTakedown(scope.row)"
+									v-if="scope.row['enabled'] == 0">
+									{{ $t('shopList.shelves') }}
+								</el-button>
+								<el-button icon="Bottom" text type="primary" @click="handleTakedown(scope.row)" v-else>
+									{{ $t('shopList.takedown') }}
+								</el-button>
+
+
 								<el-button v-auth="'sys_user_edit'" icon="edit-pen" text type="primary"
 									@click="userDialogRef.openDialog(scope.row.id)">
 									{{ $t('common.editBtn') }}
@@ -139,7 +149,19 @@ const handleDelete = async (ids: string[]) => {
 };
 
 //点击下架
-const handleTakedown = async () => {
-	await useMessageBox().confirm(t('shopList.sureTakedown'),)
+const handleTakedown = async (row: any) => {
+
+
+	const enabled = row.enabled == 1 ? '0' : '1'
+
+
+
+	if (row.enabled == 1) {
+		await useMessageBox().confirm(t('shopList.sureTakedown'))
+	}
+
+	useMessage().success(t('common.optSuccessText'));
+
+	getDataList();
 }
 </script>

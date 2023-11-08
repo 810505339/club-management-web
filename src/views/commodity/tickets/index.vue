@@ -30,13 +30,20 @@
 
 							<el-row v-show="showSearch">
 								<el-form ref="queryRef" :inline="true" :model="state.queryForm" @keyup.enter="getDataList">
-									<el-form-item :label="$t('goods.name')" prop="name">
-										<el-select v-model="state.queryForm.lockFlag" :placeholder="$t('goods.nameSelect')">
-											<el-option v-for="item in lock_flag" :key="item.id" :label="item.label" :value="item.value"
-												clearable>
+
+									<el-form-item :label="areaName" prop="areaList">
+										<el-cascader :options="options" :props="cascaderProps" v-model="state.queryForm.areaList"
+											:show-all-levels="false" />
+									</el-form-item>
+
+									<el-form-item :label="$t('area.state')" prop="enabled">
+										<el-select v-model="state.queryForm.enabled" :placeholder="$t('area.stateSelect')" clearable>
+											<el-option v-for="item, index in enabledList" :key="index" :label="item.label" :value="item.value">
 											</el-option>
 										</el-select>
 									</el-form-item>
+
+
 									<el-form-item>
 										<el-button icon="Search" type="primary" @click="getDataList">{{ $t('common.queryBtn') }}</el-button>
 										<el-button icon="Refresh" @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
@@ -67,7 +74,7 @@
 										{{ scope.row['ticketVO'].areaVO.name }}
 									</template>
 								</el-table-column>
-								<el-table-column :label="time" fixed="left">
+								<el-table-column :label="time" width="300" fixed="left">
 									<template #default="scope">
 										{{ scope.row['beginTime'] }}~{{ scope.row['endTime'] }}
 									</template>
@@ -82,7 +89,7 @@
 										{{ scope.row['amount'] }}
 									</template>
 								</el-table-column>
-								<el-table-column :label="duration">
+								<el-table-column :label="duration" width="300">
 									<template #default="scope">
 										{{ scope.row['disabledTime'] }}
 									</template>
@@ -92,7 +99,7 @@
 										{{ scope.row['enabled'] == 1 ? $t('shopList.shelves') : $t('shopList.takedown') }}
 									</template>
 								</el-table-column>
-								<el-table-column :label="$t('common.action')" width="160" fixed="right">
+								<el-table-column :label="$t('common.action')" width="180" fixed="right">
 									<template #default="scope">
 										<el-button icon="Top" text type="primary" @click="handleTakedown(scope.row)"
 											v-if="scope.row['enabled'] == 0">
@@ -102,18 +109,18 @@
 											{{ $t('shopList.takedown') }}
 										</el-button>
 
-										<el-button v-auth="'sys_user_edit'" icon="edit-pen" text type="primary"
+										<!-- <el-button v-auth="'sys_user_edit'" icon="edit-pen" text type="primary"
 											@click="userDialogRef.openDialog(scope.row.userId)">
 											{{ $t('common.editBtn') }}
-										</el-button>
-										<el-tooltip :content="$t('goods.deleteDisabledTip')" :disabled="scope.row.userId !== '1'"
+										</el-button> -->
+										<!-- <el-tooltip :content="$t('goods.deleteDisabledTip')" :disabled="scope.row.userId !== '1'"
 											placement="top">
 											<span style="margin-left: 12px">
 												<el-button icon="delete" v-auth="'sys_user_del'" :disabled="scope.row.username === 'admin'" text
 													type="primary" @click="handleDelete([scope.row.userId])">{{ $t('common.delBtn') }}
 												</el-button>
 											</span>
-										</el-tooltip>
+										</el-tooltip> -->
 									</template>
 								</el-table-column>
 							</el-table>
@@ -142,10 +149,10 @@ import { getStoreName } from '/@/api/admin/store';
 import { getTicketAll, getTicketDetail, updateEnabledByTicketDetail } from '/@/api/admin/commodity';
 import { useUserInfo } from '/@/stores/userInfo';
 import { useMessage, useMessageBox } from '/@/hooks/message';
+import { storeAreaTree } from '/@/api/operating/coupon';
 const store = useUserInfo()
 const fileCommonUrl = computed(() => store.userInfos.fileCommonUrl)
-
-
+const options = ref([])
 const { t } = useI18n();
 const { name,
 	areaName,
@@ -154,7 +161,10 @@ const { name,
 	sum,
 	duration,
 	price } = useTranslateText(t)
-
+const enabledList = [
+	{ label: '上架', value: '1' },
+	{ label: '下架', value: '0' },
+]
 const queryRef = ref();
 // 定义变量内容
 const userDialogRef = ref();
@@ -167,42 +177,34 @@ type ITicket = {
 const ticketsList = ref<ITicket[]>([])
 const activeId = ref('235645682655')
 
+const cascaderProps = {
+	label: "name",
+	value: 'id',
+	children: 'list',
+	checkStrictly: true
+}
+
 // 定义表格查询、后台调用的API
 const state: BasicTableProps = reactive<BasicTableProps>({
 	queryForm: {
-		state: '',
-		name: '',
+		enabled: '',
+		storeId: '',
+		areaId: '',
+		areaList: []
 	},
 	pageList: async (pamars) => {
-		await handleStoreNameList()
-		return await getTicketDetail(pamars)
+		console.log(pamars)
+		const temp = {
+			...pamars,
+			storeId: pamars?.areaList?.[0],
+			areaId: pamars?.areaList?.[1]
+		}
+		// console.log(temp);
+		return await getTicketDetail(temp)
 	},
 });
 const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
-function active(item: ITicket) {
-	activeId.value = item.id
-}
-//跟新下拉门店名称
-const handleStoreNameList = async () => {
-	const { data } = await getStoreName()
-	storeNameList.value = data
 
-
-}
-
-const handlegetTicketList = async () => {
-	const { data } = await getTicketAll()
-	ticketsList.value = data.map(item => {
-		return {
-			...item,
-			img: item.pictureFileVOs[0] ? `${fileCommonUrl.value}/${item.pictureFileVOs[0]?.fileName}` : undefined
-		}
-	})
-}
-
-onMounted(async () => {
-	await handlegetTicketList()
-})
 
 //点击下架
 const handleTakedown = async (row: any) => {
@@ -226,6 +228,16 @@ const handleTakedown = async (row: any) => {
 
 
 }
+
+const getstoreAreaTree = async () => {
+	const { data } = await storeAreaTree({ type: 0 })
+	options.value = data
+}
+
+onMounted(async () => {
+	await getstoreAreaTree()
+})
+
 
 </script>
 <style scoped>

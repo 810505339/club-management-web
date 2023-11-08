@@ -11,6 +11,17 @@
           @change="(_, fileList) => uploadChange('pictureIds', fileList)" />
       </el-form-item>
 
+
+      <el-form-item :label="t('area.store')" prop="storeIds">
+        <el-select v-model="form.storeIds" multiple :placeholder="$t('area.nameSelect')" clearable>
+          <el-option v-for="item, index in storeNameList" :key="index" :label="item.name" :value="item.id" clearable>
+          </el-option>
+        </el-select>
+      </el-form-item>
+
+
+
+
       <el-form-item :label="t('goods.introduce')" prop="introduction">
         <el-input type="textarea" :placeholder="`${t('common.please')}${t('goods.introduce')}`"
           v-model="form.introduction" />
@@ -35,6 +46,7 @@ import { AdddrinksMeal, EditdrinksMeal, getAreaById } from '/@/api/admin/commodi
 import { useI18n } from 'vue-i18n';
 import { rule } from '/@/utils/validate';
 import upload from "/@/components/Upload/index.vue";
+import { getStoreName } from '/@/api/admin/store';
 
 
 
@@ -46,7 +58,7 @@ const IMG_PROPS = {
 
 }
 
-
+const storeNameList = ref<any[]>([])
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
 
@@ -70,6 +82,7 @@ const form = reactive({
   pictureIds: [],
   introduction: '',
   id: undefined,
+  storeIds: []
 });
 
 // 定义校验规则
@@ -87,18 +100,23 @@ const dataRules = ref({
 });
 
 // 打开弹窗
-const openDialog = (id: string) => {
+const openDialog = async (id: string) => {
   visible.value = true;
+  loading.value = true;
   form.id = undefined;
+  await handleStoreNameList()
+  loading.value = false;
   // 重置表单数据
   nextTick(() => {
     dataFormRef.value?.resetFields();
+
   });
 
   // 获取sysOauthClientDetails信息
   if (id) {
     form.id = id;
-    getStoreDetail(id);
+    await getStoreDetail(id);
+    loading.value = false;
   }
 };
 
@@ -137,6 +155,15 @@ const uploadChange = (type: 'pictureIds', fileList: any[]) => {
   form[type] = fileList
 
 }
+
+//跟新下拉门店名称
+const handleStoreNameList = async () => {
+  const { data } = await getStoreName()
+  storeNameList.value = data
+  console.log(data);
+
+}
+
 
 // 暴露变量
 defineExpose({

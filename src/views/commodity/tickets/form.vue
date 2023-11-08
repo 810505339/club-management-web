@@ -2,35 +2,33 @@
   <el-dialog :close-on-click-modal="false" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" width="600"
     draggable v-model="visible">
     <el-form :model="form" formDialogRef label-width="120px" ref="dataFormRef" v-loading="loading">
-      <el-form-item :label="name" prop="name">
-        <el-input v-model="form.name" />
+      <el-form-item :label="ticketsDemo" prop="name">
+        <el-select v-model="form.ticketId">
+          <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id" />
+        </el-select>
       </el-form-item>
 
 
-
-
-      <el-form-item :label="time" prop="sum">
+      <el-form-item :label="time" prop="time">
         <el-date-picker :end-placeholder="$t('syslog.inputEndPlaceholderTip')"
           :start-placeholder="$t('syslog.inputStartPlaceholderTip')" range-separator="To" type="datetimerange"
-          value-format="YYYY-MM-DD HH:mm:ss" />
+          value-format="YYYY-MM-DD HH:mm:ss" v-model="form.time" />
       </el-form-item>
 
-      <el-form-item :label="duration" prop="sum">
+      <el-form-item :label="duration" prop="duration">
         <el-date-picker :end-placeholder="$t('syslog.inputEndPlaceholderTip')"
           :start-placeholder="$t('syslog.inputStartPlaceholderTip')" range-separator="To" type="datetimerange"
-          value-format="YYYY-MM-DD HH:mm:ss" />
+          value-format="YYYY-MM-DD HH:mm:ss" v-model="form.duration" />
       </el-form-item>
 
 
 
-      <el-form-item :label="sum" prop="sum">
-        <el-input-number :step="1" :min="0" />
+      <el-form-item :label="sum" prop="ticketDetailNumber">
+        <el-input-number :step="1" :min="0" v-model="form.ticketDetailNumber" />
       </el-form-item>
-      <el-form-item :label="price + '($)'" prop="sum">
-        <el-input-number :precision="2" :step="0.01" :min="0.00" />
+      <el-form-item :label="price + '($)'" prop="amount">
+        <el-input-number :precision="2" :step="0.01" :min="0.00" v-model="form.amount" />
       </el-form-item>
-
-
 
     </el-form>
     <template #footer>
@@ -49,7 +47,7 @@ import { useI18n } from 'vue-i18n';
 import { rule } from '/@/utils/validate';
 import { useTranslateText } from './hooks/translate';
 import { storeAreaTree } from '/@/api/operating/coupon'
-import { addTicket, putTicket, getTicketById, deleteTicketByIds } from '/@/api/admin/commodity'
+import { addTicket, putTicket, getTicketById, deleteTicketByIds, getTicketAll, addTicketDetail } from '/@/api/admin/commodity'
 import upload from "/@/components/Upload/index.vue";
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
@@ -60,27 +58,15 @@ const IMG_PROPS = {
   fileType: ['jpg', 'png', 'jpeg']
 }
 
-const cascaderProps = {
-  label: "name",
-  value: 'id',
-  children: 'list',
-}
+
 
 const { t } = useI18n();
 const {
-  name,
-  areaName,
   time,
-  state,
   sum,
   duration,
   price,
-  detail,
-  image,
-  beginTime,
-  endTime,
-  shelvesTime,
-  takedownTime
+  ticketsDemo
 } = useTranslateText(t)
 
 // 定义变量内容
@@ -91,24 +77,18 @@ const loading = ref(false);
 defineProps<{ storeNameList: any[] }>()
 
 
-type IForm = {
-  id: undefined | string;
-  name: string;
-  storeId: string;
-  description: string
-  pictureIds: any[]
-  areaId: string
-  areaList: any[]
-}
-// 提交表单数据
-const form = reactive<IForm>({
+//提交表单数据
+const form = reactive({
   id: undefined,
-  storeId: '',
-  name: '',
-  description: '',
-  pictureIds: [],
-  areaList: [],
-  areaId: ''
+  ticketId: '',
+  beginTime: '',
+  endTime: '',
+  enabledTime: '',
+  disabledTime: '',
+  ticketDetailNumber: 0,
+  amount: 0,
+  time: '',
+  duration: '',
 });
 
 // 定义校验规则
@@ -141,19 +121,19 @@ const dataRules = ref({
   webServerRedirectUri: [{ required: true, message: '回调地址不能为空', trigger: 'blur' }],
 });
 
-const options = ref([])
+const options = ref<{ id: string, name: string }[]>([])
 
 
 
-const getstoreAreaTree = async () => {
-  const { data } = await storeAreaTree({ type: 0 })
+const getTicketAllApi = async () => {
+  const { data } = await getTicketAll()
   options.value = data
 }
 
 // 打开弹窗
 const openDialog = async (id: string) => {
 
-  await getstoreAreaTree()
+  await getTicketAllApi()
   visible.value = true;
   form.id = '';
 
@@ -181,11 +161,12 @@ const onSubmit = async () => {
     loading.value = true;
     const temp = {
       ...form,
-      pictureIds: form.id ? form.pictureIds : form.pictureIds.map(item => item.id),
-      storeId: Number(form.areaList[0]),
-      areaId: String(form.areaList[1])
+      beginTime: form.time[0],
+      endTime: form.time[0],
+      enabledTime: form.duration[0],
+      disabledTime: form.duration[1],
     }
-    form.id ? await putTicket(temp) : await addTicket(temp);
+    await addTicketDetail(temp);
 
     useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));
     visible.value = false;
