@@ -2,9 +2,6 @@
   <el-dialog :close-on-click-modal="false" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" width="600"
     draggable v-model="visible">
     <el-form :model="form" formDialogRef label-width="120px" ref="dataFormRef" v-loading="loading">
-      <el-form-item :label="name" prop="name">
-        <el-input v-model="form.name" />
-      </el-form-item>
 
 
       <el-form-item :label="areaName" prop="areaList">
@@ -164,7 +161,7 @@ const onSubmit = async () => {
     loading.value = true;
     const temp = {
       ...form,
-      pictureIds: form.id ? form.pictureIds : form.pictureIds.map(item => item.id),
+      pictureIds: form.pictureIds.map(item => item.id),
       storeId: Number(form.areaList[0]),
       areaId: String(form.areaList[1])
     }
@@ -192,7 +189,7 @@ const getInfo = async (id: string) => {
     pictureIds: data.pictureFileVOs.map((item) => ({ name: item.fileName, url: item.fileUrl, id: item.id }))
 
   });
-  console.log(form);
+
 
 };
 

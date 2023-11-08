@@ -103,6 +103,15 @@ export const getTicketAll = () => {
   })
 }
 
+export const getTicket = (params: any) => {
+  return request({
+    url: `/operation/ticket/getPage`,
+    method: 'get',
+    params
+  })
+}
+
+
 
 
 
@@ -111,7 +120,7 @@ export const getTicketDetail = (data: any) => {
   return request({
     url: `/operation/ticketDetail/page`,
     method: 'get',
-    data
+    params: data
   })
 }
 
@@ -123,3 +132,11 @@ export const updateEnabledByTicketDetail = (data: Object) => {
 
   });
 }
+export const addTicketDetail = (data: any) => {
+  return request({
+    url: `/operation/ticketDetail`,
+    method: 'post',
+    data
+  })
+}
+
