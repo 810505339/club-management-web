@@ -274,7 +274,7 @@ const handleEditJob = (row) => {
 const jobLogRef = ref()
 const openJobLog = (row) => {
 
-	jobLogRef.value.openDialog(row);
+	jobLogRef.value.openDialog(row.id);
 
 }
 

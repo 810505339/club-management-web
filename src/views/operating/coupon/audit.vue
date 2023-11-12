@@ -28,8 +28,6 @@
 			</el-row>
 			<el-row>
 				<div class="mb8" style="width: 100%">
-
-
 					<right-toolbar @queryTable="getDataList" class="ml10" style="float: right; margin-right: 20px"
 						v-model:showSearch="showSearch" />
 				</div>
@@ -43,15 +41,16 @@
 					<template #default="scope">
 						{{ scope.row?.couponTypeDetailVO.type ? '【' + t('coupon.' + scope.row.couponTypeDetailVO.type) + '】' : '-' }}
 
-						{{ scope.row?.couponTypeDetailVO.type == 'CASH_VOUCHERS' ?
-							`抵扣${scope.row?.couponTypeDetailVO.discount}` : scope.row?.couponTypeDetailVO.type ==
-								'MAX_OUT_VOUCHERS' ? `满${scope.row?.couponTypeDetailVO.doorSill}减${scope.row?.couponTypeDetailVO.discount}`
-								: scope.row?.couponTypeDetailVO.type ==
-									'DISCOUNT_VOUCHERS' ?
-									`${scope.row?.couponTypeDetailVO.doorSill ? '满' + scope.row?.couponTypeDetailVO.doorSill + '打' :
-										''}${scope.row?.couponTypeDetailVO.discount}折`
-									:
-									''
+						{{
+							scope.row?.couponTypeDetailVO.type == 'CASH_VOUCHERS'
+							? `抵扣${scope.row?.couponTypeDetailVO.discount}`
+							: scope.row?.couponTypeDetailVO.type == 'MAX_OUT_VOUCHERS'
+								? `满${scope.row?.couponTypeDetailVO.doorSill}减${scope.row?.couponTypeDetailVO.discount}`
+								: scope.row?.couponTypeDetailVO.type == 'DISCOUNT_VOUCHERS'
+									? `${scope.row?.couponTypeDetailVO.doorSill ? '满' + scope.row?.couponTypeDetailVO.doorSill + '打' :
+										''}${scope.row?.couponTypeDetailVO.discount
+									}折`
+									: ''
 						}}
 					</template></el-table-column>
 				<el-table-column :label="t('coupon.createdTime')" width="170px" prop="createTime" show-overflow-tooltip />
@@ -83,14 +82,15 @@
 		<CouponIssueDialog @refresh="getDataList()" ref="couponIssueDialogRef" />
 		<el-dialog v-model="dialogVisible" :title="t('common.audit')" width="500px">
 			<el-form :model="form" :rules="rules" ref="ruleFormRef" label-width="100px">
-				<el-form-item :label="t('common.audit')" prop="state">
-					<el-radio-group v-model="form.state" class="ml-4">
-						<el-radio label="1"> {{ t('message.evaluation.status4') }}</el-radio>
-						<el-radio label="0">{{ t('message.evaluation.status3') }} </el-radio>
+				<el-form-item :label="t('common.audit')" prop="reqDTO.auditAction">
+					<el-radio-group v-model="form.reqDTO.auditAction" class="ml-4">
+						<el-radio label="PASS"> {{ t('message.evaluation.status4') }}</el-radio>
+						<el-radio label="REJECT">{{ t('message.evaluation.status3') }} </el-radio>
 					</el-radio-group>
 				</el-form-item>
-				<el-form-item :label="t('message.evaluation.reason')" prop="msg">
-					<el-input v-model="form.msg" type="textarea" autocomplete="off" />
+				<el-form-item :label="t('message.evaluation.reason')" prop="reqDTO.remark">
+					<el-input v-model="form.reqDTO.remark" type="textarea" placeholder='请仔细填写"审核说明"描述清楚详细原因，以便后续追溯'
+						autocomplete="off" />
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" @click="toUpdateEnabled(ruleFormRef)">{{ t('common.confirmButtonText') }}</el-button>
@@ -102,14 +102,12 @@
 </template>
 
 <script lang="ts" name="systemSysJob" setup>
-
 import { BasicTableProps, useTable } from '/@/hooks/table';
-import { delObj, runJobRa, shutDownJobRa, startJobRa } from '/@/api/daemon/job';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 import { getCouponAudit, updateEnabled } from '/@/api/operating/coupon';
-import type { FormInstance, FormRules } from 'element-plus'
-const ruleFormRef = ref<FormInstance>()
+import type { FormInstance, FormRules } from 'element-plus';
+const ruleFormRef = ref<FormInstance>();
 // 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
 const CouponIssueDialog = defineAsyncComponent(() => import('./couponIssue.vue'));
@@ -119,69 +117,75 @@ const { t } = useI18n();
 const statusOption = ref([
 	{
 		label: t('coupon.status1'),
-		value: '1'
-	}, {
-		label: t('coupon.status1'),
-		value: '0'
+		value: '1',
 	},
-])
+	{
+		label: t('coupon.status1'),
+		value: '0',
+	},
+]);
 const auditStateOption = ref([
 	{
 		label: t('coupon.FIRST_INSTANCE'),
-		value: 'FIRST_INSTANCE'
-	}, {
+		value: 'FIRST_INSTANCE',
+	},
+	{
 		label: t('coupon.SECOND_INSTANCE'),
-		value: 'SECOND_INSTANCE'
-	}, {
+		value: 'SECOND_INSTANCE',
+	},
+	{
 		label: t('coupon.THIRD_INSTANCE'),
-		value: 'THIRD_INSTANCE'
-	}, {
+		value: 'THIRD_INSTANCE',
+	},
+	{
 		label: t('coupon.ALREADY_PASSED'),
-		value: 'ALREADY_PASSED'
-	}, {
+		value: 'ALREADY_PASSED',
+	},
+	{
 		label: t('coupon.REJECTED'),
-		value: 'REJECTED'
-	}
-])
-const dialogVisible = ref(false)
+		value: 'REJECTED',
+	},
+]);
+const dialogVisible = ref(false);
 const form = ref({
-	id: null,
-	msg: '',
-	state: '1'
-})
+	reqDTO: {
+		taskId: 0,
+		auditAction: '',
+		remark: '',
+	},
+	couponId: 0,
+});
 const rules = reactive<FormRules<RuleForm>>({
-	msg: [
-		{ required: true, message: t('common.please'), trigger: 'blur' },
-	],
-})
+	'reqDTO.remark': [{ required: true, message: t('common.please'), trigger: 'blur' }],
+});
 /** 审核操作 */
 const handleDelete = (row) => {
 	form.value = {
-		id: row.id,
-		msg: '',
-		state: '1'
-	}
+		reqDTO: {
+			taskId: row.taskId,
+			auditAction: '',
+			remark: '',
+		},
+		couponId: row.id,
+	};
 
-	dialogVisible.value = true
-
-
+	dialogVisible.value = true;
 };
 const toUpdateEnabled = async (formEl: FormInstance | undefined) => {
-	if (!formEl) return
+	if (!formEl) return;
 	await formEl.validate(async (valid) => {
 		if (valid) {
 			try {
 				updateEnabled(form.value);
 				getDataList();
 				useMessage().success(t('common.optSuccessText'));
-				dialogVisible.value = false
+				dialogVisible.value = false;
 			} catch (error: any) {
 				// useMessage().error('删除失败');
 			}
 		}
-	})
-
-}
+	});
+};
 
 /** 表单弹窗引用 */
 const formDialogRef = ref();
@@ -189,8 +193,7 @@ const formDialogRef = ref();
 const couponIssueDialogRef = ref();
 
 /** 搜索表单信息 */
-const queryForm = reactive({
-});
+const queryForm = reactive({});
 /** 是否展示搜索表单 */
 const showSearch = ref(true);
 
@@ -204,7 +207,7 @@ const multiple = ref(true);
 const state = reactive<BasicTableProps>({
 	queryForm,
 	pageList: async (pamars) => {
-		return await getCouponAudit(pamars)
+		return await getCouponAudit(pamars);
 	},
 });
 
@@ -224,40 +227,11 @@ const handleSelectionChange = (rows: any) => {
 };
 
 const resetForm = (formEl: FormInstance | undefined) => {
-	if (!formEl) return
-	formEl.resetFields()
-	dialogVisible.value = false
-}
-
-/** 编辑作业 */
-const handleEditJob = (row) => {
-	formDialogRef.value.openDialog(row.id);
+	if (!formEl) return;
+	formEl.resetFields();
+	dialogVisible.value = false;
 };
 
-
-
-
-/** 运行作业 */
-const handleRunJob = async (row, type) => {
-	if (type) {
-		couponIssueDialogRef.value.openDialog(row);
-	} else {
-		try {
-			await useMessageBox().confirm(`立刻执行一次任务(任务名称: ${row.jobName}), 是否继续?`);
-		} catch {
-			return;
-		}
-
-		try {
-			await runJobRa(row.id);
-			getDataList();
-			useMessage().success(t('common.optSuccessText'));
-		} catch (err: any) {
-			useMessage().error('运行失败');
-		}
-	}
-
-};
 
 
 </script>

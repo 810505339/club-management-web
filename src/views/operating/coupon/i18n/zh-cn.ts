@@ -81,6 +81,12 @@ export default {
 		REJECT: '拒绝',
 		HAVE_BEEN_USED: '已使用',
 		WAITING_TO_BE_USED: '待使用',
-		EXPIRED: '已过期'
+		EXPIRED: '已过期',
+		userBehavior: '用户行为',
+		NEW: '新建',
+		EDIT: '编辑',
+		AUDIT: '审核',
+		LIFT_AUDIT: '提起审核',
+		ISSUE: '发放',
 	},
 };

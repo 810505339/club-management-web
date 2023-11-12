@@ -1,7 +1,7 @@
 /*
  * @Author: yxx
  * @Date: 2023-09-24 11:45:01
- * @LastEditTime: 2023-11-12 17:05:07
+ * @LastEditTime: 2023-11-12 23:48:39
  * @LastEditors: yxx
  * @Description: 
  * @FilePath: \club-management-web\src\views\operating\coupon\i18n\en.ts
@@ -89,6 +89,12 @@ export default {
 		REJECT: '拒绝',
 		HAVE_BEEN_USED: '已使用',
 		WAITING_TO_BE_USED: '待使用',
-		EXPIRED: '已过期'
+		EXPIRED: '已过期',
+		userBehavior: '用户行为',
+		NEW: '新建',
+		EDIT: '编辑',
+		AUDIT: '审核',
+		LIFT_AUDIT: '提起审核',
+		ISSUE: '发放',
 	},
 };
