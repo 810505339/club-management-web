@@ -1,7 +1,7 @@
 /*
  * @Author: yxx
  * @Date: 2023-09-27 20:06:01
- * @LastEditTime: 2023-11-05 12:07:06
+ * @LastEditTime: 2023-11-12 23:07:00
  * @LastEditors: yxx
  * @Description: 
  * @FilePath: \club-management-web\src\i18n\pages\form\en.ts
@@ -66,6 +66,8 @@ export default {
 		name: ' name',
 		detail: ' detail',
 		image: ' image',
+		PASS: '通过',
+		REJECT: 'REJECT'
 	},
 	message: {
 		box: {

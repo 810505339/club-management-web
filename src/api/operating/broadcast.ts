@@ -1,7 +1,7 @@
 /*
  * @Author: yxx
  * @Date: 2023-10-29 10:40:54
- * @LastEditTime: 2023-11-05 13:19:46
+ * @LastEditTime: 2023-11-12 23:10:24
  * @LastEditors: yxx
  * @Description: 
  * @FilePath: \club-management-web\src\api\operating\broadcast.ts
@@ -32,11 +32,9 @@ export function addObj(obj?: Object) {
  */
 export const updateEnabled = (data: Object) => {
 	return request({
-		url: `/operation/carousel/updateEnabled`,
+		url: `/operation/broadcast/broadcastAudit`,
 		method: 'put',
-		headers: {
-			'Content-Type': FORM_CONTENT_TYPE,
-		},
+
 		data
 
 	});

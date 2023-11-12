@@ -59,7 +59,8 @@ export default {
 		name: '名称',
 		detail: '详情',
 		image: '图片',
-
+		PASS: '通过',
+		REJECT: 'REJECT'
 	},
 	message: {
 		box: {
@@ -71,7 +72,8 @@ export default {
 			status2: '已通过',
 			status3: '不通过',
 			status4: '通过',
-			reason: '原因'
+			reason: '原因',
+
 		},
 
 	},

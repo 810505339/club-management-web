@@ -10,8 +10,8 @@
 							</el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item :label="t('param.status')" prop="status">
-						<el-select :placeholder="t('common.select') + t('param.status')" v-model="state.queryForm.status">
+					<el-form-item :label="t('param.status')" prop="auditState">
+						<el-select :placeholder="t('common.select') + t('param.status')" v-model="state.queryForm.auditState">
 							<el-option :key="index" :label="item.label" :value="item.value"
 								v-for="(item, index) in evaluationStatus"></el-option>
 						</el-select>
@@ -43,8 +43,9 @@
 				<el-table-column :label="t('evaluation.msg')" prop="commentContent" show-overflow-tooltip />
 				<el-table-column :label="$t('common.action')" fixed="right" width="80">
 					<template #default="scope">
-						<el-button v-auth="'job_sys_job_del'" @click="handleDelete(scope.row)" text type="primary">{{
-							$t('common.audit') }} </el-button>
+						<el-button v-if="scope.row.auditState === 'IN_AUDIT'" v-auth="'job_sys_job_del'"
+							@click="handleDelete(scope.row)" text type="primary">{{
+								$t('common.audit') }} </el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -52,14 +53,15 @@
 		</div>
 		<el-dialog v-model="dialogVisible" :title="t('common.audit')" width="500px">
 			<el-form :model="form" :rules="rules" ref="ruleFormRef" label-width="100px">
-				<el-form-item :label="t('common.audit')" prop="state">
-					<el-radio-group v-model="form.state" class="ml-4">
-						<el-radio label="1"> {{ t('message.evaluation.status4') }}</el-radio>
-						<el-radio label="0">{{ t('message.evaluation.status3') }} </el-radio>
+				<el-form-item :label="t('common.audit')" prop="reqDTO.auditAction">
+					<el-radio-group v-model="form.reqDTO.auditAction" class="ml-4">
+						<el-radio label="PASS"> {{ t('message.evaluation.status4') }}</el-radio>
+						<el-radio label="REJECT">{{ t('message.evaluation.status3') }} </el-radio>
 					</el-radio-group>
 				</el-form-item>
-				<el-form-item v-if="form.state == 0" :label="t('message.evaluation.reason')" prop="msg">
-					<el-input v-model="form.msg" type="textarea" autocomplete="off" />
+				<el-form-item v-if="form.reqDTO.auditAction == 'REJECT'" :label="t('message.evaluation.reason')"
+					prop="reqDTO.remark">
+					<el-input v-model="form.reqDTO.remark" type="textarea" autocomplete="off" />
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" @click="toUpdateEnabled(ruleFormRef)">{{ t('common.confirmButtonText') }}</el-button>
@@ -85,20 +87,20 @@ const { t } = useI18n();
 /** 搜索表单信息 */
 const queryForm = reactive({
 	storeId: '',
-	status: null
+	auditAction: null
 });
 /** 是否展示搜索表单 */
 const showSearch = ref(true);
 const evaluationStatus = ref([
 	{
 		label: t('message.evaluation.status1'),
-		value: 0
+		value: 'IN_AUDIT'
 	}, {
 		label: t('message.evaluation.status2'),
-		value: 1
+		value: 'PASS'
 	}, {
 		label: t('message.evaluation.status3'),
-		value: 2
+		value: 'REJECT'
 	}
 ])
 // 多选变量
@@ -127,22 +129,29 @@ const resetQuery = () => {
 	getDataList();
 };
 const dialogVisible = ref(false)
-const form = ref({
-	id: null,
-	msg: '',
-	state: '1'
-})
+const form = ref(
+	{
+		reqDTO: {
+			taskId: null,
+			remark: '',
+			auditAction: 'PASS'
+		},
+		commentId: null
+	})
 const rules = reactive<FormRules<RuleForm>>({
-	msg: [
+	'reqDTO.remark': [
 		{ required: true, message: t('common.please'), trigger: 'blur' },
 	],
 })
 /** 审核操作 */
 const handleDelete = (row) => {
 	form.value = {
-		id: row.id,
-		msg: '',
-		state: '1'
+		reqDTO: {
+			taskId: row.taskId,
+			remark: '',
+			auditAction: 'PASS'
+		},
+		commentId: row.id
 	}
 
 	dialogVisible.value = true
