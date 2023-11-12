@@ -109,8 +109,6 @@ const dataFormRef = ref();
 const visible = ref(false);
 const loading = ref(false);
 
-// 定义字典
-const { misfire_policy, job_type } = useDict('job_status', 'job_execute_status', 'misfire_policy', 'job_type');
 
 // 提交表单数据
 const form = reactive({

@@ -68,20 +68,14 @@
 				</el-table-column>
 				<el-table-column :label="t('coupon.useState')" width="130px" prop="useState" show-overflow-tooltip>
 					<template #default="scope">
-						{{ scope.row.useState == 1 ? t('coupon.useState1') : t('coupon.useState0') }}
-
+						{{ t('coupon.' + scope.row.useState) }}
 					</template>
 				</el-table-column>
 				<el-table-column :label="t('coupon.useTime')" width="170px" prop="useTime" show-overflow-tooltip />
-				<el-table-column :label="t('coupon.couponState')" width="130px" prop="useState" show-overflow-tooltip>
-					<template #default="scope">
-						{{ scope.row.couponState ? t('coupon.' + scope.row.couponState) : '-' }}
 
-					</template>
-				</el-table-column>
 				<el-table-column :label="$t('common.action')" fixed="right" width="150">
 					<template #default="scope">
-						<template v-if="scope.row.useState == 0 && scope.row.couponState == 'NORMAL'">
+						<template v-if="scope.row.useState == 'WAITING_TO_BE_USED'">
 							<el-button v-auth="'job_sys_job_start_job'" @click="handleDelete(scope.row, 1)" text
 								type="primary">回收</el-button>
 							<el-button v-auth="'job_sys_job_start_job'" @click="handleDelete(scope.row, 2)" text

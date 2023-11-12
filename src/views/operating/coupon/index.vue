@@ -83,18 +83,20 @@
 				<el-table-column :label="$t('common.action')" fixed="right" width="150">
 					<template #default="scope">
 						<!-- issueWay 发放方式,1:指定用户发放 ==手动发放，0:按条件发放===系统发放 -->
-						<template v-if="scope.row.auditState != 'ALREADY_PASSED'">
+						<template v-if="!scope.row.auditState">
 							<el-button v-auth="'job_sys_job_edit'" @click="handleDelete(scope.row)" text type="primary">{{
 								$t('coupon.audit') }} </el-button>
 							<el-button v-auth="'job_sys_job_edit'" @click="handleEditJob(scope.row)" text type="primary">{{
 								$t('common.editBtn') }} </el-button>
 						</template>
-						<template v-else>
-							<el-button v-if="scope.row.status == 'HAVE_NOT_STARTED'" v-auth="'job_sys_job_start_job'"
+						<template v-if="scope.row.auditState == 'PASS'">
+							<el-button v-if="scope.row.status == 'STOP_ISSUE'" v-auth="'job_sys_job_start_job'"
 								@click="handleRunJob(scope.row, 1)" text type="primary">发放</el-button>
 							<el-button v-if="scope.row.status == 'UNDER_RELEASE'" v-auth="'job_sys_job_start_job'"
 								@click="handleRunJob(scope.row, 0)" text type="primary">停止发放</el-button>
 						</template>
+						<el-button v-auth="'job_sys_job_start_job'" @click="openJobLog(scope.row)" text
+							type="primary">操作记录</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -104,6 +106,7 @@
 		<!-- 编辑、新增  -->
 		<form-dialog @refresh="getDataList()" ref="formDialogRef" />
 		<CouponIssueDialog @refresh="getDataList()" ref="couponIssueDialogRef" />
+		<JobLog ref="jobLogRef" />
 		<el-dialog v-model="dialogVisible" :title="t('common.audit')" width="500px">
 			<el-form :model="form" :rules="rules" ref="ruleFormRef" label-width="100px">
 				<el-form-item :label="t('common.audit')" prop="state">
@@ -129,13 +132,13 @@
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
-import { fetchList, updateEnabled, couponStopIssue } from '/@/api/operating/coupon';
+import { fetchList, updateEnabled, couponStopIssue, couponCreateAudit } from '/@/api/operating/coupon';
 import type { FormInstance, FormRules } from 'element-plus'
 const ruleFormRef = ref<FormInstance>()
 // 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
 const CouponIssueDialog = defineAsyncComponent(() => import('./couponIssue.vue'));
-
+const JobLog = defineAsyncComponent(() => import('./job-log.vue'));
 // 获取国际化方法
 const { t } = useI18n();
 const statusOption = ref([
@@ -190,7 +193,7 @@ const handleDelete = async (row) => {
 	}
 
 	try {
-		// await runJobRa(row.id);
+		await couponCreateAudit({ businessType: 'COUPON', businessId: row.id });
 		getDataList();
 		useMessage().success(t('common.optSuccessText'));
 	} catch (err: any) {
@@ -268,8 +271,12 @@ const handleEditJob = (row) => {
 	formDialogRef.value.openDialog(row.id);
 };
 
+const jobLogRef = ref()
+const openJobLog = (row) => {
 
+	jobLogRef.value.openDialog(row);
 
+}
 
 /** 运行作业 */
 const handleRunJob = async (row, type) => {

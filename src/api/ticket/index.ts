@@ -1,17 +1,17 @@
 /*
  * @Author: yxx
  * @Date: 2023-10-29 10:40:54
- * @LastEditTime: 2023-11-12 17:03:14
+ * @LastEditTime: 2023-11-12 18:35:56
  * @LastEditors: yxx
  * @Description: 
- * @FilePath: \club-management-web\src\api\operating\coupon.ts
+ * @FilePath: \club-management-web\src\api\ticket\index.ts
  */
 import request from '/@/utils/request';
 const FORM_CONTENT_TYPE = 'application/x-www-form-urlencoded';
 
 export function fetchList(query?: Object) {
 	return request({
-		url: '/operation/coupon/page',
+		url: '/operation/ticketCheck/page',
 		method: 'get',
 		params: query,
 	});
