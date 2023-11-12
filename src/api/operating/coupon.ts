@@ -1,7 +1,7 @@
 /*
  * @Author: yxx
  * @Date: 2023-10-29 10:40:54
- * @LastEditTime: 2023-11-12 17:03:14
+ * @LastEditTime: 2023-11-13 00:01:59
  * @LastEditors: yxx
  * @Description: 
  * @FilePath: \club-management-web\src\api\operating\coupon.ts
@@ -32,7 +32,7 @@ export function addObj(obj?: Object) {
  */
 export const updateEnabled = (data: Object) => {
 	return request({
-		url: `/operation/carousel/updateEnabled`,
+		url: `/operation/coupon/couponAudit`,
 		method: 'put',
 		headers: {
 			'Content-Type': FORM_CONTENT_TYPE,

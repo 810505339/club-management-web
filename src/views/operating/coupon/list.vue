@@ -36,11 +36,6 @@
 			</el-row>
 			<el-row>
 				<div class="mb8" style="width: 100%">
-					<el-button v-auth="'job_sys_job_add'" @click="formDialogRef.openDialog()" class="ml10" icon="folder-add"
-						type="primary">
-						{{ $t('common.addBtn') }}
-					</el-button>
-
 					<right-toolbar @queryTable="getDataList" class="ml10" style="float: right; margin-right: 20px"
 						v-model:showSearch="showSearch" />
 				</div>
