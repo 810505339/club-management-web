@@ -34,7 +34,7 @@
 						<el-table-column :label="name" fixed="left" prop="name">
 
 						</el-table-column>
-						<el-table-column :label="areaName" fixed="left">
+						<el-table-column :label="areaName" prop="areaVO.name" fixed="left">
 
 						</el-table-column>
 						<el-table-column :label="detail" prop="description" fixed="left">

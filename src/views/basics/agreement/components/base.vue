@@ -2,7 +2,7 @@
   <div class="layout-padding">
     <splitpanes>
       <pane>
-        <div class="layout-padding-auto layout-padding-view">
+        <el-scrollbar class="layout-padding-auto " height="100%">
           <el-form :model="form" formDialogRef label-width="120px" ref="dataFormRef" style="max-width: 1024px">
             <el-form-item :label="t('agreement.namechina')" prop="webServerRedirectUri">
               <el-input :placeholder="t('common.please') + t('agreement.namechina')" v-model="form.agreementNameZh" />
@@ -24,7 +24,7 @@
             </el-form-item>
           </el-form>
 
-        </div>
+        </el-scrollbar>
       </pane>
     </splitpanes>
 
