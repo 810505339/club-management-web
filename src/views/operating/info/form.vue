@@ -66,7 +66,7 @@ const dataRules = reactive({
 // 打开弹窗
 const openDialog = (id: string) => {
 	visible.value = true;
-	// form.id = 0;
+	form.id = null;
 
 	// 重置表单数据
 	nextTick(() => {

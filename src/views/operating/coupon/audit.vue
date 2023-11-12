@@ -68,7 +68,7 @@
 				</el-table-column>
 				<el-table-column :label="$t('common.action')" fixed="right" width="150">
 					<template #default="scope">
-						<template v-if="scope.row.auditState != 'ALREADY_PASSED'">
+						<template v-if="scope.row.auditState == 'IN_AUDIT'">
 							<el-button v-auth="'job_sys_job_edit'" @click="handleDelete(scope.row)" text type="primary">{{
 								$t('common.audit') }} </el-button>
 						</template>
@@ -107,7 +107,7 @@ import { BasicTableProps, useTable } from '/@/hooks/table';
 import { delObj, runJobRa, shutDownJobRa, startJobRa } from '/@/api/daemon/job';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
-import { fetchList, updateEnabled } from '/@/api/operating/coupon';
+import { getCouponAudit, updateEnabled } from '/@/api/operating/coupon';
 import type { FormInstance, FormRules } from 'element-plus'
 const ruleFormRef = ref<FormInstance>()
 // 引入组件
@@ -204,7 +204,7 @@ const multiple = ref(true);
 const state = reactive<BasicTableProps>({
 	queryForm,
 	pageList: async (pamars) => {
-		return await fetchList(pamars)
+		return await getCouponAudit(pamars)
 	},
 });
 

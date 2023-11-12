@@ -63,9 +63,9 @@
 
 					</template>
 				</el-table-column>
-				<el-table-column :label="$t('common.action')" fixed="right" width="120">
+				<el-table-column :label="$t('common.action')" fixed="right" width="150">
 					<template #default="scope">
-						<el-button text type="primary">{{ t('common.download') }}</el-button>
+						<el-button text type="primary">{{ t('common.download') }}图片</el-button>
 						<el-button v-auth="'job_sys_job_del'" @click="handleDelete(scope.row)" text type="primary">{{
 							$t('common.dispose') }} </el-button>
 					</template>

@@ -73,7 +73,7 @@
 							<el-radio-group v-model="form.customerGender">
 								<!-- <el-radio label="">全部</el-radio> -->
 								<el-radio label="1">{{ t('coupon.gender1') }}</el-radio>
-								<el-radio label="2">{{ t('coupon.gender1') }}</el-radio>
+								<el-radio label="2">{{ t('coupon.gender2') }}</el-radio>
 							</el-radio-group>
 						</el-form-item>
 					</el-col>
@@ -155,12 +155,12 @@ const User = defineAsyncComponent(() => import('./user.vue'));
 const userRef = ref()
 // 提交表单数据
 const couponInfo: any = reactive({
-	id: '',
-	name: '',
+	id: null,
+	name: null,
 	typeDetailDTO: {
-		type: '',
-		discount: '',
-		doorSill: ''
+		type: null,
+		discount: null,
+		doorSill: null
 	},
 	blockReceive: '1',
 	couponNumber: null,
@@ -178,19 +178,19 @@ const couponInfo: any = reactive({
 	customerInfos: []
 });
 let form: any = reactive({
-	couponId: '',
+	couponId: null,
 	customerIds: [],
 	customerInfos: [],
-	takeEffectTime: '',
-	disabledTime: '',
+	takeEffectTime: null,
+	disabledTime: null,
 	times: [],
 	effectiveDate: '1',
 	validDay: 1,
 	validType: '1',
 	customerIsNew: '1',
-	customerGender: '',
-	behavior: '',
-	issueWayRemark: ''
+	customerGender: null,
+	behavior: null,
+	issueWayRemark: null
 });
 
 const openDialog = (data: string) => {

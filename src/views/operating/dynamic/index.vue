@@ -181,8 +181,6 @@ const selectedRows = ref([]);
 /** 是否可以多选 */
 const multiple = ref(true);
 
-/** 查询字典 */
-const { job_status, job_execute_status, misfire_policy, job_type } = useDict('job_status', 'job_execute_status', 'misfire_policy', 'job_type');
 
 /** 表格状态变量 */
 const state = reactive<BasicTableProps>({

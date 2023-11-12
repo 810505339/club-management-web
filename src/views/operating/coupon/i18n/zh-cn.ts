@@ -75,6 +75,12 @@ export default {
 		validType1: '时间区间有效',
 		validType0: 'x天内有效',
 		validDay: '有效天数',
-		times: '生效时间区间'
+		times: '生效时间区间',
+		IN_AUDIT: '待审核',
+		PASS: '通过',
+		REJECT: '拒绝',
+		HAVE_BEEN_USED: '已使用',
+		WAITING_TO_BE_USED: '待使用',
+		EXPIRED: '已过期'
 	},
 };

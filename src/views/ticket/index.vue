@@ -29,14 +29,10 @@
 				<el-table-column :label="t('ticket.ticketArea')" fixed="left" prop="jobName" show-overflow-tooltip />
 				<el-table-column :label="t('ticket.verificationNum')" prop="jobGroup" show-overflow-tooltip />
 				<el-table-column :label="t('ticket.ticketFrom')" prop="jobStatus" show-overflow-tooltip>
-					<template #default="scope">
-						<dict-tag :options="job_status" :value="scope.row.jobStatus"></dict-tag>
-					</template>
+
 				</el-table-column>
 				<el-table-column :label="t('ticket.verificationPerson')" prop="jobExecuteStatus" show-overflow-tooltip>
-					<template #default="scope">
-						<dict-tag :options="job_execute_status" :value="scope.row.jobExecuteStatus"></dict-tag>
-					</template>
+
 				</el-table-column>
 
 				<el-table-column :label="t('ticket.verificationTime')" prop="startTime" show-overflow-tooltip />
@@ -76,9 +72,8 @@
 </template>
 
 <script lang="ts" name="systemSysJob" setup>
-import { pageList, putObj } from '/@/api/admin/user';
 import { BasicTableProps, useTable } from '/@/hooks/table';
-import { delObj, fetchList, runJobRa, shutDownJobRa, startJobRa } from '/@/api/daemon/job';
+import { fetchList } from '/@/api/ticket';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useDict } from '/@/hooks/dict';
 import { useI18n } from 'vue-i18n';
@@ -96,10 +91,8 @@ const jobLogRef = ref();
 
 /** 搜索表单信息 */
 const queryForm = reactive({
-	jobName: '',
-	jobGroup: '',
-	jobStatus: '',
-	jobExecuteStatus: '',
+	beginTime: '',
+	endTime: '',
 });
 /** 是否展示搜索表单 */
 const showSearch = ref(true);
@@ -110,13 +103,11 @@ const selectedRows = ref([]);
 /** 是否可以多选 */
 const multiple = ref(true);
 
-/** 查询字典 */
-const { job_status, job_execute_status, misfire_policy, job_type } = useDict('job_status', 'job_execute_status', 'misfire_policy', 'job_type');
 
 /** 表格状态变量 */
 const state = reactive<BasicTableProps>({
 	queryForm,
-	pageList: pageList,
+	pageList: fetchList,
 });
 
 /** 获取表格数据方法 */
