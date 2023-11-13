@@ -3,8 +3,8 @@ export default {
 		index: '#',
 		name: '反馈人',
 		phone: '手机号',
-		time: '反馈内容',
-		msg: '反馈时间',
+		time: '反馈时间',
+		msg: '反馈内容',
 
 
 
