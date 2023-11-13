@@ -13,9 +13,7 @@
 					</div>
 				</div>
 				<div class="right">
-					<img
-						src="https://img-blog.csdnimg.cn/3333f265772a4fa89287993500ecbf96.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAbHl0LXRvcA==,size_16,color_FFFFFF,t_70,g_se,x_16"
-					/>
+					<img :src="png401" />
 				</div>
 			</div>
 		</div>
@@ -24,7 +22,8 @@
 
 <script setup lang="ts" name="noPower">
 import { Session } from '/@/utils/storage';
-
+import png401 from '/@/assets/images/404.png';
+// 定义变量内容
 const onSetAuth = () => {
 	// 清除缓存/token等
 	Session.clear();
@@ -83,7 +82,7 @@ const onSetAuth = () => {
 		}
 
 		.right {
-			flex: 1;
+
 			opacity: 0;
 			animation-name: error-img;
 			animation-duration: 2s;
