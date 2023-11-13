@@ -1,5 +1,6 @@
 <template>
   <div class="layout-padding">
+
     <splitpanes>
       <pane>
         <div class="layout-padding-auto  ">
@@ -10,8 +11,10 @@
                   <div class="flex items-center justify-between">
                     <span>
                       {{ t('bus.text') }}
-                      <span v-if="state.mod === 'EDIT'" class="text-[#3876F6]"> {{ state.hour }}</span>
-                      <span v-else><el-input-number v-model="state.hour" :min="0" :max="24" class="w-10" /></span>
+                      <span v-if="state.mod === 'EDIT'" class="text-[#3876F6]"> {{ state.RESERVE_LATEST_CANCEL_TIME
+                      }}</span>
+                      <span v-else><el-input-number v-model="state.RESERVE_LATEST_CANCEL_TIME" :min="0" :max="24"
+                          class="w-10" /></span>
                       {{ t('bus.text_1') }}
                     </span>
                     <el-button type="primary" v-if="state.mod === 'EDIT'" @click="changeMod('mod', 'SURE')">{{
@@ -32,8 +35,9 @@
                   <div class="flex items-center justify-between">
                     <span>
                       {{ t('bus.text_3') }}
-                      <span v-if="state.mod_1 === 'EDIT'" class="text-[#3876F6]"> {{ state.minute }}</span>
-                      <span v-else><el-input-number v-model="state.minute" :min="0" :max="1440" class="w-10" /></span>
+                      <span v-if="state.mod_1 === 'EDIT'" class="text-[#3876F6]"> {{ state.ORDER_EXPIRATION_TIME }}</span>
+                      <span v-else><el-input-number v-model="state.ORDER_EXPIRATION_TIME" :min="0" :max="1440"
+                          class="w-10" /></span>
                       {{ t('bus.text_24') }}
                     </span>
                     <el-button type="primary" v-if="state.mod_1 === 'EDIT'" @click="changeMod('mod_1', 'SURE')">{{
@@ -100,7 +104,7 @@
                               <span v-if="state.fightMod === 'EDIT'" class="text-[#3876F6]"> {{
                                 state.ORDER_WINE_PARTY_AMOUNT_LOWEST_UP
                               }}{{ state.ORDER_WINE_PARTY_AMOUNT_LOWEST_UP_UNITS }}</span>
-                              <el-input class="w-20" v-model="state.ORDER_WINE_PARTY_AMOUNT_LOWEST_UP">
+                              <el-input class="w-20" v-model="state.ORDER_WINE_PARTY_AMOUNT_LOWEST_UP" v-else>
                                 <template #append>
                                   <el-select style="width: 70px" v-model="state.ORDER_WINE_PARTY_AMOUNT_LOWEST_UP_UNITS">
                                     <el-option label="%" value="%" />
@@ -115,7 +119,7 @@
                               <span v-if="state.fightMod === 'EDIT'" class="text-[#3876F6]"> {{
                                 state.ORDER_WINE_PARTY_AMOUNT_LOWEST_DOWN
                               }}{{ state.ORDER_WINE_PARTY_AMOUNT_LOWEST_DOWN_UNITS }}</span>
-                              <el-input v-model="state.ORDER_WINE_PARTY_AMOUNT_LOWEST_DOWN">
+                              <el-input v-model="state.ORDER_WINE_PARTY_AMOUNT_LOWEST_DOWN" v-else>
                                 <template #append>
                                   <el-select style="width: 70px"
                                     v-model="state.ORDER_WINE_PARTY_AMOUNT_LOWEST_DOWN_UNITS">
@@ -130,7 +134,7 @@
                               <span v-if="state.fightMod === 'EDIT'" class="text-[#3876F6]"> {{
                                 state.ORDER_WINE_PARTY_AMOUNT_CUSTOM
                               }}</span>
-                              <el-input v-model="state.ORDER_WINE_PARTY_AMOUNT_CUSTOM">
+                              <el-input v-model="state.ORDER_WINE_PARTY_AMOUNT_CUSTOM" v-else>
                                 <template #append>
                                   $
                                 </template>
@@ -149,8 +153,11 @@
                     </div>
                     <div class=" h-10 px-4 my-4">
                       {{ t('bus.text_22') }}
-                      <span v-if="state.fightMod === 'EDIT'" class="text-[#3876F6]">2</span>
-                      <el-time-picker format="hh:mm" v-else />
+                      <span v-if="state.fightMod === 'EDIT'" class="text-[#3876F6]">{{
+                        state.TEMPORARY_WINE_PARTY_LATEST_TIME }}</span>
+                      <el-time-picker format="HH:mm" v-model="state.TEMPORARY_WINE_PARTY_LATEST_TIME_LABEL" v-else />
+
+
                     </div>
                     <div class="px-4 my-4 flex ">
                       <div class="pt-2"> {{ t('bus.text_17') }}</div>
@@ -224,8 +231,9 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { h } from 'vue'
-import { getList } from '/@/api/admin/business';
+import { getList, putbusiness } from '/@/api/admin/business';
 import { ElInput } from 'element-plus'
+import dayjs from 'dayjs'
 
 const vnode = h(
   'div', // type
@@ -263,11 +271,9 @@ const { t } = useI18n();
 const state = ref({
   mod: 'EDIT',
   mod_1: 'EDIT',
-  hour: 0,
-  minute: 0,
+  RESERVE_LATEST_CANCEL_TIME: 0,
+  ORDER_EXPIRATION_TIME: 0,
   fightMod: 'EDIT',
-  modeType: 'RESERVE_LATEST_CANCEL_TIME',
-  mode_1Type: 'ORDER_EXPIRATION_TIME',
   ORDER_WINE_PARTY_LATEST_TIME: 0,
   ME_PAY_REMOVE_PERSON: 0,
   ORDER_WINE_PARTY_AMOUNT_LOWEST: '',
@@ -277,6 +283,7 @@ const state = ref({
   ORDER_WINE_PARTY_AMOUNT_LOWEST_DOWN_UNITS: '%',
   ORDER_WINE_PARTY_AMOUNT_CUSTOM: '',
   TEMPORARY_WINE_PARTY_LATEST_TIME: '',
+  TEMPORARY_WINE_PARTY_LATEST_TIME_LABEL: dayjs('00:00', 'HH:mm'),
   TEMPORARY_WINE_PARTY_AMOUNT_LOWEST: '',
   TEMPORARY_WINE_PARTY_AMOUNT_LOWEST_UP: '',
   TEMPORARY_WINE_PARTY_AMOUNT_LOWEST_UP_UNITS: '%',
@@ -286,6 +293,8 @@ const state = ref({
   ORDER_WINE_AMOUNT: '',
   TEMPORARY_WINE_AMOUNT: '',
 })
+
+let formList = [] //拿到返回给后端
 
 
 const fightRender = ref([
@@ -302,13 +311,12 @@ const fightRender = ref([
 
 const getListApi = async () => {
   const { data } = await getList()
-  const { modeType, mode_1Type } = state.value
-  state.value.hour = data.find((item: any) => item.configType === modeType)!.configValue!
-  state.value.minute = data.find((item: any) => item.configType === mode_1Type)!.configValue!
+  formList = data
   fightRender.value = fightRender.value.map(f => {
     f.value = data.find((item: any) => item.configType === f.key)!.configValue!
     return f
   })
+
   data.forEach((element: any) => {
     Object.keys(state.value).forEach(s => {
       if (s === element.configType) {
@@ -316,6 +324,7 @@ const getListApi = async () => {
       }
     })
   });
+  state.value.TEMPORARY_WINE_PARTY_LATEST_TIME_LABEL = dayjs(data.find((item: any) => item.configType === 'TEMPORARY_WINE_PARTY_LATEST_TIME')!.configValue!, 'HH:mm')
 
 
 
@@ -323,8 +332,42 @@ const getListApi = async () => {
 
 
 
-const changeMod = (key: string, value: 'EDIT' | 'SURE') => {
+const changeMod = async (key: string, value: 'EDIT' | 'SURE') => {
   state.value[key] = value
+  if (value === 'EDIT') {
+    formList.forEach((element: any) => {
+      Object.keys(state.value).forEach(s => {
+
+        if (element.configType === s) {
+          element.configValue = `${state.value[s]}`
+          console.log(s, state.value[s], element)
+        }
+      })
+      fightRender.value.forEach(f => {
+        if (element.configType === f.key) {
+          element.configValue = f.value
+        }
+      })
+
+    });
+    let tempList = []
+
+    switch (key) {
+      case 'mod':
+        tempList = formList.filter(f => f.configType === 'RESERVE_LATEST_CANCEL_TIME')
+        break;
+      case 'mod_1':
+        tempList = formList.filter(f => f.configType === 'ORDER_EXPIRATION_TIME')
+        break;
+      case 'fightMod':
+        tempList = formList.filter(f => f.configType != 'RESERVE_LATEST_CANCEL_TIME' && f.configType != 'ORDER_EXPIRATION_TIME')
+        break;
+
+    }
+
+
+    await putbusiness(tempList)
+  }
 }
 
 onMounted(async () => {

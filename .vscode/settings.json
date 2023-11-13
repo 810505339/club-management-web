@@ -15,7 +15,7 @@
 		"editor.defaultFormatter": "vscode.typescript-language-features"
 	},
 	"[json]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
+		"editor.defaultFormatter": "HookyQR.beautify"
 	},
 	"[vue]": {
 		"editor.defaultFormatter": "Vue.volar"
