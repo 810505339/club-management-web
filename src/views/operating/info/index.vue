@@ -57,11 +57,13 @@
 				</el-table-column>
 				<el-table-column :label="$t('common.action')" fixed="right" width="150">
 					<template #default="scope">
-						<el-button v-auth="'job_sys_job_edit'" v-if="scope.row.enabled != 1" @click="handleEditJob(scope.row)" text
-							type="primary">{{
+						<template v-if="scope.row.canDeleteEdit">
+							<el-button v-auth="'job_sys_job_edit'" @click="handleEditJob(scope.row)" text type="primary">{{
 								$t('common.editBtn') }} </el-button>
-						<el-button v-auth="'job_sys_job_del'" @click="handleDelete([scope.row.id])" text type="primary">{{
-							$t('common.delBtn') }} </el-button>
+							<el-button v-auth="'job_sys_job_del'" @click="handleDelete([scope.row.id])" text type="primary">{{
+								$t('common.delBtn') }} </el-button>
+						</template>
+
 					</template>
 				</el-table-column>
 			</el-table>
