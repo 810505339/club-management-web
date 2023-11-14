@@ -80,9 +80,9 @@ export const putTicket = (data: any) => {
 
 export const deleteTicketByIds = (ids: string[]) => {
   return request({
-    url: "/operation/ticket",
+    url: `/operation/ticket/${ids}`,
     method: 'DELETE',
-    data: ids
+
   })
 }
 

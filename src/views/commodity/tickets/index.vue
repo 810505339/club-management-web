@@ -109,15 +109,16 @@
 											{{ $t('shopList.takedown') }}
 										</el-button>
 
-										<!-- <el-button v-auth="'sys_user_edit'" icon="edit-pen" text type="primary"
-											@click="userDialogRef.openDialog(scope.row.userId)">
+										<!-- <el-button icon="edit-pen" text type="primary" @click="userDialogRef.openDialog(scope.row.id)">
 											{{ $t('common.editBtn') }}
-										</el-button> -->
-										<!-- <el-tooltip :content="$t('goods.deleteDisabledTip')" :disabled="scope.row.userId !== '1'"
+										</el-button>
+
+
+										<el-tooltip :content="$t('goods.deleteDisabledTip')" :disabled="scope.row.userId !== '1'"
 											placement="top">
 											<span style="margin-left: 12px">
-												<el-button icon="delete" v-auth="'sys_user_del'" :disabled="scope.row.username === 'admin'" text
-													type="primary" @click="handleDelete([scope.row.userId])">{{ $t('common.delBtn') }}
+												<el-button icon="delete" :disabled="scope.row.username === 'admin'" text type="primary"
+													@click="handleDelete(scope.row.id)">{{ $t('common.delBtn') }}
 												</el-button>
 											</span>
 										</el-tooltip> -->
@@ -234,10 +235,12 @@ const getstoreAreaTree = async () => {
 	options.value = data
 }
 
+
+
+
 onMounted(async () => {
 	await getstoreAreaTree()
 })
-
 
 </script>
 <style scoped>
