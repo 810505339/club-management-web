@@ -39,12 +39,11 @@ export const getAreaById = (storeId: string) => {
   "enabled": ""
 }
  */
-export const updateEnabled = (data: Object) => {
+export const updateEnabled = (params: any) => {
   return request({
     url: `/admin/area/updateEnabled`,
     method: 'put',
-    data
-
+    params: params
   });
 }
 

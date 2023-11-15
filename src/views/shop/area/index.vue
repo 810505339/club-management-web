@@ -56,7 +56,7 @@
 						</el-table-column>
 						<el-table-column :label="$t('area.decks')" prop="decks" width="100" fixed="left">
 							<template #default="scope">
-								{{ scope.row['boothVOS']?.length }}
+								{{ scope.row['boothQuantity'] }}
 							</template>
 						</el-table-column>
 
@@ -72,25 +72,31 @@
 								<el-button icon="InfoFilled" text type="primary" @click="useInfoRef.open(scope.row.id)">
 									{{ $t('common.detailBtn') }}
 								</el-button>
-								<el-button v-auth="'sys_user_edit'" icon="edit-pen" text type="primary"
-									@click="userDialogRef.openDialog(scope.row.id)">
-									{{ $t('common.editBtn') }}
-								</el-button>
+
 
 								<el-button icon="Top" text type="primary" @click="handleTakedown(scope.row)"
 									v-if="scope.row['enabled'] == 0">
 									{{ $t('shopList.shelves') }}
 								</el-button>
-								<el-button icon="Bottom" text type="primary" @click="handleTakedown(scope.row)" v-else>
-									{{ $t('shopList.takedown') }}
-								</el-button>
-								<el-tooltip :content="$t('area.deleteDisabledTip')" :disabled="scope.row.userId !== '1'" placement="top">
-									<span style="margin-left: 12px">
-										<el-button icon="delete" text type="primary" @click="handleDelete([scope.row.id])">{{
-											$t('common.delBtn') }}
-										</el-button>
-									</span>
-								</el-tooltip>
+
+								<span else>
+									<el-button icon="Bottom" text type="primary" @click="handleTakedown(scope.row)">
+										{{ $t('shopList.takedown') }}
+									</el-button>
+									<el-button v-auth="'sys_user_edit'" icon="edit-pen" text type="primary"
+										@click="userDialogRef.openDialog(scope.row.id)">
+										{{ $t('common.editBtn') }}
+									</el-button>
+									<el-tooltip :content="$t('area.deleteDisabledTip')" :disabled="scope.row.userId !== '1'"
+										placement="top">
+										<span style="margin-left: 12px">
+											<el-button icon="delete" text type="primary" @click="handleDelete([scope.row.id])">{{
+												$t('common.delBtn') }}
+											</el-button>
+										</span>
+									</el-tooltip>
+								</span>
+
 							</template>
 						</el-table-column>
 					</el-table>
@@ -202,16 +208,13 @@ const handleTakedown = async (row: any) => {
 	//scope.row['enabled'] == 1 ? '上架' : '下架'
 	//shelves: '上架',
 	//	takedown: '下架',
-	const enabled = row.enabled == 1 ? '0' : '1'
+
 
 	if (row.enabled == 1) {
 		await useMessageBox().confirm(t('shopList.sureTakedown'))
 	}
 	//1:下架,0:正常
-	await updateEnabled({
-		id: row.id,
-		enabled: enabled
-	})
+	await updateEnabled({ id: row.id })
 	useMessage().success(t('common.optSuccessText'));
 
 	getDataList();

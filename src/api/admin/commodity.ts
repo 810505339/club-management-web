@@ -60,6 +60,18 @@ export const deletedrinksMealByIds = (ids: string[]) => {
   })
 }
 
+type IData = {
+  id: string,
+  boothIds: string[]
+}
+export const drinksEnabled = (data: IData) => {
+  return request({
+    url: "/operation/drinksMeal/enabled",
+    method: 'put',
+    data
+  })
+}
+
 
 
 export const addTicket = (data: any) => {
