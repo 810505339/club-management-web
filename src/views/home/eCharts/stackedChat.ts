@@ -2,7 +2,7 @@ import { EChartsOption } from "echarts";
 import * as echarts from 'echarts';
 import { Ref } from "vue";
 
-export const useOptions = (chartDom: HTMLElement) => {
+export const useStackedChatOptions = (chartDom: HTMLElement) => {
 
   const myChart = echarts.init(chartDom)
   const options: EChartsOption = {

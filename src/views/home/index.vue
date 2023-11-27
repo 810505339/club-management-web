@@ -1,6 +1,6 @@
 <template>
   <div class="flex p-2.5 absolute inset-0 ">
-    <div class="flex-auto border border-[#FFFFFF40] bg-[#00000040] rounded-xl mr-5 overflow-hidden p-6">
+    <div class="flex-auto border border-[#FFFFFF40] bg-[#00000040] rounded-xl mr-5 overflow-hidden py-6 pl-6">
       <header>
         <div class="flex items-center">
           <label class="text-[#CFD3DCFF] text-xl font-semibold mr-5">工作台</label>
@@ -29,36 +29,49 @@
         </div>
       </header>
 
-      <el-scrollbar height="450px">
-
-        <div class="flex h-[300px] gap-6">
-          <div class="flex-1 rounded-3xl bg-[#72AA3D80]  text-[#CAF16CFF] p-6 flex flex-col">
-            <header class="text-base font-semibold">订单及流水统计</header>
-            <div class="text-xs font-semibold">订单总量 <span class="text-white text-2xl ml-2">517,563,254</span> </div>
-            <div class="text-xs font-semibold">流水总计 <span class="text-white text-2xl ml-2">17,563,254.23</span></div>
-            <div ref="dom" class="flex-auto"></div>
-          </div>
-          <div class="flex-1 rounded-3xl bg-[#CB7B2480] p-6  text-[#EBB77FFF]">
-            <header class="text-base font-semibold">订单及流水统计</header>
-            <div>
-              <div v-for="item, index in 10" :key="item" class="flex justify-center">
-                <span class="bg-[#EBB77F] rounded-2xl py-1 px-1.5 text-[#000000] text-sx">No.{{ index + 1 }}</span>
-                <div class="overflow-hidden  flex-auto ">
-                  <div class="text-overflow">商品名称商品名称商商品名称商品名称商商品名称商品名称商</div>
+      <el-scrollbar height="450px" class="pr-6 pb-5">
+        <div class="py-10">
+          <div class="flex h-[300px] gap-6">
+            <div class="w-1/3 rounded-3xl bg-[#72AA3D80]  text-[#CAF16CFF] p-6 flex flex-col ">
+              <header class="text-base font-semibold">订单及流水统计</header>
+              <div class="text-xs font-semibold">订单总量 <span class="text-white text-2xl ml-2">517,563,254</span> </div>
+              <div class="text-xs font-semibold">流水总计 <span class="text-white text-2xl ml-2">17,563,254.23</span></div>
+              <div ref="dom" class="flex-auto"></div>
+            </div>
+            <div class="w-1/3 rounded-3xl bg-[#CB7B2480] p-6  text-[#EBB77FFF] flex flex-col ">
+              <header class="text-base font-semibold">酒水套餐排行榜</header>
+              <div class="mt-5">
+                <div v-for="item, index in 9" :key="item" class="flex justify-center items-center">
+                  <span class="bg-[#EBB77F]  h-4 py-1 px-1.5 rounded-lg flex items-center   text-[#000000] text-xs">No.{{
+                    index + 1
+                  }}</span>
+                  <div class="flex-auto ml-4">
+                    <div class="truncate">商品名称商品名称商商品名称商品名称商商品名称商品名称商</div>
+                  </div>
+                  <span class="flex-shrink-0 font-bold text-lg text-white ml-4">$ 452,054.54</span>
                 </div>
-                <span class="flex-shrink-0 font-bold text-lg">$ 452,054.54</span>
               </div>
             </div>
+            <div class="w-1/3 rounded-3xl bg-[#3F4FD780] p-6 text-[#D5DFFFFF]">
+              <header class="text-base font-semibold">区域偏好数据</header>
+              <div class="mt-5">
+                <div class="text-xs">数据来源：用户预订卡座、拼酒局时选择的区域</div>
+                <div></div>
+              </div>
+
+            </div>
           </div>
-          <div class="flex-1 rounded-3xl bg-[#3F4FD780] p-6 "></div>
+          <div class="flex h-[320px] gap-6 mt-5">
+            <div class="w-1/3 rounded-3xl bg-[#8645BD80] p-6"></div>
+            <div class="w-1/3 rounded-3xl bg-[#BB2B5D80] p-6"></div>
+            <div class="w-1/3 rounded-3xl bg-[#278BA880]  p-6 flex flex-col">
+              <header class="text-base font-semibold">拼酒局数据概况</header>
+              <div class="text-xs font-semibold">拼酒局总次数 <span class="text-white text-2xl ml-2">517,563,254</span> </div>
+              <div class="text-xs font-semibold">拼酒局成功率 <span class="text-white text-2xl ml-2">56.23%</span></div>
+              <div ref="dom5" class="flex-auto"></div>
+            </div>
+          </div>
         </div>
-
-        <div class="flex h-[320px] gap-6 mt-5">
-          <div class="flex-1 rounded-3xl bg-[#8645BD80]"></div>
-          <div class="flex-1 rounded-3xl bg-[#BB2B5D80]"></div>
-          <div class="flex-1 rounded-3xl bg-[#278BA880]"></div>
-        </div>
-
       </el-scrollbar>
 
 
@@ -71,14 +84,16 @@
 <script setup lang="ts" name="home">
 import { getStoreName } from '/@/api/admin/store'
 import dayjs from 'dayjs'
-import { useOptions } from './eCharts/stackedChat'
+import { useStackedChatOptions } from './eCharts/stackedChat'
 
 const dom = ref<HTMLElement>()
+const dom5 = ref<HTMLElement>()
 const active = ref(0)
 const storeNameList = ref<any[]>([])
 onMounted(() => {
-  if (dom.value) {
-    useOptions(dom.value)
+  if (dom.value && dom5.value) {
+    useStackedChatOptions(dom.value)
+    useStackedChatOptions(dom5.value)
   }
 })
 
