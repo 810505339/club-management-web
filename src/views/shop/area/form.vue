@@ -33,6 +33,7 @@
                 </el-option>
               </el-select>
 
+
               <el-time-picker v-model="timer.beginTime" :disabled="timer.disabled" class="mr-4" format='HH:mm'
                 value-format='HH:mm' />
 
