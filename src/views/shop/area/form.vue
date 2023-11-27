@@ -32,6 +32,7 @@
                   :disabled="item.disabled">
                 </el-option>
               </el-select>
+              {{ timer.beginTime }}
               <el-time-picker v-model="timer.beginTime" :disabled="timer.disabled" class="mr-4" format='HH:mm'
                 value-format='HH:mm' />
 
@@ -148,7 +149,7 @@ const { grant_types, common_status } = useDict(
 type IboothDTOListItem = {
   id: string,
   name: string,
-  pictureIds: any[],
+
   maxAccommodate: string,
   minConsumption: string,
   reserveAmount: string

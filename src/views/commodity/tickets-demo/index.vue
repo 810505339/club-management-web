@@ -8,12 +8,11 @@
 					<el-row v-show="showSearch">
 						<el-form ref="queryRef" :inline="true" :model="state.queryForm" @keyup.enter="getDataList">
 							<el-form-item :label="$t('goods.name')" prop="name">
-
-							</el-form-item>
+								<el-input v-model="state.queryForm.name" /></el-form-item>
 							<el-form-item>
 								<el-button icon="Search" type="primary" @click="getDataList">{{ $t('common.queryBtn') }}</el-button>
 								<el-button icon="Refresh" @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
-							</el-form-item>
+								</el-form-item>
 						</el-form>
 					</el-row>
 					<el-row>
@@ -45,8 +44,8 @@
 							<template #default="scope">
 
 								<el-image :preview-src-list="[`${fileCommonUrl}/${item.fileName}`]" preview-teleported
-									class="w-20 h-20 my-2 rounded-md" fit="cover" v-for="item in scope.row.pictureFileVOs" :key="item.id"
-									:src="`${fileCommonUrl}/${item.fileName}`" />
+									class="w-20 h-20 my-2 rounded-md" fit="cover" v-for=" item  in  scope.row.pictureFileVOs "
+									:key="item.id" :src="`${fileCommonUrl}/${item.fileName}`" />
 							</template>
 						</el-table-column>
 
@@ -78,7 +77,7 @@
 			</pane>
 		</splitpanes>
 
-		<user-form ref="userDialogRef" @refresh="handlegetTicketList" />
+		<user-form ref="userDialogRef" @refresh="getDataList" />
 
 		<upload-excel ref="excelUploadRef" :title="$t('sysuser.importUserTip')"
 			temp-url="/admin/sys-file/local/file/user.xlsx" url="/admin/user/import" @refreshDataList="getDataList" />

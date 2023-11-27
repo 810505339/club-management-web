@@ -2,7 +2,9 @@
   <el-dialog :close-on-click-modal="false" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" width="600"
     draggable v-model="visible">
     <el-form :model="form" formDialogRef label-width="120px" ref="dataFormRef" v-loading="loading">
-
+      <el-form-item :label="$t(name)" prop="name">
+        <el-input v-model="form.name" />
+      </el-form-item>
 
       <el-form-item :label="areaName" prop="areaList">
         <el-cascader :options="options" v-model="form.areaList" :props="cascaderProps" :show-all-levels="false" />
@@ -19,7 +21,6 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
-        <el-button type="primary" @click="handleDelete">{{ $t('common.delBtn') }}</el-button>
         <el-button @click="onSubmit" type="primary" :disabled="loading">{{ $t('common.confirmButtonText')
         }}</el-button>
       </span>
