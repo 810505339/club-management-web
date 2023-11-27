@@ -160,8 +160,8 @@ const createTimer = () => {
     areaId: `${generateUUID()}`,
     beginWeekDay: '',
     endWeekDay: '',
-    endTime: new Date(),
-    beginTime: new Date(),
+    endTime: dayjs().format('HH:mm'),
+    beginTime: dayjs().format('HH:mm'),
     disabled: false
   }
 }
