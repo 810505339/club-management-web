@@ -1,6 +1,6 @@
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { i18n } from '../i18n';
-
+import { VNode, RendererNode, RendererElement } from 'vue'
 const { t } = i18n.global;
 
 interface MessageImplements {
@@ -59,7 +59,7 @@ export function useMessageBox() {
 		}
 
 		// 确认窗体
-		confirm(msg: string) {
+		confirm(msg: string | VNode<RendererNode, RendererElement>) {
 			return ElMessageBox.confirm(msg, t('message.box.title'), {
 				confirmButtonText: t('common.confirmButtonText'),
 				cancelButtonText: t('common.cancelButtonText'),

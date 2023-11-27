@@ -45,22 +45,27 @@
 									v-if="scope.row['enabled'] == 0">
 									{{ $t('shopList.shelves') }}
 								</el-button>
-								<el-button icon="Bottom" text type="primary" @click="handleTakedown(scope.row)" v-else>
-									{{ $t('shopList.takedown') }}
-								</el-button>
+
+								<div v-else>
+									<el-button icon="Bottom" text type="primary" @click="handleTakedown(scope.row)">
+										{{ $t('shopList.takedown') }}
+									</el-button>
 
 
-								<el-button v-auth="'sys_user_edit'" icon="edit-pen" text type="primary"
-									@click="userDialogRef.openDialog(scope.row.id)">
-									{{ $t('common.editBtn') }}
-								</el-button>
-								<el-tooltip :content="$t('goods.deleteDisabledTip')" :disabled="scope.row.userId !== '1'" placement="top">
-									<span style="margin-left: 12px">
-										<el-button icon="delete" v-auth="'sys_user_del'" :disabled="scope.row.username === 'admin'" text
-											type="primary" @click="handleDelete([scope.row.id])">{{ $t('common.delBtn') }}
-										</el-button>
-									</span>
-								</el-tooltip>
+									<el-button v-auth="'sys_user_edit'" icon="edit-pen" text type="primary"
+										@click="userDialogRef.openDialog(scope.row.id)">
+										{{ $t('common.editBtn') }}
+									</el-button>
+									<el-tooltip :content="$t('goods.deleteDisabledTip')" :disabled="scope.row.userId !== '1'"
+										placement="top">
+										<span style="margin-left: 12px">
+											<el-button icon="delete" v-auth="'sys_user_del'" :disabled="scope.row.username === 'admin'" text
+												type="primary" @click="handleDelete([scope.row.id])">{{ $t('common.delBtn') }}
+											</el-button>
+										</span>
+									</el-tooltip>
+								</div>
+
 							</template>
 						</el-table-column>
 					</el-table>
@@ -68,6 +73,9 @@
 					</pagination>
 				</div>
 			</pane>
+
+
+
 		</splitpanes>
 
 		<user-form ref="userDialogRef" :lock_flag="lock_flag" @refresh="getDataList(false)" />
@@ -79,13 +87,16 @@
 
 <script lang="ts" name="systemUser" setup>
 
-import { getdrinksMealList, deletedrinksMealByIds } from '/@/api/admin/commodity';
+import { getdrinksMealList, deletedrinksMealByIds, drinksEnabled } from '/@/api/admin/commodity';
 import { list } from '/@/api/admin/role';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 import { useDict } from '/@/hooks/dict';
 import { useUserInfo } from '/@/stores/userInfo';
+import { storeAreaTree } from '/@/api/operating/coupon';
+import { ElCascader, ElMessageBox } from 'element-plus'
+
 // 动态引入组件
 const UserForm = defineAsyncComponent(() => import('./form.vue'));
 const { t } = useI18n();
@@ -98,7 +109,13 @@ const showSearch = ref(true);
 const optionsRoles = ref([]) as any;
 const store = useUserInfo()
 const fileCommonUrl = computed(() => store.userInfos.fileCommonUrl)
-
+const cascaderProps = {
+	label: "name",
+	value: 'id',
+	children: 'list',
+	multiple: true,
+	emitPath: false
+}
 
 // 定义表格查询、后台调用的API
 const state: BasicTableProps = reactive<BasicTableProps>({
@@ -150,18 +167,55 @@ const handleDelete = async (ids: string[]) => {
 
 //点击下架
 const handleTakedown = async (row: any) => {
+	const selectList = ref<string[]>([])
+
+	if (row.enabled == 0) {
+		await getstoreAreaTree(row.storeList)
+
+		await ElMessageBox.alert(h('div', null, [
+			h('span', {
+				class: 'mr-10'
+			}, t('area.deck')),
+			h(ElCascader, {
+				props: cascaderProps,
+				modelValue: selectList.value,
+				'onUpdate:modelValue': (val: string[]) => {
+					selectList.value = val
+				},
+
+				showAllLevels: false,
+				options: options.value
+			}),
+
+		]), t('message.box.title'), {
+			confirmButtonText: t('common.confirmButtonText'),
+			cancelButtonText: t('common.cancelButtonText'),
+
+		});
 
 
-	const enabled = row.enabled == 1 ? '0' : '1'
 
-
+	}
 
 	if (row.enabled == 1) {
 		await useMessageBox().confirm(t('shopList.sureTakedown'))
-	}
 
+	}
+	await drinksEnabled({ id: row.id, boothIds: selectList.value })
 	useMessage().success(t('common.optSuccessText'));
 
+
+
 	getDataList();
+}
+
+const options = ref([])
+
+const getstoreAreaTree = async (storeList: any[]) => {
+	const { data } = await storeAreaTree({ type: 1 })
+
+	options.value = data.filter((item: any) => {
+		return storeList.some((store: any) => store.id == item.id)
+	})
 }
 </script>

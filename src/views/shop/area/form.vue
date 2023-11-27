@@ -18,6 +18,11 @@
           @change="(_, fileList) => uploadChange('pictureIds', fileList)" />
       </el-form-item>
 
+      <el-form-item :label="t('area.deckimage')" prop="seatPicture" width="100" class="mb-2">
+        <upload v-bind="ITEM_IMG_PROPS" class="w-full" :model-value="form.seatPicture"
+          @change="(_, fileList) => uploadChange('seatPicture', fileList)" />
+      </el-form-item>
+
       <el-form-item :label="t('area.time')" prop="businessDateDTOList">
         <div>
           <div class="flex my-2" v-for="timer, index in  form.businessDateDTOList " :key="timer.areaId">
@@ -52,12 +57,8 @@
 
       <el-form-item :label="t('area.deck')" prop="boothDTOList">
         <div>
-          <div v-for="item, index in form.boothDTOList" :key="item.id" class="my-5">
+          <div v-for="item in form.boothDTOList" :key="item.id" class="my-5">
             <div>
-              <el-form-item :label="t('area.deckimage')" prop="item.name" width="100" class="mb-2">
-                <upload v-bind="ITEM_IMG_PROPS" class="w-full" :model-value="item.pictureIds"
-                  @change="(_, fileList) => uploadChange('pictureIds', fileList, index)" />
-              </el-form-item>
 
               <el-form-item :label="t('area.deckname')" prop="item.name" width="100" class="mb-2">
                 <el-input v-model="item.name" />
@@ -165,9 +166,10 @@ const createTimer = () => {
 }
 
 // 提交表单数据
-const form = reactive<{ boothDTOList: IboothDTOListItem[], businessDateDTOList: ITimer[], name: string, id: string | undefined, storeId: string, pictureIds: any[] }>({
+const form = reactive<{ boothDTOList: IboothDTOListItem[], businessDateDTOList: ITimer[], name: string, id: string | undefined, storeId: string, pictureIds: any[], seatPicture: any[] }>({
   name: '',  //区域名称
   pictureIds: [], //图片文件ID
+  seatPicture: [], //卡座图片
   id: undefined, //区域ID
   storeId: '', //所属门店
   boothDTOList: [],
@@ -235,10 +237,10 @@ const onSubmit = async () => {
     const temp = {
       ...form,
       pictureIds: form.pictureIds.map(item => item.id),
+      seatPicture: form.pictureIds.map(item => item.id),
       boothDTOList: form.boothDTOList.map(item => {
         return {
           ...item,
-          pictureIds: item.pictureIds.map(item => item.id)
         }
       })
 
@@ -261,15 +263,14 @@ const onSubmit = async () => {
 const getStoreDetail = async (id: string) => {
   // 获取数据
   let { data } = await getAreaById(id)
-  console.log(data);
+    ;
   data.storeId = data.storeVO.id
-  data.pictureIds = data.pictureFIleVOs?.map((item: any) => ({ id: item.id, name: item.fileName }))
+  data.pictureIds = data?.pictureFIleVOs?.map((item: any) => ({ id: item.id, name: item.fileName }))
+  data.seatPicture = data?.seatPictureFileVO?.map((item: any) => ({ id: item.id, name: item.fileName }))
   data.businessDateDTOList = data.businessDateVOS
   data.boothDTOList = data.boothVOS.map((item: any) => {
     return {
       ...item,
-      pictureIds: item.pictureFileVOs?.map((file: any) => ({ id: file.id, name: file.fileName }))
-
     }
   })
 
@@ -279,12 +280,9 @@ const getStoreDetail = async (id: string) => {
 
 };
 
-const uploadChange = (type: 'pictureIds', fileList: any[], index: number | undefined = undefined) => {
+const uploadChange = (type: string, fileList: any[]) => {
 
-  if (index !== undefined) {
-    form.boothDTOList[index].pictureIds = fileList
-    return
-  }
+
   form[type] = fileList
 
 }
@@ -338,7 +336,6 @@ const addDeck = () => {
     {
       id: `${generateUUID()}`,
       name: '',
-      pictureIds: [],
       maxAccommodate: '0',
       minConsumption: '0',
       reserveAmount: '0'

@@ -15,6 +15,13 @@
           <el-image class=" my-2 rounded-md" fit="cover" v-for="item in userInfo.pictureFIleVOs" :key="item.id"
             :src="`${fileCommonUrl}/${item.fileName}`" />
         </el-form-item>
+        <el-form-item :label="t('area.deckimage')" prop="pictureIds" width="100">
+          <el-image class=" my-2 rounded-md" fit="cover" v-for="item in userInfo.seatPictureFileVO" :key="item.id"
+            :src="`${fileCommonUrl}/${item.fileName}`" />
+        </el-form-item>
+
+
+
         <el-form-item :label="t('area.time')" prop="businessDateVOS">
           <div v-for="item, index in timerFormat(userInfo.businessDateVOS)" :key="index" class="my-2">
             {{ item }}
@@ -29,14 +36,6 @@
 
             <el-table-column prop="minConsumption" :label="t('area.spend')" />
             <el-table-column prop="reserveAmount" :label="t('area.reservation')" />
-
-            <el-table-column prop="deckimage" :label="t('area.deckimage')">
-              <template #default="scope">
-                <el-image class=" my-2 rounded-md" :zoom-rate="1.2" :max-scale="7" :min-scale="0.2"
-                  :preview-src-list="[`${fileCommonUrl}/${item.fileName}`]" :initial-index="4" fit="cover"
-                  v-for="item in scope.row.pictureFileVOs" :key="item.id" :src="`${fileCommonUrl}/${item.fileName}`" />
-              </template>
-            </el-table-column>
           </el-table>
 
 

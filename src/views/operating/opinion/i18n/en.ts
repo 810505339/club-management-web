@@ -3,7 +3,7 @@ export default {
 		index: '#',
 		name: 'name',
 		phone: 'phone',
-		time: 'message',
-		msg: 'time',
+		time: 'time',
+		msg: 'message',
 	},
 };
