@@ -16,7 +16,8 @@ export default {
 		registrations: 'number of registrations / total number of participants',
 		userName: 'user name',
 		userPhone: 'user phone',
-		expense: 'expenses'
+		expense: 'expenses',
+		image: 'image'
 	},
 
 };

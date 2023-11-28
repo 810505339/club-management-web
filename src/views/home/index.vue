@@ -31,7 +31,7 @@
 
       <el-scrollbar height="450px" class="pr-6 pb-5">
         <div class="py-10">
-          <div class="flex h-[300px] gap-6">
+          <div class="flex h-[320px] gap-6">
             <div class="w-1/3 rounded-3xl bg-[#72AA3D80]  text-[#CAF16CFF] p-6 flex flex-col ">
               <header class="text-base font-semibold">订单及流水统计</header>
               <div class="text-xs font-semibold">订单总量 <span class="text-white text-2xl ml-2">517,563,254</span> </div>

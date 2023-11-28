@@ -16,7 +16,8 @@ export default {
 		registrations: '已报名人数/活动总人数',
 		userName: '用户姓名',
 		userPhone: '用户手机',
-		expense: '费用'
+		expense: '费用',
+		image: '图片'
 	},
 
 };

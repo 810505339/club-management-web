@@ -43,6 +43,13 @@
         </el-col>
 
         <el-col :span="20" class="mb20">
+          <el-form-item :label="t('dynamic.image')" prop="pictureIds">
+            <upload v-bind="IMG_PROPS" class="w-full" :model-value="form.pictureIds"
+              @change="(_, fileList) => uploadChange('pictureIds', fileList)" />
+          </el-form-item>
+        </el-col>
+
+        <el-col :span="20" class="mb20">
           <el-form-item :label="t('dynamic.register')" prop="whetherSignUp">
             <el-switch v-model="form.apply" />
           </el-form-item>
@@ -86,7 +93,7 @@ import { useMessage } from '/@/hooks/message';
 import { getDynamicById, AddDynamic, EditDynamic } from '/@/api/admin/dynamic';
 import { useI18n } from 'vue-i18n';
 import { useTranslateText } from './hooks/translate';
-
+import upload from "/@/components/Upload/index.vue";
 const emit = defineEmits(['refresh']);
 const props = defineProps<{ list: any[], storeNameList: any[] }>()
 
@@ -109,7 +116,12 @@ const dataFormRef = ref();
 const visible = ref(false);
 const loading = ref(false);
 
+const IMG_PROPS = {
+  fileSize: 1,
+  limit: 1,
+  fileType: ['jpg', 'png', 'jpeg']
 
+}
 // 提交表单数据
 const form = reactive({
   storeId: []
@@ -158,7 +170,9 @@ const onSubmit = async () => {
 
   try {
     loading.value = true;
-    const temp = { ...form, storeId: [form.storeId], expireTime: form.expireTime }
+
+    const pictureIds = form.pictureIds?.map(item => (item.id))
+    const temp = { ...form, storeId: [form.storeId], expireTime: form.expireTime, pictureIds }
 
 
     form.jobId ? await EditDynamic(temp) : await AddDynamic(temp);
@@ -178,11 +192,19 @@ const getsysJobData = (id: string) => {
   // 获取数据
   getDynamicById(id).then((res: any) => {
 
-    res.data.storeId = res.data.storeVOS[0].id
+    res.data.storeId = res.data.storeVOS[0]?.id
     res.data.dynamicTypeId = res.data.dynamicTypeVO.id
+    const pictureIds = res.data.pictureFile?.map((item: any) => ({ id: item.id, name: item.fileName }))
     Object.assign(form, res.data);
+    form.pictureIds = pictureIds
   });
 };
+
+const uploadChange = (type: 'pictureIds' | 'videoIds', fileList: any[]) => {
+
+  form[type] = fileList
+
+}
 
 // 暴露变量
 defineExpose({
