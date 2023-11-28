@@ -141,8 +141,9 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 		name: '',
 	},
 	pageList: async (pamars) => {
-		await handleStoreNameList()
-		return await getStoreList(pamars)
+		const data = await Promise.all([getStoreList(pamars), handleStoreNameList()])
+
+		return data[0]
 	},
 });
 const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
@@ -169,8 +170,6 @@ const exportExcel = () => {
 const handleStoreNameList = async () => {
 	const { data } = await getStoreName()
 	storeNameList.value = data
-	console.log(data);
-
 }
 
 
