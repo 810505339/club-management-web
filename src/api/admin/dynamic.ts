@@ -62,11 +62,11 @@ export const getActivity = (id: string) => {
 
 ///operation/dynamicState/updateEnabled
 
-export const updateEnabled = (data: Object) => {
+export const updateEnabled = (params: Object) => {
   return request({
     url: 'operation/dynamicState/updateEnabled',
     method: 'put',
-    data,
+    params,
   });
 }
 

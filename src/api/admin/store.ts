@@ -38,12 +38,10 @@ export const getStoreById = (storeId: string) => {
   "enabled": ""
 }
  */
-export const updateEnabled = (data: Object) => {
+export const updateEnabled = (params: any) => {
   return request({
-    url: `/admin/store/updateEnabled`,
+    url: `/admin/store/updateEnabled/${params.id}`,
     method: 'put',
-    data
-
   });
 }
 

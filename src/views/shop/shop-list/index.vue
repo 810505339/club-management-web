@@ -60,28 +60,38 @@
 									{{ $t('common.detailBtn') }}
 								</el-button>
 
-								<el-button v-auth="'sys_user_edit'" icon="edit-pen" text type="primary"
-									@click="userDialogRef.openDialog(scope.row.id)">
-									{{ $t('common.editBtn') }}
-								</el-button>
 
 
+								<div v-if="scope.row['enabled'] == 0">
+									<el-button icon="Top" text type="primary" @click="handleTakedown(scope.row)">
+										{{ $t('shopList.shelves') }}
+									</el-button>
+									<el-button v-auth="'sys_user_edit'" icon="edit-pen" text type="primary"
+										@click="userDialogRef.openDialog(scope.row.id)">
+										{{ $t('common.editBtn') }}
+									</el-button>
+									<el-tooltip :content="$t('shopList.deleteDisabledTip')" :disabled="scope.row.userId !== '1'"
+										placement="top">
+										<span style="margin-left: 12px">
+											<el-button icon="delete" v-auth="'sys_user_del'" :disabled="scope.row.username === 'admin'" text
+												type="primary" @click="handleDelete([scope.row.id])">{{ $t('common.delBtn') }}
+											</el-button>
+										</span>
+									</el-tooltip>
+								</div>
 
-								<el-button icon="Top" text type="primary" @click="handleTakedown(scope.row)"
-									v-if="scope.row['enabled'] == 0">
-									{{ $t('shopList.shelves') }}
-								</el-button>
+
 								<el-button icon="Bottom" text type="primary" @click="handleTakedown(scope.row)" v-else>
 									{{ $t('shopList.takedown') }}
 								</el-button>
-								<el-tooltip :content="$t('shopList.deleteDisabledTip')" :disabled="scope.row.userId !== '1'"
-									placement="top">
-									<span style="margin-left: 12px">
-										<el-button icon="delete" v-auth="'sys_user_del'" :disabled="scope.row.username === 'admin'" text
-											type="primary" @click="handleDelete([scope.row.id])">{{ $t('common.delBtn') }}
-										</el-button>
-									</span>
-								</el-tooltip>
+
+
+
+
+
+
+
+
 							</template>
 						</el-table-column>
 					</el-table>

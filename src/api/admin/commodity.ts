@@ -41,11 +41,11 @@ export const getAreaById = (id: string) => {
   "enabled": ""
 }
  */
-export const updateEnabled = (data: Object) => {
+export const updateEnabled = (params: Object) => {
   return request({
     url: `/admin/area/updateEnabled`,
     method: 'put',
-    data
+    params
 
   });
 }
@@ -136,11 +136,11 @@ export const getTicketDetail = (data: any) => {
   })
 }
 
-export const updateEnabledByTicketDetail = (data: Object) => {
+export const updateEnabledByTicketDetail = (params: Object) => {
   return request({
     url: `/operation/ticketDetail/enabledById`,
     method: 'put',
-    params: data
+    params: params
 
   });
 }

@@ -11,8 +11,8 @@
 
       <el-form-item :label="time" prop="time">
         <el-date-picker :end-placeholder="$t('syslog.inputEndPlaceholderTip')"
-          :start-placeholder="$t('syslog.inputStartPlaceholderTip')" range-separator="To" type="datetimerange"
-          value-format="YYYY-MM-DD HH:mm:ss" v-model="form.time" />
+          :start-placeholder="$t('syslog.inputStartPlaceholderTip')" range-separator="To" type="daterange"
+          value-format="YYYY-MM-DD" v-model="form.time" />
       </el-form-item>
 
       <el-form-item :label="duration" prop="duration">
