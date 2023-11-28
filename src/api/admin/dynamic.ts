@@ -22,11 +22,11 @@ export const EditDynamic = (data?: Object) => {
 
 
 //删除动态管理
-export const deleteDynamic = (data?: Object) => {
+export const deleteDynamic = (ids?: Object) => {
   return request({
     url: '/operation/dynamicState',
     method: 'delete',
-    data,
+    data: ids
   });
 };
 

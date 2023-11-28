@@ -25,32 +25,22 @@
 
       <el-form-item :label="t('area.time')" prop="businessDateDTOList">
         <div>
-          <div class="flex my-2" v-for="timer, index in  form.businessDateDTOList " :key="timer.areaId">
-            <div class="flex " :class="{ 'pr-8': index != form.businessDateDTOList.length - 1 }">
-              <el-select v-model="timer.beginWeekDay" class="mr-2" :disabled="timer.disabled">
+          <div class="flex my-2" v-for="timer in  7 " :key="timer">
+            <div class="flex ">
+              <el-select class="mr-2" v-model="form.businessDateDTOList[timer - 1].weekDay">
                 <el-option v-for=" item, index  in  weekDayList " :key="index" :label="item.label" :value="item.value"
-                  :disabled="item.disabled">
+                  :disabled="true">
                 </el-option>
               </el-select>
-              <el-time-picker v-model="timer.beginTime" :disabled="timer.disabled" class="mr-4" format='HH:mm'
-                value-format='HH:mm' />
 
-              <el-select v-model="timer.endWeekDay" class="mr-2" :disabled="timer.disabled">
-                <el-option v-for=" item, index  in  weekDayList " :key="index" :label="item.label" :value="item.value"
-                  :disabled="item.disabled">
-                </el-option>
-              </el-select>
-              <el-time-picker v-model="timer.endTime" :disabled="timer.disabled" format='HH:mm' value-format='HH:mm' />
+              <el-time-picker v-model="form.businessDateDTOList[timer - 1].beginTime" class="mr-4" format='HH:mm'
+                value-format='HH:mm' />
+              <el-time-picker v-model="form.businessDateDTOList[timer - 1].endTime" format='HH:mm' value-format='HH:mm' />
             </div>
 
-            <el-icon class="m-2 cursor-pointer" @click.once="deleteTimer(timer.areaId)"
-              v-if="index === form.businessDateDTOList.length - 1 && index !== 0">
-              <Minus />
-            </el-icon>
+
           </div>
-          <div class="mt-2">
-            <el-button type="primary" @click="addTimer">{{ t('common.addBtn') }}</el-button>
-          </div>
+
 
         </div>
       </el-form-item>
@@ -154,13 +144,12 @@ type IboothDTOListItem = {
   reserveAmount: string
 }
 
-const createTimer = () => {
+const createTimer = (weekDay: number) => {
   return {
     areaId: `${generateUUID()}`,
-    beginWeekDay: '',
-    endWeekDay: '',
-    endTime: dayjs().format('HH:mm'),
-    beginTime: dayjs().format('HH:mm'),
+    weekDay: weekDay,
+    endTime: '',
+    beginTime: '',
     disabled: false
   }
 }
@@ -173,14 +162,14 @@ const form = reactive<{ boothDTOList: IboothDTOListItem[], businessDateDTOList: 
   id: undefined, //区域ID
   storeId: '', //所属门店
   boothDTOList: [],
-  businessDateDTOList: [{ ...createTimer() }]
+  businessDateDTOList: Array.from({ length: 7 }, (_, index) => createTimer(index + 1)),
 
 });
 
 //时间对象
 
 type ITimer = {
-  areaId: string, beginWeekDay: string, endWeekDay: string, beginTime: Date, endTime: Date, disabled: boolean
+  areaId: string, weekDay: string, beginTime: Date, endTime: Date, disabled: boolean
 }
 
 

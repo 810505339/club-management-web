@@ -17,7 +17,11 @@ export default {
 		userName: 'user name',
 		userPhone: 'user phone',
 		expense: 'expenses',
-		image: 'image'
+		image: 'image',
+		showOrNotPersonNumber: 'Whether the total number of people is displayed',
+		activityPersonNumber: 'The total number of participants is limited',
+		showActivityPersonNumber: 'Whether or not the activity is limited to the total number of people',
+		showTicketId: 'Whether or not to display the ticket ID'
 	},
 
 };

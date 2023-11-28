@@ -1,7 +1,7 @@
 <template>
   <el-dialog v-model="visible" :close-on-click-modal="false"
     :title="form.jobId ? $t('common.editBtn') : $t('common.addBtn')" draggable width="600">
-    <el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="120px" v-loading="loading">
+    <el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="200px" v-loading="loading">
       <el-row :gutter="20">
         <el-col :span="20" class="mb20">
           <el-form-item :label="titleChinese" prop="dynamicTitleCn">
@@ -36,7 +36,7 @@
 
         <el-col :span="20" class="mb20">
           <el-form-item :label="t('dynamic.store')" prop="storeId">
-            <el-select v-model="form.storeId" :placeholder="$t('shopList.nameSelect')" clearable>
+            <el-select v-model="form.storeId" multiple :placeholder="$t('shopList.nameSelect')" clearable>
               <el-option v-for="item, index in storeNameList" :key="index" :label="item.name" :value="item.id" />
             </el-select>
           </el-form-item>
@@ -49,30 +49,77 @@
           </el-form-item>
         </el-col>
 
-        <el-col :span="20" class="mb20">
-          <el-form-item :label="t('dynamic.register')" prop="whetherSignUp">
-            <el-switch v-model="form.apply" />
-          </el-form-item>
-        </el-col>
-
-        <el-col :span="20" class="mb20">
-          <el-form-item :label="t('dynamic.expenses')" prop="charge">
-            <el-switch v-model="form.charge" />
-          </el-form-item>
-        </el-col>
-
-        <el-col :span="20" class="mb20" v-if="form.charge">
-          <el-form-item :label="t('dynamic.expense') + '($)'" prop="amount">
-            <el-input-number v-model="form.amount" :precision="2" :step="0.1" />
-          </el-form-item>
-        </el-col>
-
-
+        <!-- 到期时间 -->
         <el-col :span="20" class="mb20">
           <el-form-item :label="t('dynamic.expiryTime')" prop="expireTime">
             <el-date-picker v-model="form.expireTime" type="datetime" />
           </el-form-item>
         </el-col>
+
+        <!-- 是否报名 -->
+        <el-col :span="20" class="mb20">
+          <el-form-item :label="t('dynamic.register')" prop="whetherSignUp">
+            <el-switch v-model="form.whetherSignUp" />
+          </el-form-item>
+        </el-col>
+
+
+        <!-- 是否显示总人数 -->
+
+        <div v-if="form.whetherSignUp">
+
+          <el-col :span="20" class="mb20">
+            <el-form-item :label="t('dynamic.showOrNotPersonNumber')" prop="showOrNotPersonNumber">
+              <el-switch v-model="form.showOrNotPersonNumber" />
+            </el-form-item>
+          </el-col>
+
+
+          <el-col :span="20" class="mb20">
+            <el-form-item :label="t('dynamic.showActivityPersonNumber')" prop="showActivityPersonNumber">
+              <el-switch v-model="form.showActivityPersonNumber" />
+            </el-form-item>
+          </el-col>
+          <!-- 活动限制总人数 -->
+
+          <el-col :span="20" class="mb20" v-if="form.showActivityPersonNumber">
+            <el-form-item :label="t('dynamic.activityPersonNumber')" prop="activityPersonNumber">
+              <el-input-number v-model="form.activityPersonNumber" :min="0" :precision="0" :step="1" />
+            </el-form-item>
+          </el-col>
+
+
+          <el-col :span="20" class="mb20">
+            <el-form-item :label="t('dynamic.expenses')" prop="charge">
+              <el-switch v-model="form.charge" />
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="20" class="mb20" v-if="form.charge">
+            <el-form-item :label="t('dynamic.expense') + '($)'" prop="amount">
+              <el-input-number v-model="form.amount" :min="0" :precision="2" :step="0.1" />
+            </el-form-item>
+          </el-col>
+
+
+          <!--是否显示门票ID -->
+
+
+          <el-col :span="20" class="mb20">
+            <el-form-item :label="t('dynamic.showTicketId')" prop="showTicketId">
+              <el-switch v-model="form.showTicketId" />
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="20" class="mb20" v-if="form.showTicketId">
+            <el-form-item :label="t('tickets.tickets')" prop="ticketId">
+              <el-cascader :options="options" v-model="form.ticketId" :props="cascaderProps" :show-all-levels="false" />
+            </el-form-item>
+          </el-col>
+
+
+        </div>
+
       </el-row>
     </el-form>
     <template #footer>
@@ -82,7 +129,6 @@
         }}</el-button>
       </span>
     </template>
-
   </el-dialog>
 </template>
 
@@ -94,9 +140,42 @@ import { getDynamicById, AddDynamic, EditDynamic } from '/@/api/admin/dynamic';
 import { useI18n } from 'vue-i18n';
 import { useTranslateText } from './hooks/translate';
 import upload from "/@/components/Upload/index.vue";
+
+import { storeTicket } from '/@/api/operating/coupon'
 const emit = defineEmits(['refresh']);
+const options = ref([])
 const props = defineProps<{ list: any[], storeNameList: any[] }>()
 
+onMounted(async () => {
+
+
+  await storeTicketApi()
+
+})
+
+
+const cascaderProps = {
+  label: "label",
+  value: 'value',
+  children: 'children',
+  emitPath: false
+}
+
+const storeTicketApi = async () => {
+  const { data } = await storeTicket()
+  options.value = data.map(item => {
+    return {
+      label: item.storeName,
+      value: item.storeId,
+      children: item.ticketTreeVOList.map(f => ({
+        label: f.ticketName,
+        value: f.ticketId,
+      }))
+    }
+  })
+  console.log(data);
+
+}
 
 const { t } = useI18n();
 
@@ -118,13 +197,25 @@ const loading = ref(false);
 
 const IMG_PROPS = {
   fileSize: 1,
-  limit: 1,
+  limit: 10,
   fileType: ['jpg', 'png', 'jpeg']
 
 }
+
+const defalut = {
+  storeId: [],
+  whetherSignUp: false,
+  showOrNotPersonNumber: false,
+  activityPersonNumber: 0,
+  ticketId: '',
+  showTicketId: false,
+  amount: 0,
+  charge: false,
+  showActivityPersonNumber: false
+}
 // 提交表单数据
 const form = reactive({
-  storeId: []
+  ...defalut
 });
 
 const popoverVis = (bol: boolean) => {
@@ -152,6 +243,9 @@ const openDialog = (id: string) => {
   // 重置表单数据
   nextTick(() => {
     dataFormRef.value?.resetFields();
+    Object.keys(defalut).map(item => {
+      form[item] = defalut[item]
+    })
   });
 
   // 获取sysJob信息
@@ -172,7 +266,17 @@ const onSubmit = async () => {
     loading.value = true;
 
     const pictureIds = form.pictureIds?.map(item => (item.id))
-    const temp = { ...form, storeId: [form.storeId], expireTime: form.expireTime, pictureIds }
+    const temp = {
+      ...form,
+      expireTime: form.expireTime,
+      pictureIds,
+      whetherSignUp: form.whetherSignUp ? 1 : 0,
+      showOrNotPersonNumber: form.showOrNotPersonNumber ? 1 : 0,
+      amount: form.charge ? form.amount : null,
+      activityPersonNumber: form.showActivityPersonNumber ? form.activityPersonNumber : null,
+      ticketId: form.showTicketId ? form.ticketId : null,
+
+    }
 
 
     form.jobId ? await EditDynamic(temp) : await AddDynamic(temp);
@@ -192,11 +296,17 @@ const getsysJobData = (id: string) => {
   // 获取数据
   getDynamicById(id).then((res: any) => {
 
-    res.data.storeId = res.data.storeVOS[0]?.id
+    res.data.storeId = res.data.storeVOS.map(item => item.id)
     res.data.dynamicTypeId = res.data.dynamicTypeVO.id
     const pictureIds = res.data.pictureFile?.map((item: any) => ({ id: item.id, name: item.fileName }))
+    if (res.data.amount) {
+      form.charge = true
+    }
     Object.assign(form, res.data);
     form.pictureIds = pictureIds
+    form.whetherSignUp = res.data.whetherSignUp == 1 ? true : false
+    form.showActivityPersonNumber = res.data.activityPersonNumber ? true : false
+    form.showTicketId = res.data.ticketId ? true : false
   });
 };
 
@@ -204,7 +314,10 @@ const uploadChange = (type: 'pictureIds' | 'videoIds', fileList: any[]) => {
 
   form[type] = fileList
 
+
 }
+
+
 
 // 暴露变量
 defineExpose({
