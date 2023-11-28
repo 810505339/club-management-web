@@ -33,9 +33,10 @@
                 </el-option>
               </el-select>
 
-              <el-time-picker v-model="form.businessDateDTOList[timer - 1].beginTime" class="mr-4" format='HH:mm'
-                value-format='HH:mm' />
-              <el-time-picker v-model="form.businessDateDTOList[timer - 1].endTime" format='HH:mm' value-format='HH:mm' />
+              <el-time-picker v-model="form.businessDateDTOList[timer - 1].beginTime" class="mr-4" format='HH:mm:ss'
+                value-format='HH:mm:ss' />
+              <el-time-picker v-model="form.businessDateDTOList[timer - 1].endTime" format='HH:mm:ss'
+                value-format='HH:mm:ss' />
             </div>
 
 

@@ -14,7 +14,7 @@
 
       </el-form-item>
       <el-form-item :label="t('banner.name')" prop="storeIds">
-        <el-select v-model="form.storeIds" :placeholder="$t('shopList.nameSelect')" multiple>
+        <el-select v-model="form.storeIds" :placeholder="$t('shopList.nameSelect')" multiple clearable>
           <el-option v-for="item, index in storeList" :key="index" :label="item.name" :value="item.id" clearable>
           </el-option>
         </el-select>
