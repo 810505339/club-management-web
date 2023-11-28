@@ -101,27 +101,38 @@
 								</el-table-column>
 								<el-table-column :label="$t('common.action')" width="180" fixed="right">
 									<template #default="scope">
-										<el-button icon="Top" text type="primary" @click="handleTakedown(scope.row)"
-											v-if="scope.row['enabled'] == 0">
-											{{ $t('shopList.shelves') }}
-										</el-button>
+
+
+										<div v-if="scope.row['enabled'] == 0">
+
+											<el-button icon="Top" text type="primary" @click="handleTakedown(scope.row)">
+												{{ $t('shopList.shelves') }}
+											</el-button>
+											<!-- 
+											<el-button icon="edit-pen" text type="primary" @click="userDialogRef.openDialog(scope.row.id)">
+												{{ $t('common.editBtn') }}
+											</el-button>
+
+
+											<el-tooltip :content="$t('goods.deleteDisabledTip')" :disabled="scope.row.userId !== '1'"
+												placement="top">
+												<span style="margin-left: 12px">
+													<el-button icon="delete" :disabled="scope.row.username === 'admin'" text type="primary"
+														@click="handleDelete(scope.row.id)">{{ $t('common.delBtn') }}
+													</el-button>
+												</span>
+											</el-tooltip> -->
+
+										</div>
+
+
+
+
 										<el-button icon="Bottom" text type="primary" @click="handleTakedown(scope.row)" v-else>
 											{{ $t('shopList.takedown') }}
 										</el-button>
 
-										<!-- <el-button icon="edit-pen" text type="primary" @click="userDialogRef.openDialog(scope.row.id)">
-											{{ $t('common.editBtn') }}
-										</el-button>
 
-
-										<el-tooltip :content="$t('goods.deleteDisabledTip')" :disabled="scope.row.userId !== '1'"
-											placement="top">
-											<span style="margin-left: 12px">
-												<el-button icon="delete" :disabled="scope.row.username === 'admin'" text type="primary"
-													@click="handleDelete(scope.row.id)">{{ $t('common.delBtn') }}
-												</el-button>
-											</span>
-										</el-tooltip> -->
 									</template>
 								</el-table-column>
 							</el-table>
@@ -235,6 +246,10 @@ const getstoreAreaTree = async () => {
 	options.value = data
 }
 
+
+const handleDelete = async (id: string) => {
+
+}
 
 
 

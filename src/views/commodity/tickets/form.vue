@@ -47,7 +47,7 @@ import { useI18n } from 'vue-i18n';
 import { rule } from '/@/utils/validate';
 import { useTranslateText } from './hooks/translate';
 import { storeAreaTree } from '/@/api/operating/coupon'
-import { addTicket, putTicket, getTicketById, deleteTicketByIds, getTicketAll, addTicketDetail } from '/@/api/admin/commodity'
+import { addTicket, putTicket, getTicketById, deleteTicketByIds, getTicketAll, addTicketDetail, getsTicketDetailById } from '/@/api/admin/commodity'
 import upload from "/@/components/Upload/index.vue";
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
@@ -87,8 +87,8 @@ const form = reactive({
   disabledTime: '',
   ticketDetailNumber: 0,
   amount: 0,
-  time: '',
-  duration: '',
+  time: [],
+  duration: [],
 });
 
 // 定义校验规则
@@ -135,7 +135,7 @@ const openDialog = async (id: string) => {
 
   await getTicketAllApi()
   visible.value = true;
-  form.id = '';
+  form.ticketId = '';
 
   // 重置表单数据
   nextTick(() => {
@@ -145,7 +145,7 @@ const openDialog = async (id: string) => {
   // 获取sysOauthClientDetails信息
   if (id) {
     loading.value = true;
-    form.id = id;
+    form.ticketId = id;
     await getInfo(id);
     loading.value = false;
   }
@@ -166,7 +166,7 @@ const onSubmit = async () => {
       enabledTime: form.duration[0],
       disabledTime: form.duration[1],
     }
-    await addTicketDetail(temp);
+    form.ticketId ? await addTicketDetail(temp) : await addTicketDetail(temp);
 
     useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));
     visible.value = false;
@@ -180,17 +180,16 @@ const onSubmit = async () => {
 
 // 初始化表单数据
 const getInfo = async (id: string) => {
-  const { data } = await getTicketById(id)
+  const { data } = await getsTicketDetailById(id)
 
 
 
   Object.assign(form, {
     ...data,
-    areaList: [data.areaVO.storeVO.id, data.areaVO.id],
-    pictureIds: data.pictureFileVOs.map((item) => ({ name: item.fileName, url: item.fileUrl, id: item.id }))
-
   });
-  console.log(form);
+  form.time = [data.beginTime, data.endTime];
+  form.duration = [data.enabledTime, data.disabledTime]
+  form.id = data?.ticketVO?.id
 
 };
 

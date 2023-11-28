@@ -136,12 +136,10 @@ export const getTicketDetail = (data: any) => {
   })
 }
 
-export const updateEnabledByTicketDetail = (params: Object) => {
+export const updateEnabledByTicketDetail = (params: any) => {
   return request({
-    url: `/operation/ticketDetail/enabledById`,
+    url: `/operation/ticketDetail/enabledById/${params.id}`,
     method: 'put',
-    params: params
-
   });
 }
 export const addTicketDetail = (data: any) => {
@@ -152,3 +150,11 @@ export const addTicketDetail = (data: any) => {
   })
 }
 
+
+export const getsTicketDetailById = (id: string) => {
+  return request({
+    url: `/operation/ticketDetail/${id}`,
+    method: 'get',
+
+  })
+}

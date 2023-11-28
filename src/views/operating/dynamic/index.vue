@@ -83,17 +83,22 @@
         <el-table-column :label="$t('common.action')" fixed="right" width="300">
           <template #default="scope">
 
-            <el-button icon="Top" text type="primary" @click="handleTakedown(scope.row)" v-if="scope.row['enabled'] == 0">
-              {{ $t('shopList.shelves') }}
-            </el-button>
+            <div v-if="scope.row['enabled'] == 0">
+              <el-button v-auth="'job_sys_job_del'" text type="primary" @click="formDialogRef.openDialog(scope.row.id)">{{
+                $t('common.edit') }} </el-button>
+              <el-button v-auth="'job_sys_job_del'" text type="primary">{{
+                $t('common.delBtn') }} </el-button>
+              <el-button icon="Top" text type="primary" @click="handleTakedown(scope.row)">
+                {{ $t('shopList.shelves') }}
+              </el-button>
+            </div>
+
+
             <el-button icon="Bottom" text type="primary" @click="handleTakedown(scope.row)" v-else>
               {{ $t('shopList.takedown') }}
             </el-button>
 
-            <el-button v-auth="'job_sys_job_del'" text type="primary" @click="formDialogRef.openDialog(scope.row.id)">{{
-              $t('common.edit') }} </el-button>
-            <el-button v-auth="'job_sys_job_del'" text type="primary">{{
-              $t('common.delBtn') }} </el-button>
+
             <el-button v-auth="'job_sys_job_del'" text type="primary" @click="formDrawerRef.openDialog(scope.row.id)">{{
               $t('dynamic.statistics') }} </el-button>
           </template>
