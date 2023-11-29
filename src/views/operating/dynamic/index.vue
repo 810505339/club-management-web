@@ -86,7 +86,7 @@
             <div v-if="scope.row['enabled'] == 0">
               <el-button v-auth="'job_sys_job_del'" text type="primary" @click="formDialogRef.openDialog(scope.row.id)">{{
                 $t('common.edit') }} </el-button>
-              <el-button v-auth="'job_sys_job_del'" text type="primary">{{
+              <el-button @click="handleDelete([scope.row.id])" text type="primary">{{
                 $t('common.delBtn') }} </el-button>
               <el-button icon="Top" text type="primary" @click="handleTakedown(scope.row)">
                 {{ $t('shopList.shelves') }}
@@ -251,6 +251,7 @@ const handleDelete = async (ids: string[]) => {
     useMessage().error(err.msg);
   }
 };
+
 
 
 

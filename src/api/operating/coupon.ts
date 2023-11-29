@@ -71,7 +71,7 @@ export const getStoreActivity = () => {
 	});
 };
 //门店门票级联下拉
-export const storeTicket = () => {
+export const storeTicket = async () => {
 	return request({
 		url: '/operation/ticket/storeTicket',
 		method: 'get',

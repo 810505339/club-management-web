@@ -1,6 +1,6 @@
 export default {
-	
-	clientmanager: {
-	
+
+	type: {
+		name: '名称'
 	},
 };

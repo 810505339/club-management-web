@@ -6,7 +6,7 @@
 					<el-row v-show="showSearch">
 						<el-form ref="queryRef" :inline="true" :model="state.queryForm" @keyup.enter="getDataList">
 							<el-form-item :label="$t('shopList.name')" prop="storeId">
-								<el-select v-model="state.queryForm.storeId" :placeholder="$t('area.nameSelect')" clearable>
+								<el-select v-model="state.queryForm.storeId" :placeholder="$t('shopList.nameSelect')" clearable>
 									<el-option v-for="item, index in storeNameList" :key="index" :label="item.name" :value="item.id"
 										clearable>
 									</el-option>
@@ -74,7 +74,7 @@
 								<el-button icon="InfoFilled" text type="primary" @click="useInfoRef.open(scope.row.id)">
 									{{ $t('common.detailBtn') }}
 								</el-button>
-								
+
 								<div v-if="scope.row['enabled'] == 0">
 									<el-button icon="Top" text type="primary" @click="handleTakedown(scope.row)">
 										{{ $t('shopList.shelves') }}
@@ -231,7 +231,7 @@ const handleTakedown = async (row: any) => {
 function timerFormat(list: any[]) {
 
 	return list.map((item) => {
-		return `${weekdayFormat(Number(item.beginWeekDay), t)}  ${item.beginTime}~${weekdayFormat(Number(item.endWeekDay), t)}  ${item.endTime}`
+		return `${weekdayFormat(Number(item.weekDay), t)}  ${item.beginTime}~${item.endTime}`
 	})
 
 }

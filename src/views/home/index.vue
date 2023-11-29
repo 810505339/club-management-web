@@ -31,7 +31,7 @@
 
       <el-scrollbar height="450px" class="pr-6 pb-5">
         <div class="py-10">
-          <div class="flex h-[300px] gap-6">
+          <div class="flex h-[320px] gap-6">
             <div class="w-1/3 rounded-3xl bg-[#72AA3D80]  text-[#CAF16CFF] p-6 flex flex-col ">
               <header class="text-base font-semibold">订单及流水统计</header>
               <div class="text-xs font-semibold">订单总量 <span class="text-white text-2xl ml-2">517,563,254</span> </div>
@@ -52,23 +52,27 @@
                 </div>
               </div>
             </div>
-            <div class="w-1/3 rounded-3xl bg-[#3F4FD780] p-6 text-[#D5DFFFFF]">
+            <div class="w-1/3 rounded-3xl bg-[#3F4FD780] p-6 text-[#D5DFFFFF] flex flex-col">
               <header class="text-base font-semibold">区域偏好数据</header>
               <div class="mt-5">
                 <div class="text-xs">数据来源：用户预订卡座、拼酒局时选择的区域</div>
-                <div></div>
               </div>
-
+              <div ref="dom3" class="flex-auto"></div>
             </div>
           </div>
           <div class="flex h-[320px] gap-6 mt-5">
-            <div class="w-1/3 rounded-3xl bg-[#8645BD80] p-6"></div>
-            <div class="w-1/3 rounded-3xl bg-[#BB2B5D80] p-6"></div>
-            <div class="w-1/3 rounded-3xl bg-[#278BA880]  p-6 flex flex-col">
+            <div class="w-1/3 rounded-3xl bg-[#8645BD80] p-6 text-[#E6C9FFFF] ">
+              <header class="text-base font-semibold">拼酒局用户性别、年龄占比数据概况</header>
+            </div>
+            <div class="w-1/3 rounded-3xl bg-[#BB2B5D80] p-6 text-[#FEB6CBFF] flex flex-col">
+              <header class="text-base font-semibold">用户来店方式占比</header>
+              <div ref="dom5" class="flex-auto"></div>
+            </div>
+            <div class="w-1/3 rounded-3xl bg-[#278BA880]  p-6 flex text=[#98DCEAFF] flex-col">
               <header class="text-base font-semibold">拼酒局数据概况</header>
               <div class="text-xs font-semibold">拼酒局总次数 <span class="text-white text-2xl ml-2">517,563,254</span> </div>
               <div class="text-xs font-semibold">拼酒局成功率 <span class="text-white text-2xl ml-2">56.23%</span></div>
-              <div ref="dom5" class="flex-auto"></div>
+              <div ref="dom6" class="flex-auto"></div>
             </div>
           </div>
         </div>
@@ -85,16 +89,23 @@
 import { getStoreName } from '/@/api/admin/store'
 import dayjs from 'dayjs'
 import { useStackedChatOptions } from './eCharts/stackedChat'
+import useBarOptions from './eCharts/bar'
+import usePieOptions from './eCharts/pie'
 
 const dom = ref<HTMLElement>()
+const dom3 = ref<HTMLElement>()
 const dom5 = ref<HTMLElement>()
+const dom6 = ref<HTMLElement>()
 const active = ref(0)
 const storeNameList = ref<any[]>([])
 onMounted(() => {
-  if (dom.value && dom5.value) {
+  if (dom.value && dom5.value && dom3.value && dom6.value) {
     useStackedChatOptions(dom.value)
-    useStackedChatOptions(dom5.value)
+    useStackedChatOptions(dom6.value)
+    useBarOptions(dom3.value)
+    usePieOptions(dom5.value)
   }
+
 })
 
 const state = ref({
