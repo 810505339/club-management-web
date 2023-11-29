@@ -2,7 +2,7 @@ import { EChartsOption } from "echarts";
 import * as echarts from 'echarts';
 
 
-const usePieOptions = (chartDom: HTMLElement) => {
+const useBarOptions = (chartDom: HTMLElement) => {
 
   const myChart = echarts.init(chartDom)
   const COLORS = ['#91CC75FF', '#FAC758FF', '#EE6667FF',];
@@ -64,4 +64,4 @@ const usePieOptions = (chartDom: HTMLElement) => {
 }
 
 
-export default usePieOptions
+export default useBarOptions

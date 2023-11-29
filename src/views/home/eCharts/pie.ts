@@ -4,30 +4,38 @@ import * as echarts from 'echarts';
 
 
 
-const useBarOptions = (chartDom: HTMLElement) => {
-
+const useBarOptions = (chartDom: HTMLElement, opt: any) => {
+  const { radius = ['50%', '10%'], legend = {
+    top: '5%',
+    left: 'center',
+    textStyle: {
+      color: '#fff'
+    },
+  }, grid = {
+    bottom: '10%'
+  }, center = ['50%', '50%'] } = opt
   const myChart = echarts.init(chartDom)
   const options: EChartsOption = {
     tooltip: {
-      trigger: 'item'
+      trigger: 'item',
+      axisPointer: {
+        // 坐标轴指示器，坐标轴触发有效
+        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+      },
+      formatter: '{b} : {c} <br/>百分比 : {d}%' //{a}（系列名称），{b}（数据项名称），{c}（数值）, {d}（百分比）
     },
-    legend: {
-      top: '5%',
-      left: 'center',
-      textStyle: {
-        color: '#fff'
-      }
-    },
+    legend: legend,
     series: [
       {
 
         type: 'pie',
-        radius: ['50%', '10%'],
+        radius: radius,
+        center: center,
         avoidLabelOverlap: false,
         itemStyle: {
           borderRadius: 5,
           borderColor: '#fff',
-          borderWidth: 1
+          borderWidth: 0
         },
         label: {
           show: false,
@@ -51,9 +59,7 @@ const useBarOptions = (chartDom: HTMLElement) => {
         ]
       }
     ],
-    grid: {
-      bottom: '10%'
-    }
+    grid: grid
   };
 
 
