@@ -1,5 +1,13 @@
 /*
  * @Author: yxx
+ * @Date: 2023-11-07 19:17:50
+ * @LastEditTime: 2023-11-29 20:46:46
+ * @LastEditors: yxx
+ * @Description: 
+ * @FilePath: \club-management-web\src\i18n\pages\form\en.ts
+ */
+/*
+ * @Author: yxx
  * @Date: 2023-09-27 20:06:01
  * @LastEditTime: 2023-11-12 23:07:00
  * @LastEditors: yxx
@@ -24,6 +32,7 @@ export default {
 		action: 'Action',
 		audit: 'Audit',
 		dispose: 'Dispose',
+		disposes: 'Disposes',
 		optSuccessText: 'Operation successful',
 		optConfirmText: 'Confirm this operation?',
 		editSuccessText: 'Successfully edited',
@@ -67,7 +76,8 @@ export default {
 		detail: ' detail',
 		image: ' image',
 		PASS: '通过',
-		REJECT: 'REJECT'
+		REJECT: 'REJECT',
+		revocation: 'revocation撤销'
 	},
 	message: {
 		box: {

@@ -58,7 +58,7 @@ export default {
 		importsysJobLogTip: '导入定时任务执行日志表',
 		jobLogId: '任务日志ID',
 		jobId: '任务id',
-		jobName: '任务名称',
+		jobName: '任务名称1',
 		jobGroup: '任务组名',
 		jobMessage: '日志信息',
 		jobLogStatus: '执行状态',
