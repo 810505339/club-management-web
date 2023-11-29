@@ -6,7 +6,7 @@
 					<el-row v-show="showSearch">
 						<el-form ref="queryRef" :inline="true" :model="state.queryForm" @keyup.enter="getDataList">
 							<el-form-item :label="$t('shopList.name')" prop="storeId">
-								<el-select v-model="state.queryForm.storeId" :placeholder="$t('area.nameSelect')" clearable>
+								<el-select v-model="state.queryForm.storeId" :placeholder="$t('shopList.nameSelect')" clearable>
 									<el-option v-for="item, index in storeNameList" :key="index" :label="item.name" :value="item.id"
 										clearable>
 									</el-option>

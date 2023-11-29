@@ -18,7 +18,7 @@
       <el-form-item :label="duration" prop="duration">
         <el-date-picker :end-placeholder="$t('syslog.inputEndPlaceholderTip')"
           :start-placeholder="$t('syslog.inputStartPlaceholderTip')" range-separator="To" type="datetimerange"
-          value-format="YYYY-MM-DD HH:mm" v-model="form.duration" />
+          value-format="YYYY-MM-DD HH:mm" format="YYYY-MM-DD HH:mm" v-model="form.duration" />
       </el-form-item>
 
 
@@ -162,7 +162,7 @@ const onSubmit = async () => {
     const temp = {
       ...form,
       beginTime: form.time[0],
-      endTime: form.time[0],
+      endTime: form.time[1],
       enabledTime: form.duration[0],
       disabledTime: form.duration[1],
     }
