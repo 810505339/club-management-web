@@ -1,5 +1,5 @@
 export default {
-	client: {
-	
+	type: {
+		name: 'name'
 	},
 };
