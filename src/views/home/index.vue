@@ -64,7 +64,8 @@
             </div>
           </div>
           <div class="flex h-[320px] gap-6 mt-5">
-            <div class="w-1/3 rounded-3xl bg-[#8645BD80] p-6 text-[#E6C9FFFF] flex flex-col">
+            <div class="w-1/3 rounded-3xl bg-[#8645BD80] p-6 text-[#E6C9FFFF] flex flex-col relative">
+              <img :src="cardIcon4" class="absolute z-10 right-5 top-10" />
               <header class="text-base font-semibold">拼酒局用户性别、年龄占比数据概况</header>
               <div class="text-xs flex items-center justify-between mt-2.5">
                 <span>用户性别构成</span>
@@ -74,11 +75,13 @@
               <div ref="dom4" />
 
             </div>
-            <div class="w-1/3 rounded-3xl bg-[#BB2B5D80] p-6 text-[#FEB6CBFF] flex flex-col">
+            <div class="w-1/3 rounded-3xl bg-[#BB2B5D80] p-6 text-[#FEB6CBFF] flex flex-col relative">
+              <img :src="cardIcon5" class="absolute z-10 right-5 top-10" />
               <header class="text-base font-semibold">用户来店方式占比</header>
               <div ref="dom5" class="flex-auto"></div>
             </div>
-            <div class="w-1/3 rounded-3xl bg-[#278BA880]  p-6 flex text=[#98DCEAFF] flex-col">
+            <div class="w-1/3 rounded-3xl bg-[#278BA880]  p-6 flex text=[#98DCEAFF] flex-col relative">
+              <img :src="cardIcon6" class="absolute z-10 right-5 top-10" />
               <header class="text-base font-semibold">拼酒局数据概况</header>
               <div class="text-xs font-semibold">拼酒局总次数 <span class="text-white text-2xl ml-2">517,563,254</span> </div>
               <div class="text-xs font-semibold">拼酒局成功率 <span class="text-white text-2xl ml-2">56.23%</span></div>
@@ -91,7 +94,44 @@
 
 
     </div>
-    <div class="w-[300px] border border-[#FFFFFF40] bg-[#00000040]  rounded-xl overflow-hidden">1</div>
+    <div class="w-[400px] mr-2.5 border border-[#FFFFFF40] bg-[#00000040]  rounded-xl  relative p-6 overflow-hidden">
+      <img class="absolute z-10 left-0 right-0 top-0" :src="userBg" />
+      <div class="relative z-20">
+        <header>
+          <div class="flex flex-row justify-between">
+            <div>
+              <div class="text-white text-[32px] font-bold">Sherlock Holmes</div>
+              <div class="text-base text-[#CFD3DC]">系统管理员</div>
+            </div>
+            <div>
+              <el-avatar :size="128" :src="'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'" />
+            </div>
+          </div>
+          <div class="text-[#E6A055FF] text-base">
+            Sharp tools make good work.
+          </div>
+        </header>
+        <section class="mt-6">
+          <header class="text-[#CFD3DC] text-xl font-bold">待办事项</header>
+          <div class="">
+            <div v-for="todo, index in todos" :key="index" class="h-[118px]  relative py-4 px-5 my-2.5"
+              :class="[todo.color]">
+              <img class="absolute z-10 left-0 right-0 top-0" :src="todo.bg" />
+              <div class="relative z-20 ">
+                <div class="text-sm">{{ todo.title }}</div>
+                <div class="mt-6">
+                  <span class="text-5xl font-bold">{{ todo.num }}</span>
+                  <span class="text-sm font-normal">{{ todo.sub }}</span>
+                </div>
+                <div class="absolute z-30 w-8 h-8 right-0 top-[50%] -translate-x-1/2">
+                  <img :src="todo.icon" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -109,6 +149,31 @@ import cardIcon3 from '/@/assets/home/card_3.png'
 import cardIcon4 from '/@/assets/home/card_4.png'
 import cardIcon5 from '/@/assets/home/card_5.png'
 import cardIcon6 from '/@/assets/home/card_6.png'
+
+import todoIcon1 from '/@/assets/home/todo1_bg.png'
+import todoIcon2 from '/@/assets/home/todo2_bg.png'
+import todoIcon3 from '/@/assets/home/todo3_bg.png'
+import todoIcon4 from '/@/assets/home/todo4_bg.png'
+import todoIcon5 from '/@/assets/home/todo5_bg.png'
+
+import btn1 from '/@/assets/home/btn1.png'
+import btn2 from '/@/assets/home/btn2.png'
+import btn3 from '/@/assets/home/btn3.png'
+import btn4 from '/@/assets/home/btn4.png'
+import btn5 from '/@/assets/home/btn5.png'
+
+
+
+import userBg from '/@/assets/home/userBg.png'
+
+
+const todos = [
+  { title: '待处理订单', num: '2534', sub: '个', icon: btn1, bg: todoIcon1, color: 'text-[#E6A055FF]' },
+  { title: '拼酒局评论', num: '2534', sub: '条', icon: btn2, bg: todoIcon2, color: 'text-[#3ADBCBFF]' },
+  { title: '广播申请', num: '2534', sub: '条', icon: btn3, bg: todoIcon3, color: 'text-[#FF6035FF]' },
+  { title: '退款审核', num: '2534', sub: '条', icon: btn4, bg: todoIcon4, color: 'text-[#759BFFFF]' },
+  { title: '优惠券审核', num: '2534', sub: '条', icon: btn5, bg: todoIcon5, color: 'text-[#FAAD14FF]' },
+]
 
 
 const dom = ref<HTMLElement>()
