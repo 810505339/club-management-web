@@ -58,9 +58,6 @@
 		</splitpanes>
 
 		<user-form ref="userDialogRef" :gender="gender" :lock_flag="lock_flag" @refresh="getDataList(false)" />
-
-		<upload-excel ref="excelUploadRef" :title="$t('clientUser.importUserTip')"
-			temp-url="/admin/sys-file/local/file/user.xlsx" url="/admin/user/import" @refreshDataList="getDataList" />
 	</div>
 </template>
 

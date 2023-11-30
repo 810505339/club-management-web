@@ -18,8 +18,9 @@ export const EditDynamicType = (data?: Object) => {
 
 export const DeleteDynamicTypeByIds = (ids: string[]) => {
   return request({
-    url: `/admin/dynamicType/${ids}`,
+    url: `/admin/dynamicType`,
     method: 'DELETE',
+    data: ids,
 
   })
 }

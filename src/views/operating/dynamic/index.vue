@@ -33,10 +33,7 @@
             type="primary">
             {{ $t('common.addBtn') }}
           </el-button>
-          <el-button plain v-auth="'job_sys_job_del'" :disabled="multiple" @click="handleDelete(undefined)" class="ml10"
-            icon="Delete" type="primary">
-            {{ $t('common.delBtn') }}
-          </el-button>
+
           <right-toolbar :export="'job_sys_job_add'" @exportExcel="exportExcel" @queryTable="getDataList" class="ml10"
             style="float: right; margin-right: 20px" v-model:showSearch="showSearch" />
         </div>

@@ -52,7 +52,7 @@
         <!-- 到期时间 -->
         <el-col :span="20" class="mb20">
           <el-form-item :label="t('dynamic.expiryTime')" prop="expireTime">
-            <el-date-picker v-model="form.expireTime" type="datetime" />
+            <el-date-picker v-model="form.expireTime" type="datetime" value-format="YYYY-MM-DD HH:mm:ss" />
           </el-form-item>
         </el-col>
 
