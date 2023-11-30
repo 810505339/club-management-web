@@ -2,107 +2,110 @@
 	<div class="layout-padding">
 		<splitpanes>
 			<pane>
-				<div class="layout-padding-auto layout-padding-view">
-					<el-row>
-						<el-form ref="queryRef" :inline="true" :model="state.queryForm" @keyup.enter="getDataList">
-							<el-form-item :label="$t('sysuser.username')" prop="username">
-								<el-input v-model="state.queryForm.username" :placeholder="$t('sysuser.inputUsernameTip')" clearable />
-							</el-form-item>
-							<el-form-item :label="$t('sysuser.phone')" prop="phone">
-								<el-input v-model="state.queryForm.phone" :placeholder="$t('sysuser.inputPhoneTip')" clearable />
-							</el-form-item>
-							<el-form-item :label="$t('sysuser.role')" prop="role">
-								<el-select v-model="state.queryForm.role" multiple :placeholder="$t('sysuser.inputPhoneRole')">
-									<el-option v-for="item in optionsRoles" :key="item.roleId" :label="item.roleName" :value="item.roleId"
-										clearable> </el-option>
-								</el-select>
-							</el-form-item>
-							<el-form-item :label="$t('sysuser.lockFlag')" prop="lockFlag">
-								<el-select v-model="state.queryForm.lockFlag" :placeholder="$t('sysuser.inputLockFlag')">
-									<el-option v-for="item in lock_flag" :key="item.id" :label="item.label" :value="item.value" clearable>
-									</el-option>
-								</el-select>
-							</el-form-item>
-							<el-form-item>
-								<el-button icon="Search" type="primary" @click="getDataList">{{ $t('common.queryBtn') }}</el-button>
-								<el-button icon="Refresh" @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
-							</el-form-item>
-						</el-form>
-					</el-row>
-					<el-row>
-						<div class="mb8" style="width: 100%">
-							<el-button v-auth="'sys_user_add'" icon="folder-add" type="primary" @click="userDialogRef.openDialog()">
-								{{ $t('common.addBtn') }}
-							</el-button>
-							<el-button plain v-auth="'sys_user_add'" class="ml10" icon="upload-filled" type="primary"
-								@click="excelUploadRef.show()">
-								{{ $t('common.importBtn') }}
-							</el-button>
+				<div class="layout-padding-auto layout-padding-view ">
 
-							<el-button plain v-auth="'sys_user_del'" :disabled="multiple" class="ml10" icon="Delete" type="primary"
-								@click="handleDelete(selectObjs)">
-								{{ $t('common.delBtn') }}
-							</el-button>
+					<div class="flex h-full text-center">
 
-							<right-toolbar v-model:showSearch="showSearch" :export="'sys_user_export'" @exportExcel="exportExcel"
-								@queryTable="getDataList" class="ml10 mr20" style="float: right" />
+						<div class="flex-auto h-full p-5">
+
+							<el-row v-show="showSearch">
+								<el-form ref="queryRef" :inline="true" :model="state.queryForm" @keyup.enter="getDataList">
+
+									<el-form-item :label="t('pool.search1')" prop="areaList">
+										<el-select />
+									</el-form-item>
+
+									<el-form-item :label="t('pool.search2')" prop="areaList">
+										<el-select />
+									</el-form-item>
+
+									<el-form-item :label="t('pool.search3')" prop="areaList">
+										<el-input />
+									</el-form-item>
+
+									<el-form-item :label="t('pool.search4')" prop="areaList">
+										<el-input />
+									</el-form-item>
+
+
+									<el-form-item>
+										<el-button icon="Search" type="primary" @click="getDataList">{{ $t('common.queryBtn') }}</el-button>
+										<el-button icon="Refresh" @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
+									</el-form-item>
+								</el-form>
+							</el-row>
+							<el-row>
+								<div class="mb8 flex items-center">
+									<div v-for="item, index in stateList" :key="index" class="mr-2">
+										<span>{{ item.label }}:</span>
+										<span :class="item.color" class="ml-2 font-bold">{{ item.num }}</span>
+									</div>
+								</div>
+							</el-row>
+
+							<el-table stripe v-loading="state.loading" :data="state.dataList" @selection-change="handleSelectionChange"
+								border :cell-style="tableStyle.cellStyle" :header-cell-style="tableStyle.headerCellStyle">
+								<el-table-column :label="$t('common.index')" type="index" width="60" fixed="left" />
+								<el-table-column :label="t('pool.search3')" fixed="left">
+									<template #default="scope">
+										{{ scope.row['ticketVO'].name }}
+									</template>
+								</el-table-column>
+								<el-table-column :label="t('pool.search2')" fixed="left">
+									<template #default="scope">
+										{{ scope.row['ticketVO'].areaVO.name }}
+									</template>
+								</el-table-column>
+								<el-table-column :label="t('pool.search1')" width="300" fixed="left">
+									<template #default="scope">
+										{{ scope.row['beginTime'] }}~{{ scope.row['endTime'] }}
+									</template>
+								</el-table-column>
+								<el-table-column :label="t('pool.table1')" props="ticketDetailNumber">
+									<template #default="scope">
+										<span @click="userDialogRef.openDialog()" class="text-[#759BFFFF] cursor-pointer border-b border-[#759BFFFF]"> {{
+											scope.row['ticketDetailNumber'] }}</span>
+									</template>
+								</el-table-column>
+								<el-table-column :label="t('pool.table2')" props="amount">
+									<template #default="scope">
+										{{ scope.row['amount'] }}
+									</template>
+								</el-table-column>
+								<el-table-column :label="t('pool.table3')" width="300">
+									<template #default="scope">
+										{{ scope.row['disabledTime'] }}
+									</template>
+								</el-table-column>
+								<el-table-column :label="t('pool.table4')">
+									<template #default="scope">
+										{{ scope.row['enabled'] == 1 ? $t('shopList.shelves') : $t('shopList.takedown') }}
+									</template>
+								</el-table-column>
+
+								<el-table-column :label="t('pool.table5')">
+									<template #default="scope">
+										{{ scope.row['enabled'] == 1 ? $t('shopList.shelves') : $t('shopList.takedown') }}
+									</template>
+								</el-table-column>
+
+								<el-table-column :label="t('pool.table6')">
+									<template #default="scope">
+										{{ scope.row['enabled'] == 1 ? $t('shopList.shelves') : $t('shopList.takedown') }}
+									</template>
+								</el-table-column>
+
+							</el-table>
+							<pagination v-bind="state.pagination" @current-change="currentChangeHandle" @size-change="sizeChangeHandle">
+							</pagination>
 						</div>
-					</el-row>
-					<el-table v-loading="state.loading" :data="state.dataList" @selection-change="handleSelectionChange" border
-						:cell-style="tableStyle.cellStyle" :header-cell-style="tableStyle.headerCellStyle">
-						<el-table-column :selectable="handleSelectable" type="selection" width="40" />
-						<el-table-column :label="$t('sysuser.index')" type="index" width="60" fixed="left" />
-						<el-table-column :label="$t('sysuser.username')" prop="username" fixed="left"
-							show-overflow-tooltip></el-table-column>
-						<el-table-column :label="$t('sysuser.name')" prop="name" show-overflow-tooltip></el-table-column>
-						<el-table-column :label="$t('sysuser.gender')" prop="gender" show-overflow-tooltip>
-							<template #default="scope">
-								{{ scope.row.gender == 1 ? '男' : scope.row.gender == 2 ? '女' : '-' }}
-							</template>
-						</el-table-column>
-						<el-table-column :label="$t('sysuser.phone')" prop="phone" show-overflow-tooltip></el-table-column>
-						<el-table-column :label="$t('sysuser.post')" show-overflow-tooltip>
-							<template #default="scope">
-								<el-tag v-for="(item, index) in scope.row.postList" :key="index">{{ item.postName }}</el-tag>
-							</template>
-						</el-table-column>
-						<el-table-column :label="$t('sysuser.role')" show-overflow-tooltip>
-							<template #default="scope">
-								<el-tag v-for="(item, index) in scope.row.roleList" :key="index">{{ item.roleName }}</el-tag>
-							</template>
-						</el-table-column>
-						<el-table-column :label="$t('sysuser.lockFlag')" show-overflow-tooltip>
-							<template #default="scope">
-								<el-switch v-model="scope.row.lockFlag" @change="changeSwitch(scope.row)" active-value="0"
-									inactive-value="9"></el-switch>
-							</template>
-						</el-table-column>
-						<el-table-column :label="$t('sysuser.createTime')" prop="createTime" show-overflow-tooltip
-							width="180"></el-table-column>
-						<el-table-column :label="$t('common.action')" width="160" fixed="right">
-							<template #default="scope">
-								<el-button v-auth="'sys_user_edit'" icon="edit-pen" text type="primary"
-									@click="userDialogRef.openDialog(scope.row.userId)">
-									{{ $t('common.editBtn') }}
-								</el-button>
-								<el-tooltip :content="$t('sysuser.deleteDisabledTip')" :disabled="scope.row.userId !== '1'"
-									placement="top">
-									<span style="margin-left: 12px">
-										<el-button icon="delete" v-auth="'sys_user_del'" :disabled="scope.row.username === 'admin'" text
-											type="primary" @click="handleDelete([scope.row.userId])">{{ $t('common.delBtn') }}
-										</el-button>
-									</span>
-								</el-tooltip>
-							</template>
-						</el-table-column>
-					</el-table>
-					<pagination v-bind="state.pagination" @current-change="currentChangeHandle" @size-change="sizeChangeHandle">
-					</pagination>
+					</div>
+
 				</div>
 			</pane>
 		</splitpanes>
 
-		<user-form ref="userDialogRef" :gender="gender" :lock_flag="lock_flag" @refresh="getDataList(false)" />
+		<user-form ref="userDialogRef" @refresh="handlegetTicketList" />
 
 		<upload-excel ref="excelUploadRef" :title="$t('sysuser.importUserTip')"
 			temp-url="/admin/sys-file/local/file/user.xlsx" url="/admin/user/import" @refreshDataList="getDataList" />
@@ -110,34 +113,77 @@
 </template>
 
 <script lang="ts" name="systemUser" setup>
-import { delObj, pageList, putObj } from '/@/api/admin/user';
-import { deptTree } from '/@/api/admin/dept';
-import { list } from '/@/api/admin/role';
-import { BasicTableProps, useTable } from '/@/hooks/table';
-import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
-import { useDict } from '/@/hooks/dict';
-// 动态引入组件
-const UserForm = defineAsyncComponent(() => import('./form.vue'));
-const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'));
+import { BasicTableProps, useTable } from '/@/hooks/table';
 
+import userForm from "./form.vue";
+import { getStoreName } from '/@/api/admin/store';
+import { getTicketAll, getTicketDetail, updateEnabledByTicketDetail } from '/@/api/admin/commodity';
+import { useUserInfo } from '/@/stores/userInfo';
+import { useMessage, useMessageBox } from '/@/hooks/message';
+import { storeAreaTree } from '/@/api/operating/coupon';
+const store = useUserInfo()
+const fileCommonUrl = computed(() => store.userInfos.fileCommonUrl)
+const options = ref([])
 const { t } = useI18n();
 
+<<<<<<< HEAD
 const userDialogRef = ref();
+=======
+//拼局中：15    待入场：100    已入场：123   拼局失败：333
+const stateList = [
+	{ label: t('pool.state1'), num: '15', color: 'text-[#759BFFFF]' },
+	{ label: t('pool.state2'), num: '100', color: 'text-[#E6A055FF]' },
+	{ label: t('pool.state3'), num: '123', color: 'text-[#CAF16CFF]' },
+	{ label: t('pool.state4'), num: '333', color: 'text-[]' },
+]
+
+const enabledList = [
+	{ label: '上架', value: '1' },
+	{ label: '下架', value: '0' },
+]
+const queryRef = ref();
+// 定义变量内容
+const userDialogRef = ref();
+const showSearch = ref(true);
+const storeNameList = ref<any[]>([])
+type ITicket = {
+	id: string;
+	img: string
+}
+const ticketsList = ref<ITicket[]>([])
+const activeId = ref('235645682655')
+
+const cascaderProps = {
+	label: "name",
+	value: 'id',
+	children: 'list',
+	checkStrictly: true
+}
+>>>>>>> cee421145b21489ddb9f5dd47eb74965c0059f8b
 
 // 定义表格查询、后台调用的API
 const state: BasicTableProps = reactive<BasicTableProps>({
 	queryForm: {
-		deptId: '',
-		username: '',
-		phone: '',
-		role: '',
-		lockFlag: '',
+		enabled: '',
+		storeId: '',
+		areaId: '',
+		areaList: []
 	},
-	pageList: pageList,
+	pageList: async (pamars) => {
+		console.log(pamars)
+		const temp = {
+			...pamars,
+			storeId: pamars?.areaList?.[0],
+			areaId: pamars?.areaList?.[1]
+		}
+		// console.log(temp);
+		return await getTicketDetail(temp)
+	},
 });
 const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
+<<<<<<< HEAD
 
 
 
@@ -168,4 +214,51 @@ const handleDelete = async (ids: string[]) => {
 };
 
 
+=======
+
+//点击下架
+const handleTakedown = async (row: any) => {
+
+	//scope.row['enabled'] == 1 ? '上架' : '下架'
+	//shelves: '上架',
+	//	takedown: '下架',
+	const enabled = row.enabled == 1 ? '0' : '1'
+
+	if (row.enabled == 1) {
+		await useMessageBox().confirm(t('shopList.sureTakedown'))
+	}
+	//1:下架,0:正常
+	await updateEnabledByTicketDetail({
+		id: row.id,
+		enabled: enabled
+	})
+	useMessage().success(t('common.optSuccessText'));
+
+	getDataList();
+
+
+}
+
+const getstoreAreaTree = async () => {
+	const { data } = await storeAreaTree({ type: 0 })
+	options.value = data
+}
+
+
+const handleDelete = async (id: string) => {
+
+}
+
+
+
+onMounted(async () => {
+	await getstoreAreaTree()
+})
+
+>>>>>>> cee421145b21489ddb9f5dd47eb74965c0059f8b
 </script>
+<style scoped>
+:deep(.el-scrollbar) {
+	height: 90%;
+}
+</style>
