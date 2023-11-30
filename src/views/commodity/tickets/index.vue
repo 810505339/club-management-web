@@ -5,27 +5,7 @@
 				<div class="layout-padding-auto layout-padding-view ">
 
 					<div class="flex h-full text-center">
-						<!-- <div class="w-64 bg-[#141414]  h-full">
 
-							<el-scrollbar max-height="800px">
-								<div v-for="item, index in  ticketsList " :key="item.id">
-									<div class="p-5" :class="activeId === item.id && 'bg-[rgba(64,158,255,0.2)]'" @click="active(item)"
-										@dblclick="userDialogRef.openDialog(item.id)">
-										<el-image class="w-52 h-32" fit="cover" :src="item.img" v-if="item.img" />
-										<div v-else class="w-52 h-32 flex justify-center items-center bg-[#1d1d1f]">暂无封面</div>
-
-										<div class="text-[#ffffff] text-center mt-3">{{ name }}:{{ item.name }}</div>
-									</div>
-								</div>
-							</el-scrollbar>
-							<div>
-								<el-button type="primary" class="my-2" @click="userDialogRef.openDialog()">
-									{{ $t('common.addBtn') }}
-								</el-button>
-							</div>
-
-
-						</div> -->
 						<div class="flex-auto h-full p-5">
 
 							<el-row v-show="showSearch">

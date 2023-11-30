@@ -114,7 +114,7 @@
         <section class="mt-6">
           <header class="text-[#CFD3DC] text-xl font-bold">待办事项</header>
           <div class="">
-            <div v-for="todo, index in todos" :key="index" class="h-[118px]  relative py-4 px-5 my-2.5"
+            <div v-for="todo, index in todos" :key="index" class="h-[118px]  relative py-4 px-5 my-2.5 cursor-pointer"
               :class="[todo.color]">
               <img class="absolute z-10 left-0 right-0 top-0" :src="todo.bg" />
               <div class="relative z-20 ">
