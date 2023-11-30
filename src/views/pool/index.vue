@@ -63,7 +63,8 @@
 								</el-table-column>
 								<el-table-column :label="t('pool.table1')" props="ticketDetailNumber">
 									<template #default="scope">
-										{{ scope.row['ticketDetailNumber'] }}
+										<span @click="userDialogRef.openDialog()" class="text-[#759BFFFF] cursor-pointer border-b border-[#759BFFFF]"> {{
+											scope.row['ticketDetailNumber'] }}</span>
 									</template>
 								</el-table-column>
 								<el-table-column :label="t('pool.table2')" props="amount">
