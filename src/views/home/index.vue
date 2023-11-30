@@ -11,7 +11,7 @@
           <div class="py-[4px] px-[10px] text-xs rounded-2xl flex items-center justify-center  cursor-pointer"
             :class="[activeClass(1)]" @click="changeActive(1)">数据看板</div>
         </div>
-        <div class="mt-10">
+        <div class="mt-10" v-if="active === 1">
           <el-form inline>
             <el-form-item :label="$t('shopList.name')" prop="name">
               <el-select v-model="state.name" :placeholder="$t('shopList.nameSelect')">
@@ -29,7 +29,10 @@
         </div>
       </header>
 
-      <el-scrollbar height="450px" class="pr-6 pb-5">
+      <BoothReservation v-if="active === 0" class="mt-10" />
+
+
+      <el-scrollbar height="450px" class="pr-6 pb-5" v-else>
         <div class="py-10">
           <div class="flex h-[320px] gap-6">
             <div class="w-1/3 rounded-3xl bg-[#72AA3D80]  text-[#CAF16CFF] p-6 flex flex-col relative">
@@ -94,44 +97,51 @@
 
 
     </div>
-    <div class="w-[400px] mr-2.5 border border-[#FFFFFF40] bg-[#00000040]  rounded-xl  relative p-6 overflow-hidden">
-      <img class="absolute z-10 left-0 right-0 top-0" :src="userBg" />
-      <div class="relative z-20">
-        <header>
-          <div class="flex flex-row justify-between">
-            <div>
-              <div class="text-white text-[32px] font-bold">Sherlock Holmes</div>
-              <div class="text-base text-[#CFD3DC]">系统管理员</div>
-            </div>
-            <div>
-              <el-avatar :size="128" :src="'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'" />
-            </div>
-          </div>
-          <div class="text-[#E6A055FF] text-base">
-            Sharp tools make good work.
-          </div>
-        </header>
-        <section class="mt-6">
-          <header class="text-[#CFD3DC] text-xl font-bold">待办事项</header>
-          <div class="">
-            <div v-for="todo, index in todos" :key="index" class="h-[118px]  relative py-4 px-5 my-2.5 cursor-pointer"
-              :class="[todo.color]">
-              <img class="absolute z-10 left-0 right-0 top-0" :src="todo.bg" />
-              <div class="relative z-20 ">
-                <div class="text-sm">{{ todo.title }}</div>
-                <div class="mt-6">
-                  <span class="text-5xl font-bold">{{ todo.num }}</span>
-                  <span class="text-sm font-normal">{{ todo.sub }}</span>
+
+    <div>
+      <el-scrollbar height="100%">
+        <div class="w-[400px] mr-2.5 border border-[#FFFFFF40] bg-[#00000040]  rounded-xl  relative p-6 ">
+          <img class="absolute z-10 left-0 right-0 top-0" :src="userBg" />
+          <div class="relative z-20">
+            <header>
+              <div class="flex flex-row justify-between">
+                <div>
+                  <div class="text-white text-[32px] font-bold">Sherlock Holmes</div>
+                  <div class="text-base text-[#CFD3DC]">系统管理员</div>
                 </div>
-                <div class="absolute z-30 w-8 h-8 right-0 top-[50%] -translate-x-1/2">
-                  <img :src="todo.icon" />
+                <div>
+                  <el-avatar :size="128" :src="'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'" />
                 </div>
               </div>
-            </div>
+              <div class="text-[#E6A055FF] text-base">
+                Sharp tools make good work.
+              </div>
+            </header>
+            <section class="mt-6">
+              <header class="text-[#CFD3DC] text-xl font-bold">待办事项</header>
+              <div class="">
+                <div v-for="todo, index in todos" :key="index" class="h-[118px]  relative py-4 px-5 my-2.5 cursor-pointer"
+                  :class="[todo.color]">
+                  <img class="absolute z-10 left-0 right-0 top-0" :src="todo.bg" />
+                  <div class="relative z-20 ">
+                    <div class="text-sm">{{ todo.title }}</div>
+                    <div class="mt-6">
+                      <span class="text-5xl font-bold">{{ todo.num }}</span>
+                      <span class="text-sm font-normal">{{ todo.sub }}</span>
+                    </div>
+                    <div class="absolute z-30 w-8 h-8 right-0 top-[50%] -translate-x-1/2">
+                      <img :src="todo.icon" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
           </div>
-        </section>
-      </div>
+        </div>
+
+      </el-scrollbar>
     </div>
+
   </div>
 </template>
 
@@ -142,6 +152,7 @@ import { useStackedChatOptions } from './eCharts/stackedChat'
 import useBarOptions from './eCharts/bar'
 import usePieOptions from './eCharts/pie'
 import usehorizontalBarOptions from './eCharts/horizontalBar'
+import BoothReservation from './BoothReservation.vue'
 
 import cardIcon1 from '/@/assets/home/card_1.png'
 import cardIcon2 from '/@/assets/home/card_2.png'
