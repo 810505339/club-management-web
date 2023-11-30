@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="visible" :close-on-click-modal="false"
+  <el-dialog v-model="visible" :append-to-body="true" :close-on-click-modal="false" :top="'5vh'"
     :title="form.jobId ? $t('common.editBtn') : $t('common.addBtn')" draggable width="600">
     <el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="200px" v-loading="loading">
       <el-row :gutter="20">

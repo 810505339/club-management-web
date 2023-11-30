@@ -1,6 +1,6 @@
 <template>
   <el-dialog :close-on-click-modal="false" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" width="600"
-    draggable v-model="visible">
+    top="10px" draggable v-model="visible">
     <el-form :model="form" formDialogRef label-width="120px" ref="dataFormRef" v-loading="loading">
       <el-form-item :label="ticketsDemo" prop="name">
         <el-select v-model="form.ticketId">
@@ -16,9 +16,18 @@
       </el-form-item>
 
       <el-form-item :label="duration" prop="duration">
-        <el-date-picker :end-placeholder="$t('syslog.inputEndPlaceholderTip')"
+        <el-date-picker :append-to-body="false" :end-placeholder="$t('syslog.inputEndPlaceholderTip')"
           :start-placeholder="$t('syslog.inputStartPlaceholderTip')" range-separator="To" type="datetimerange"
-          value-format="YYYY-MM-DD HH:mm" format="YYYY-MM-DD HH:mm" v-model="form.duration" />
+          value-format="YYYY-MM-DD HH:mm" format="YYYY-MM-DD HH:mm" v-model="form.duration" :popper-options="{
+            modifiers: [
+              {
+                name: 'offset',
+                options: {
+                  offset: [10, -100],
+                },
+              },
+            ],
+          }" />
       </el-form-item>
 
 
