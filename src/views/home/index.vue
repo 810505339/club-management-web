@@ -32,13 +32,15 @@
       <el-scrollbar height="450px" class="pr-6 pb-5">
         <div class="py-10">
           <div class="flex h-[320px] gap-6">
-            <div class="w-1/3 rounded-3xl bg-[#72AA3D80]  text-[#CAF16CFF] p-6 flex flex-col ">
+            <div class="w-1/3 rounded-3xl bg-[#72AA3D80]  text-[#CAF16CFF] p-6 flex flex-col relative">
+              <img :src="cardIcon1" class="absolute z-10 right-5 top-10" />
               <header class="text-base font-semibold">订单及流水统计</header>
               <div class="text-xs font-semibold">订单总量 <span class="text-white text-2xl ml-2">517,563,254</span> </div>
               <div class="text-xs font-semibold">流水总计 <span class="text-white text-2xl ml-2">17,563,254.23</span></div>
               <div ref="dom" class="flex-auto"></div>
             </div>
-            <div class="w-1/3 rounded-3xl bg-[#CB7B2480] p-6  text-[#EBB77FFF] flex flex-col ">
+            <div class="w-1/3 rounded-3xl bg-[#CB7B2480] p-6  text-[#EBB77FFF] flex flex-col relative">
+              <img :src="cardIcon2" class="absolute z-10 right-5 top-10" />
               <header class="text-base font-semibold">酒水套餐排行榜</header>
               <div class="mt-5">
                 <div v-for="item, index in 9" :key="item" class="flex justify-center items-center">
@@ -52,7 +54,8 @@
                 </div>
               </div>
             </div>
-            <div class="w-1/3 rounded-3xl bg-[#3F4FD780] p-6 text-[#D5DFFFFF]">
+            <div class="w-1/3 rounded-3xl bg-[#3F4FD780] p-6 text-[#D5DFFFFF] relative">
+              <img :src="cardIcon3" class="absolute z-10 right-5 top-10" />
               <header class="text-base font-semibold">区域偏好数据</header>
               <div class="mt-5">
                 <div class="text-xs">数据来源：用户预订卡座、拼酒局时选择的区域</div>
@@ -62,9 +65,14 @@
             </div>
           </div>
           <div class="flex h-[320px] gap-6 mt-5">
-            <div class="w-1/3 rounded-3xl bg-[#8645BD80] p-6"></div>
-            <div class="w-1/3 rounded-3xl bg-[#BB2B5D80] p-6"></div>
-            <div class="w-1/3 rounded-3xl bg-[#278BA880]  p-6 flex flex-col">
+            <div class="w-1/3 rounded-3xl bg-[#8645BD80] p-6 relative">
+              <img :src="cardIcon4" class="absolute z-10 right-5 top-10" />
+            </div>
+            <div class="w-1/3 rounded-3xl bg-[#BB2B5D80] p-6 relative">
+              <img :src="cardIcon5" class="absolute z-10 right-5 top-10" />
+            </div>
+            <div class="w-1/3 rounded-3xl bg-[#278BA880]  p-6 flex flex-col relative">
+              <img :src="cardIcon6" class="absolute z-10 right-0 top-10" />
               <header class="text-base font-semibold">拼酒局数据概况</header>
               <div class="text-xs font-semibold">拼酒局总次数 <span class="text-white text-2xl ml-2">517,563,254</span> </div>
               <div class="text-xs font-semibold">拼酒局成功率 <span class="text-white text-2xl ml-2">56.23%</span></div>
@@ -85,6 +93,14 @@
 import { getStoreName } from '/@/api/admin/store'
 import dayjs from 'dayjs'
 import { useStackedChatOptions } from './eCharts/stackedChat'
+
+import cardIcon1 from '/@/assets/home/card_1.png'
+import cardIcon2 from '/@/assets/home/card_2.png'
+import cardIcon3 from '/@/assets/home/card_3.png'
+import cardIcon4 from '/@/assets/home/card_4.png'
+import cardIcon5 from '/@/assets/home/card_5.png'
+import cardIcon6 from '/@/assets/home/card_6.png'
+
 
 const dom = ref<HTMLElement>()
 const dom5 = ref<HTMLElement>()
