@@ -127,9 +127,6 @@ const fileCommonUrl = computed(() => store.userInfos.fileCommonUrl)
 const options = ref([])
 const { t } = useI18n();
 
-<<<<<<< HEAD
-const userDialogRef = ref();
-=======
 //拼局中：15    待入场：100    已入场：123   拼局失败：333
 const stateList = [
 	{ label: t('pool.state1'), num: '15', color: 'text-[#759BFFFF]' },
@@ -160,7 +157,6 @@ const cascaderProps = {
 	children: 'list',
 	checkStrictly: true
 }
->>>>>>> cee421145b21489ddb9f5dd47eb74965c0059f8b
 
 // 定义表格查询、后台调用的API
 const state: BasicTableProps = reactive<BasicTableProps>({
@@ -183,38 +179,6 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 });
 const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
-<<<<<<< HEAD
-
-
-
-const resetQuery = () => {
-	queryRef.value?.resetFields();
-	state.queryForm.deptId = '';
-	getDataList();
-};
-
-
-
-
-// 删除操作
-const handleDelete = async (ids: string[]) => {
-	try {
-		await useMessageBox().confirm(t('common.delConfirmText'));
-	} catch {
-		return;
-	}
-
-	try {
-		await delObj(ids);
-		getDataList();
-		useMessage().success(t('common.delSuccessText'));
-	} catch (err: any) {
-		useMessage().error(err.msg);
-	}
-};
-
-
-=======
 
 //点击下架
 const handleTakedown = async (row: any) => {
@@ -255,7 +219,6 @@ onMounted(async () => {
 	await getstoreAreaTree()
 })
 
->>>>>>> cee421145b21489ddb9f5dd47eb74965c0059f8b
 </script>
 <style scoped>
 :deep(.el-scrollbar) {
