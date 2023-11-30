@@ -54,29 +54,35 @@
                 </div>
               </div>
             </div>
-            <div class="w-1/3 rounded-3xl bg-[#3F4FD780] p-6 text-[#D5DFFFFF] relative">
+            <div class="w-1/3 rounded-3xl bg-[#3F4FD780] p-6 text-[#D5DFFFFF] flex flex-col relative">
               <img :src="cardIcon3" class="absolute z-10 right-5 top-10" />
               <header class="text-base font-semibold">区域偏好数据</header>
               <div class="mt-5">
                 <div class="text-xs">数据来源：用户预订卡座、拼酒局时选择的区域</div>
-                <div></div>
               </div>
-
+              <div ref="dom3" class="flex-auto"></div>
             </div>
           </div>
           <div class="flex h-[320px] gap-6 mt-5">
-            <div class="w-1/3 rounded-3xl bg-[#8645BD80] p-6 relative">
-              <img :src="cardIcon4" class="absolute z-10 right-5 top-10" />
+            <div class="w-1/3 rounded-3xl bg-[#8645BD80] p-6 text-[#E6C9FFFF] flex flex-col">
+              <header class="text-base font-semibold">拼酒局用户性别、年龄占比数据概况</header>
+              <div class="text-xs flex items-center justify-between mt-2.5">
+                <span>用户性别构成</span>
+                <span>共计:24567895人</span>
+              </div>
+              <div ref="sexDom" class="flex-auto"></div>
+              <div ref="dom4" />
+
             </div>
-            <div class="w-1/3 rounded-3xl bg-[#BB2B5D80] p-6 relative">
-              <img :src="cardIcon5" class="absolute z-10 right-5 top-10" />
+            <div class="w-1/3 rounded-3xl bg-[#BB2B5D80] p-6 text-[#FEB6CBFF] flex flex-col">
+              <header class="text-base font-semibold">用户来店方式占比</header>
+              <div ref="dom5" class="flex-auto"></div>
             </div>
-            <div class="w-1/3 rounded-3xl bg-[#278BA880]  p-6 flex flex-col relative">
-              <img :src="cardIcon6" class="absolute z-10 right-0 top-10" />
+            <div class="w-1/3 rounded-3xl bg-[#278BA880]  p-6 flex text=[#98DCEAFF] flex-col">
               <header class="text-base font-semibold">拼酒局数据概况</header>
               <div class="text-xs font-semibold">拼酒局总次数 <span class="text-white text-2xl ml-2">517,563,254</span> </div>
               <div class="text-xs font-semibold">拼酒局成功率 <span class="text-white text-2xl ml-2">56.23%</span></div>
-              <div ref="dom5" class="flex-auto"></div>
+              <div ref="dom6" class="flex-auto"></div>
             </div>
           </div>
         </div>
@@ -93,6 +99,9 @@
 import { getStoreName } from '/@/api/admin/store'
 import dayjs from 'dayjs'
 import { useStackedChatOptions } from './eCharts/stackedChat'
+import useBarOptions from './eCharts/bar'
+import usePieOptions from './eCharts/pie'
+import usehorizontalBarOptions from './eCharts/horizontalBar'
 
 import cardIcon1 from '/@/assets/home/card_1.png'
 import cardIcon2 from '/@/assets/home/card_2.png'
@@ -103,14 +112,43 @@ import cardIcon6 from '/@/assets/home/card_6.png'
 
 
 const dom = ref<HTMLElement>()
+const dom3 = ref<HTMLElement>()
+const dom4 = ref<HTMLElement>()
 const dom5 = ref<HTMLElement>()
+const dom6 = ref<HTMLElement>()
+
+const sexDom = ref<HTMLElement>()
 const active = ref(0)
 const storeNameList = ref<any[]>([])
 onMounted(() => {
-  if (dom.value && dom5.value) {
+  if (dom.value && dom5.value && dom3.value && dom4.value && dom6.value && sexDom.value) {
     useStackedChatOptions(dom.value)
-    useStackedChatOptions(dom5.value)
+    useStackedChatOptions(dom6.value)
+    useBarOptions(dom3.value)
+    usePieOptions(dom5.value, {})
+    usePieOptions(dom4.value, {
+      radius: ['40%', '70%'],
+      legend: {
+        orient: 'vertical',
+        x: 'left',
+        y: 'center',
+        textStyle: {
+          color: '#fff'
+        },
+        width: 400
+      },
+      grid: {
+        bottom: '10%',
+        left: '10%'
+
+      },
+      center: ['70%', '50%']
+
+    })
+
+    usehorizontalBarOptions(sexDom.value)
   }
+
 })
 
 const state = ref({

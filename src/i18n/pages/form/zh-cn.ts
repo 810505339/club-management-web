@@ -15,6 +15,7 @@ export default {
 		action: '操作',
 		audit: '审核',
 		dispose: '处理',
+		disposes: '批量处理',
 		optSuccessText: '操作成功',
 		editSuccessText: '修改成功',
 		addSuccessText: '添加成功',
@@ -60,7 +61,8 @@ export default {
 		detail: '详情',
 		image: '图片',
 		PASS: '通过',
-		REJECT: 'REJECT'
+		REJECT: 'REJECT',
+		revocation: '撤销'
 	},
 	message: {
 		box: {

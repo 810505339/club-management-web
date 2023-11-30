@@ -13,4 +13,10 @@ export default {
 		amountCoupon: '优惠金额',
 		amountPaid: '实付金额'
 	},
+	pending: {
+		area: '区域',
+		phone: '联系电话',
+		booth: '卡座号',
+		name: '用户姓名'
+	}
 };
