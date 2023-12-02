@@ -41,15 +41,9 @@
 						<el-table-column :label="$t('common.action')" fixed="right">
 							<template #default="scope">
 
-								<el-button icon="Top" text type="primary" @click="handleTakedown(scope.row)"
-									v-if="scope.row['enabled'] == 0">
-									{{ $t('shopList.shelves') }}
-								</el-button>
-
-								<div v-else>
-									<el-button icon="Bottom" text type="primary" @click="handleTakedown(scope.row)">
-										{{ $t('shopList.takedown') }}
-									</el-button>
+								<div v-if="scope.row['enabled'] == 0">
+									<el-button icon="Top" text type="primary" @click="handleTakedown(scope.row)"> {{ $t('shopList.shelves')
+									}}</el-button>
 
 
 									<el-button v-auth="'sys_user_edit'" icon="edit-pen" text type="primary"
@@ -64,6 +58,14 @@
 											</el-button>
 										</span>
 									</el-tooltip>
+								</div>
+
+
+
+								<div v-else>
+									<el-button icon="Bottom" text type="primary" @click="handleTakedown(scope.row)">
+										{{ $t('shopList.takedown') }}
+									</el-button>
 								</div>
 
 							</template>
