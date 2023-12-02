@@ -1,7 +1,7 @@
 <!--
  * @Author: yxx
  * @Date: 2023-09-24 11:45:01
- * @LastEditTime: 2023-11-28 19:24:09
+ * @LastEditTime: 2023-12-02 13:34:53
  * @LastEditors: yxx
  * @Description: 
  * @FilePath: \club-management-web\src\views\operating\coupon\form.vue
@@ -327,10 +327,10 @@ const onSubmit = async () => {
 			if (d == 'RESERVE_BOOTH') {
 				_a.scopeIds = form.reserveBooths
 			}
-			if (d.useScope == 'SHARE_WINE') {
+			if (d == 'SHARE_WINE') {
 				_a.scopeIds = form.shareWines
 			}
-			if (d.useScope == 'RESERVE_TICKET') {
+			if (d == 'RESERVE_TICKET') {
 				_a.scopeIds = form.reserveTickets
 			}
 			return _a
