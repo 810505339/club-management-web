@@ -11,7 +11,8 @@
 								<el-radio-button label="IOS" />
 							</el-radio-group>
 						</div>
-						<el-button type="primary" class="my-5" @click="userDialogRef.openDialog()">新增版本</el-button>
+						<el-button type="primary" class="my-5" @click="userDialogRef.openDialog()">{{ t('application.btn1')
+						}}</el-button>
 					</el-row>
 
 					<el-table v-loading="state.loading" :data="state.dataList" border :cell-style="tableStyle.cellStyle"

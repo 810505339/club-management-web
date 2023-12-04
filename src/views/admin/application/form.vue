@@ -106,7 +106,7 @@ const onSubmit = async () => {
       ...form,
       versionType: props.type,
       sensitivenessOn: form.sensitivenessOn ? '1' : 0,
-      packageId: form.packageId.map(item => item.name)
+      packageId: form.packageId.map(item => item.id)
     }
     form.id ? await editApplication(temp) : await addApplication(temp);
     useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));

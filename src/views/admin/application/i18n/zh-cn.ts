@@ -10,5 +10,7 @@ export default {
 		form1: '敏感功能',
 		form2: 'Google Play安装包',
 		form3: 'iOS安装包',
+
+		btn1: '新增版本'
 	},
 };
