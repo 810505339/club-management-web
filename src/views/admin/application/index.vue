@@ -13,18 +13,25 @@
 						</div>
 						<el-button type="primary" class="my-5" @click="userDialogRef.openDialog()">新增版本</el-button>
 					</el-row>
-					{{ state.dataList }}
+
 					<el-table v-loading="state.loading" :data="state.dataList" border :cell-style="tableStyle.cellStyle"
 						:header-cell-style="tableStyle.headerCellStyle">
 
 						<el-table-column :label="$t('sysuser.index')" type="index" width="60" fixed="left" />
-						<el-table-column label="版本号" prop="versionNumber" width="60" fixed="left" />
-						<el-table-column label="版本介绍" prop="versionIntroduce" width="320" fixed="left" />
-						<el-table-column label="是否强制更新" prop="isForceUpdate" width="120" fixed="left" />
-						<el-table-column label="跟新人" prop="versionNumber" width="120" fixed="left" />
-						<el-table-column label="更新时间" prop="updateDate" width="120" fixed="left" />
+						<el-table-column :label="t('application.table1')" prop="versionNumber" width="60" fixed="left" />
+						<el-table-column :label="t('application.table2')" prop="versionIntroduce" width="320" fixed="left" />
+						<el-table-column :label="t('application.table3')" prop="isForceUpdate" width="120" fixed="left">
+							<template #default="scope">
+								{{ scope.row['isForceUpdate'] == 0 ? t('common.no') : t('common.yes') }}
+							</template>
+						</el-table-column>
+						<el-table-column :label="t('application.table4')" prop="updatePerson" width="120" fixed="left" />
+						<el-table-column :label="t('application.table5')" prop="updateDate" width="240" fixed="left" />
 						<el-table-column :label="$t('common.action')" fixed="right">
-							<el-button text type="primary" icon="edit-pen">{{ t('common.editBtn') }}</el-button>
+							<template #default="scope">
+								<el-button text type="primary" icon="edit-pen" @click="userDialogRef.openDialog(scope.row['id'])">{{
+									t('common.editBtn') }}</el-button>
+							</template>
 						</el-table-column>
 					</el-table>
 					<pagination v-bind="state.pagination" @current-change="currentChangeHandle" @size-change="sizeChangeHandle">
@@ -33,10 +40,9 @@
 			</pane>
 		</splitpanes>
 
-		<user-form ref="userDialogRef" @refresh="getDataList(false)" />
+		<user-form ref="userDialogRef" :type="state.queryForm.type" @refresh="getDataList(false)" />
 
-		<upload-excel ref="excelUploadRef" :title="$t('sysuser.importUserTip')"
-			temp-url="/admin/sys-file/local/file/user.xlsx" url="/admin/user/import" @refreshDataList="getDataList" />
+
 	</div>
 </template>
 
@@ -63,5 +69,12 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 });
 const { getDataList, currentChangeHandle, sizeChangeHandle, tableStyle } = useTable(state);
 
+
+watch(() => state.queryForm.type, () => {
+
+	getDataList()
+}, {
+	deep: true
+})
 
 </script>

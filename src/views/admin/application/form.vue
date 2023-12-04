@@ -1,66 +1,59 @@
 <template>
-  <el-dialog :close-on-click-modal="false" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" width="600"
-             draggable v-model="visible">
-    <el-form :model="form" :rules="dataRules" formDialogRef label-width="120px" ref="dataFormRef" v-loading="loading">
-      <el-form-item :label="t('client.clientId')" prop="clientId">
-        <el-input :placeholder="t('client.inputClientIdTip')" v-model="form.clientId"/>
-      </el-form-item>
-      <el-form-item :label="t('client.clientSecret')" prop="clientSecret">
-        <el-input :placeholder="t('client.inputClientSecretTip')" v-model="form.clientSecret"/>
-      </el-form-item>
-      <el-form-item :label="t('client.scope')" prop="scope">
-        <el-input :placeholder="t('client.inputScopeTip')" v-model="form.scope"/>
-      </el-form-item>
-      <el-form-item :label="t('client.authorizedGrantTypes')" prop="authorizedGrantTypes">
-        <el-select collapse-tags collapse-tags-tooltip multiple v-model="form.authorizedGrantTypes">
-          <el-option :key="index" :label="item.label" :value="item.value"
-                     v-for="(item, index) in grant_types"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item :label="t('client.accessTokenValidity')" prop="accessTokenValidity">
-        <el-input-number :placeholder="t('client.inputAccessTokenValidityTip')" v-model="form.accessTokenValidity"/>
-      </el-form-item>
-      <el-form-item :label="t('client.refreshTokenValidity')" prop="refreshTokenValidity">
-        <el-input-number :placeholder="t('client.inputRefreshTokenValidityTip')" v-model="form.refreshTokenValidity"/>
-      </el-form-item>
-      <el-form-item :label="t('client.autoapprove')" prop="autoapprove" v-if="form.authorizedGrantTypes.includes('authorization_code')">
-        <el-radio-group v-model="form.autoapprove">
-          <el-radio :key="index" :label="item.value" border v-for="(item, index) in common_status">{{
-              item.label
-            }}
-          </el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item :label="t('client.authorities')" prop="authorities"
-                    v-if="form.authorizedGrantTypes.includes('authorization_code')">
-        <el-input :placeholder="t('client.inputAuthoritiesTip')" v-model="form.authorities"/>
+  <el-dialog :close-on-click-modal="false" :title="(form.id ? $t('common.editBtn') : $t('common.addBtn')) + ' ' + type"
+    width="600" draggable v-model="visible">
+    <el-form :model="form" label-width="140px" ref="dataFormRef" v-loading="loading">
+      <el-form-item :label="$t('application.table1')" prop="versionNumber">
+        <el-input v-model="form.versionNumber" />
       </el-form-item>
 
-      <el-form-item :label="t('client.webServerRedirectUri')" prop="webServerRedirectUri"
-                    v-if="form.authorizedGrantTypes.includes('authorization_code')">
-        <el-input :placeholder="t('client.inputWebServerRedirectUriTip')" v-model="form.webServerRedirectUri"/>
+      <el-form-item :label="$t('application.table2')" prop="versionIntroduce">
+        <el-input v-model="form.versionIntroduce" show-word-limit type="textarea" />
+      </el-form-item>
+
+      <el-form-item :label="$t('application.table3')" prop="versionIntroduce">
+        <el-radio-group v-model="form.isForceUpdate">
+          <el-radio label="1">{{ t('common.yes') }}</el-radio>
+          <el-radio label="0">{{ t('common.no') }}</el-radio>
+        </el-radio-group>
+      </el-form-item>
+
+      <el-form-item :label="$t('application.form1')" prop="sensitivenessOn">
+        <el-switch v-model="form.sensitivenessOn" />
+      </el-form-item>
+
+      <el-form-item :label="type === 'ANDROID' ? $t('application.form2') : $t('application.form3')" prop="packageId">
+        <upload v-bind="IMG_PROPS" class="w-full" :model-value="form.packageId"
+          @change="(_, fileList) => uploadChange('packageId', fileList)" />
       </el-form-item>
     </el-form>
     <template #footer>
-			<span class="dialog-footer">
-				<el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
-				<el-button @click="onSubmit" type="primary" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
-			</span>
+      <span class="dialog-footer">
+        <el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
+        <el-button @click="onSubmit" type="primary" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
+      </span>
     </template>
   </el-dialog>
 </template>
 
 <script lang="ts" name="SysOauthClientDetailsDialog" setup>
-import {useDict} from '/@/hooks/dict';
-import {useMessage} from '/@/hooks/message';
-import {addObj, getObj, putObj, validateclientId} from '/@/api/admin/client';
-import {useI18n} from 'vue-i18n';
-import {rule} from '/@/utils/validate';
-
+import { useDict } from '/@/hooks/dict';
+import { useMessage } from '/@/hooks/message';
+import { addApplication, getApplicationById, editApplication } from '/@/api/admin/application';
+import { useI18n } from 'vue-i18n';
+import upload from "/@/components/Upload/index.vue";
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
+const props = defineProps<{
+  type: string
+}>()
 
-const {t} = useI18n();
+const IMG_PROPS = {
+  fileSize: 1024,
+  limit: 1,
+}
+
+
+const { t } = useI18n();
 
 // 定义变量内容
 const dataFormRef = ref();
@@ -68,68 +61,26 @@ const visible = ref(false);
 const loading = ref(false);
 
 // 定义字典
-const {grant_types, common_status} = useDict(
-    'grant_types',
-    'common_status',
+const { grant_types, common_status } = useDict(
+  'grant_types',
+  'common_status',
 );
 
 // 提交表单数据
 const form = reactive({
-  id: '',
-  clientId: '',
-  clientSecret: '',
-  scope: 'server',
-  authorizedGrantTypes: [] as string[],
-  webServerRedirectUri: '',
-  authorities: '',
-  accessTokenValidity: 43200,
-  refreshTokenValidity: 2592001,
-  autoapprove: 'true',
-  delFlag: '',
-  createBy: '',
-  updateBy: '',
-  createTime: '',
-  updateTime: '',
-  tenantId: '',
-  onlineQuantity: '1',
-  captchaFlag: '1',
-  encFlag: '1',
+  id: undefined,
+  versionNumber: '',
+  versionIntroduce: '',
+  isForceUpdate: '1',
+  sensitivenessOn: true,
+  packageId: []
 });
 
-// 定义校验规则
-const dataRules = ref({
-  clientId: [
-    {required: true, message: '编号不能为空', trigger: 'blur'},
-    {validator: rule.validatorLowercase, trigger: 'blur'},
-    {
-      validator: (rule: any, value: any, callback: any) => {
-        validateclientId(rule, value, callback, form.id !== '');
-      },
-      trigger: 'blur',
-    },
-  ],
-  clientSecret: [
-    {required: true, message: '密钥不能为空', trigger: 'blur'},
-    {validator: rule.validatorLower, trigger: 'blur'},
-  ],
-  scope: [{required: true, message: '域不能为空', trigger: 'blur'}],
-  authorizedGrantTypes: [{required: true, message: '授权模式不能为空', trigger: 'blur'}],
-  accessTokenValidity: [
-    {required: true, message: '令牌时效不能为空', trigger: 'blur'},
-    {type: 'number', min: 1, message: '令牌时效不能小于一小时', trigger: 'blur'},
-  ],
-  refreshTokenValidity: [
-    {required: true, message: '刷新时效不能为空', trigger: 'blur'},
-    {type: 'number', min: 1, message: '刷新时效不能小于两小时', trigger: 'blur'},
-  ],
-  autoapprove: [{required: true, message: '自动放行不能为空', trigger: 'blur'}],
-  webServerRedirectUri: [{required: true, message: '回调地址不能为空', trigger: 'blur'}],
-});
 
 // 打开弹窗
 const openDialog = (id: string) => {
   visible.value = true;
-  form.id = '';
+  form.id = undefined;
   // 重置表单数据
   nextTick(() => {
     dataFormRef.value?.resetFields();
@@ -150,7 +101,14 @@ const onSubmit = async () => {
 
   try {
     loading.value = true;
-    form.id ? await putObj(form) : await addObj(form);
+
+    const temp = {
+      ...form,
+      versionType: props.type,
+      sensitivenessOn: form.sensitivenessOn ? '1' : 0,
+      packageId: form.packageId.map(item => item.name)
+    }
+    form.id ? await editApplication(temp) : await addApplication(temp);
     useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));
     visible.value = false;
     emit('refresh');
@@ -164,10 +122,22 @@ const onSubmit = async () => {
 // 初始化表单数据
 const getsysOauthClientDetailsData = (id: string) => {
   // 获取数据
-  getObj(id).then((res: any) => {
-    Object.assign(form, res.data);
+  getApplicationById(id).then((res: any) => {
+
+    Object.assign(form, {
+      ...res,
+      sensitivenessOn: res.sensitivenessOn == '1' ? true : false,
+      packageId: res.packageFile?.map((item: any) => ({ id: item.id, name: item.fileName }))
+
+    });
   });
 };
+
+const uploadChange = (type: 'packageId', fileList: any[]) => {
+
+  form[type] = fileList
+
+}
 
 // 暴露变量
 defineExpose({
