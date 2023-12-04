@@ -22,7 +22,7 @@
       </el-form-item>
 
       <el-form-item :label="type === 'ANDROID' ? $t('application.form2') : $t('application.form3')" prop="packageId">
-        <upload v-bind="IMG_PROPS" class="w-full" :model-value="form.packageId"
+        <upload v-bind="IMG_PROPS" class="w-full" :model-value="form.packageId" :disabled="form.id"
           @change="(_, fileList) => uploadChange('packageId', fileList)" />
       </el-form-item>
     </el-form>
@@ -105,7 +105,7 @@ const onSubmit = async () => {
     const temp = {
       ...form,
       versionType: props.type,
-      sensitivenessOn: form.sensitivenessOn ? '1' : 0,
+      sensitivenessOn: form.sensitivenessOn ? '1' : '0',
       packageId: form.packageId.map(item => item.id)
     }
     form.id ? await editApplication(temp) : await addApplication(temp);

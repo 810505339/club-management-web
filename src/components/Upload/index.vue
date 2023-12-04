@@ -1,7 +1,7 @@
 <!--文件上传组件-->
 <template>
 	<div class="upload-file">
-		<el-upload ref="fileUpload" v-if="props.type === 'default'"
+		<el-upload ref="fileUpload" v-if="props.type === 'default'" :disabled="disabled"
 			:action="baseURL + other.adaptationUrl(props.uploadFileUrl)" :before-upload="handleBeforeUpload"
 			:file-list="fileList" :headers="headers" :limit="limit" :on-error="handleUploadError" :on-remove="handleRemove"
 			:on-preview="handlePreview" :data="data" :auto-upload="autoUpload" :on-success="handleUploadSuccess"
@@ -82,6 +82,10 @@ const props = defineProps({
 		type: Boolean,
 		default: true,
 	},
+	disabled: {
+		type: Boolean,
+		default: false,
+	}
 });
 
 const emit = defineEmits(['update:modelValue', 'change']);
