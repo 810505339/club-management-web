@@ -133,11 +133,12 @@ export function useTable(options?: BasicTableProps) {
 
 				// 设置表格展示的数据数组
 				state.dataList = state.isPage ? res.data[state.props.item] : res.data;
+				console.log(state.dataList, 'state.dataList')
 				// 设置分页信息中的总数据条数
 				state.pagination!.total = state.isPage ? res.data[state.props.totalCount] : 0;
 			} catch (err: any) {
 				// 捕获异常并显示错误提示
-				ElMessage.error(err.msg || err.data.msg);
+				ElMessage.error(err?.msg || err?.data?.msg);
 			} finally {
 				// 结束加载数据，设置state.loading为false
 				state.loading = false;

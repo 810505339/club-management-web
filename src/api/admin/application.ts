@@ -8,6 +8,7 @@ export const getApplicationPage = async (params: any) => {
     method: 'get',
     params: params
   });
+  console.log(data, 'data')
   return data
 }
 

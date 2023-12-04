@@ -13,16 +13,16 @@
 						</div>
 						<el-button type="primary" class="my-5" @click="userDialogRef.openDialog()">新增版本</el-button>
 					</el-row>
-
+					{{ state.dataList }}
 					<el-table v-loading="state.loading" :data="state.dataList" border :cell-style="tableStyle.cellStyle"
 						:header-cell-style="tableStyle.headerCellStyle">
 
 						<el-table-column :label="$t('sysuser.index')" type="index" width="60" fixed="left" />
 						<el-table-column label="版本号" prop="versionNumber" width="60" fixed="left" />
-						<el-table-column label="版本介绍" type="index" width="320" fixed="left" />
-						<el-table-column label="是否强制更新" type="index" width="120" fixed="left" />
-						<el-table-column label="跟新人" type="index" width="120" fixed="left" />
-						<el-table-column label="更新时间" type="index" width="120" fixed="left" />
+						<el-table-column label="版本介绍" prop="versionIntroduce" width="320" fixed="left" />
+						<el-table-column label="是否强制更新" prop="isForceUpdate" width="120" fixed="left" />
+						<el-table-column label="跟新人" prop="versionNumber" width="120" fixed="left" />
+						<el-table-column label="更新时间" prop="updateDate" width="120" fixed="left" />
 						<el-table-column :label="$t('common.action')" fixed="right">
 							<el-button text type="primary" icon="edit-pen">{{ t('common.editBtn') }}</el-button>
 						</el-table-column>
@@ -61,7 +61,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 	},
 	pageList: getApplicationPage,
 });
-const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, tableStyle } = useTable(state);
 
 
 </script>
