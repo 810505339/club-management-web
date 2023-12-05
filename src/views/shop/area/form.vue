@@ -149,8 +149,8 @@ const createTimer = (weekDay: number) => {
   return {
     areaId: `${generateUUID()}`,
     weekDay: weekDay,
-    endTime: '',
-    beginTime: '',
+    endTime: null,
+    beginTime: null,
     disabled: false
   }
 }
@@ -217,10 +217,15 @@ const openDialog = async (id: string) => {
 
 // 提交
 const onSubmit = async () => {
-  // const valid = await dataFormRef.value.validate().catch(() => {
-  // });
-  // if (!valid) return false;
-  console.log(form);
+  // form.businessDateDTOList.map(b => {
+  //   return {
+  //     ...b,
+  //     begin: b.beginTime ? true : false,
+  //     end: b.endTime ? true : false
+  //   }
+  // })
+
+
   try {
     loading.value = true;
 
