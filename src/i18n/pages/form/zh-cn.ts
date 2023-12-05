@@ -61,7 +61,8 @@ export default {
 		detail: '详情',
 		image: '图片',
 		PASS: '通过',
-		REJECT: 'REJECT',
+		REJECT: '驳回',
+		IN_AUDIT: '待审核',
 		revocation: '撤销'
 	},
 	message: {

@@ -1,7 +1,7 @@
 /*
  * @Author: yxx
  * @Date: 2023-10-29 10:40:54
- * @LastEditTime: 2023-11-13 00:01:59
+ * @LastEditTime: 2023-12-05 21:00:27
  * @LastEditors: yxx
  * @Description: 
  * @FilePath: \club-management-web\src\api\operating\coupon.ts
@@ -34,9 +34,6 @@ export const updateEnabled = (data: Object) => {
 	return request({
 		url: `/operation/coupon/couponAudit`,
 		method: 'put',
-		headers: {
-			'Content-Type': FORM_CONTENT_TYPE,
-		},
 		data
 
 	});
@@ -121,7 +118,7 @@ export const couponStopIssue = (id: any) => {
 //新增审核任务
 export const couponCreateAudit = (data?: Object) => {
 	return request({
-		url: '/examine/task/create',
+		url: '/operation/coupon/couponCreat',
 		method: 'post',
 		data,
 	});
