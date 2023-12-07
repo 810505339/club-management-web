@@ -29,10 +29,10 @@
         </div>
       </header>
 
-      <BoothReservation v-if="active === 0" class="mt-10" />
+      <!-- <BoothReservation v-show="active === 0" class="mt-10" /> -->
 
 
-      <el-scrollbar height="450px" class="pr-6 pb-5" v-else>
+      <el-scrollbar height="450px" class="pr-6 pb-5" v-show="active === 0">
         <div class="py-10">
           <div class="flex h-[320px] gap-6">
             <div class="w-1/3 rounded-3xl bg-[#72AA3D80]  text-[#CAF16CFF] p-6 flex flex-col relative">
