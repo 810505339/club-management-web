@@ -53,7 +53,10 @@ export const useStackedChatOptions = (chartDom: Ref<HTMLElement | undefined>) =>
 
 
   onMounted(() => {
-    myEcharts = chartDom.value && echarts.init(chartDom.value)
+    if (chartDom.value) {
+      myEcharts = echarts.init(chartDom.value)
+    }
+
   })
 
   const setOption = (parmams: IParams) => {
@@ -101,7 +104,10 @@ export const useStackedChatOptions = (chartDom: Ref<HTMLElement | undefined>) =>
       series: series.value
     };
 
-    myEcharts.setOption(options, true)
+    console.log(myEcharts, 'myEcharts');
+
+
+    myEcharts?.setOption(options, true)
   }
 
   return {

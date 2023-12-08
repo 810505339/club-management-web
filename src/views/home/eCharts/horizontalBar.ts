@@ -1,96 +1,96 @@
 import { EChartsOption } from "echarts";
 import * as echarts from 'echarts';
+import { Ref } from "vue";
+
+type Data = Array<{ name: string, data: any[] }>
 
 
-const usehorizontalBarOptions = (chartDom: HTMLElement) => {
 
-  const myChart = echarts.init(chartDom)
-  const COLORS = ['#91CC75FF', '#FAC758FF', '#EE6667FF',];
-  const options: EChartsOption = {
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: {
-        // Use axis to trigger tooltip
-        type: 'line' // 'shadow' as default; can also be 'line' or 'shadow'
-      }
+
+const usehorizontalBarOptions = (chartDom: Ref<HTMLElement | undefined>) => {
+
+  let myChart: unknown = null
+  const data = ref<Data>([])
+
+  const series = computed(() => data.value.map(item => ({
+    ...item,
+    type: 'bar',
+    stack: 'total',
+    barWidth: 20,
+    borderRadius: 10,
+    label: {
+      show: true
     },
-    legend: {
-      textStyle: {
-        color: '#fff'
-      }
+    emphasis: {
+      focus: 'series'
     },
-    grid: {
-      left: '3%',
-      right: '4%',
-      bottom: '3%',
-      containLabel: true
-    },
-    xAxis: {
-      type: 'value',
-      splitLine: {
-        show: false
-      },
-      axisLabel: {
-        show: false
-      },
-    },
-    yAxis: {
-      type: 'category',
-      data: [''],
-      splitLine: {
-        show: false
-      },
-      axisTick: {
-        show: false,
-      },
-      axisLine: {
-        show: false,
-      },
-    },
-    series: [
-      {
-        name: '男',
-        type: 'bar',
-        stack: 'total',
-        label: {
-          show: true
-        },
-        emphasis: {
-          focus: 'series'
-        },
-        data: [320]
-      },
-      {
-        name: '女',
-        type: 'bar',
-        stack: 'total',
-        label: {
-          show: true
-        },
-        emphasis: {
-          focus: 'series'
-        },
-        data: [120]
-      },
-      {
-        name: '未知',
-        type: 'bar',
-        stack: 'total',
-        label: {
-          show: true
-        },
-        emphasis: {
-          focus: 'series'
-        },
-        data: [220]
-      },
-
-    ]
-  };
+  })))
 
 
 
-  options && myChart.setOption(options)
+  onMounted(() => {
+    if (chartDom.value)
+      myChart = echarts.init(chartDom.value)
+  })
+
+  const setOption = (parmas: Data) => {
+    data.value = parmas
+    const options: EChartsOption = {
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          // Use axis to trigger tooltip
+          type: 'line' // 'shadow' as default; can also be 'line' or 'shadow'
+        }
+      },
+      legend: {
+        textStyle: {
+          color: '#fff'
+        }
+      },
+      grid: {
+        left: '3%',
+        right: '4%',
+
+        top: '100%',
+        containLabel: true
+      },
+      xAxis: {
+        type: 'value',
+        splitLine: {
+          show: false
+        },
+        axisLabel: {
+          show: false
+        },
+      },
+      yAxis: {
+        type: 'category',
+        data: [''],
+        splitLine: {
+          show: false
+        },
+        axisTick: {
+          show: false,
+        },
+        axisLine: {
+          show: false,
+        },
+      },
+      series: series.value
+
+    };
+
+    myChart.setOption(options)
+  }
+
+  return {
+    setOption
+  }
+
+
+
+
 }
 
 

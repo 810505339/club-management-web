@@ -270,6 +270,8 @@ const getStoreDetail = async (id: string) => {
   })
 
   Object.assign(form, data)
+  console.log(form);
+
 
 
 
