@@ -11,18 +11,18 @@
           <div class="py-[4px] px-[10px] text-xs rounded-2xl flex items-center justify-center  cursor-pointer"
             :class="[activeClass(1)]" @click="changeActive(1)">数据看板</div>
         </div>
-        <div class="mt-10" v-if="active === 1">
+        <div class="mt-10">
           <el-form inline>
             <el-form-item :label="$t('shopList.name')" prop="name">
-              <el-select v-model="state.name" :placeholder="$t('shopList.nameSelect')">
-                <el-option v-for="item, index in storeNameList" :key="index" :label="item.name" :value="item.name"
+              <el-select v-model="parmas.storeId" :placeholder="$t('shopList.nameSelect')">
+                <el-option v-for="item, index in storeNameList" :key="index" :label="item.name" :value="item.id"
                   clearable>
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="查看时间" prop="time">
-              <el-date-picker v-model="state.time" type="datetimerange" range-separator="To" class="w-10"
-                start-placeholder="Start date" end-placeholder="End date" format="YYYY-MM-DD" />
+              <el-date-picker type="datetimerange" range-separator="To" class="w-10" start-placeholder="Start date"
+                end-placeholder="End date" format="YYYY-MM-DD" @change="change" />
             </el-form-item>
           </el-form>
 
@@ -38,8 +38,10 @@
             <div class="w-1/3 rounded-3xl bg-[#72AA3D80]  text-[#CAF16CFF] p-6 flex flex-col relative">
               <img :src="cardIcon1" class="absolute z-10 right-5 top-10" />
               <header class="text-base font-semibold">订单及流水统计</header>
-              <div class="text-xs font-semibold">订单总量 <span class="text-white text-2xl ml-2">517,563,254</span> </div>
-              <div class="text-xs font-semibold">流水总计 <span class="text-white text-2xl ml-2">17,563,254.23</span></div>
+              <div class="text-xs font-semibold">订单总量 <span class="text-white text-2xl ml-2">{{
+                resList[0]?.orderTotalCount }}</span> </div>
+              <div class="text-xs font-semibold">流水总计 <span class="text-white text-2xl ml-2">{{
+                resList[0]?.saleTotalAmount }}</span></div>
               <div ref="dom" class="flex-auto"></div>
             </div>
             <div class="w-1/3 rounded-3xl bg-[#CB7B2480] p-6  text-[#EBB77FFF] flex flex-col relative">
@@ -177,6 +179,7 @@ import btn5 from '/@/assets/home/btn5.png'
 
 import userBg from '/@/assets/home/userBg.png'
 
+import useRequest from './hooks/useRequest'
 
 const todos = [
   { title: '待处理订单', num: '2534', sub: '个', icon: btn1, bg: todoIcon1, color: 'text-[#E6A055FF]' },
@@ -188,6 +191,9 @@ const todos = [
 
 
 const dom = ref<HTMLElement>()
+
+const { setOption } = useStackedChatOptions(dom)
+
 const dom3 = ref<HTMLElement>()
 const dom4 = ref<HTMLElement>()
 const dom5 = ref<HTMLElement>()
@@ -196,36 +202,62 @@ const dom6 = ref<HTMLElement>()
 const sexDom = ref<HTMLElement>()
 const active = ref(0)
 const storeNameList = ref<any[]>([])
-onMounted(() => {
+
+const parmas = ref({
+  beginDate: '',
+  endDate: '',
+  storeId: '1729135883314356225',
+})
+
+const { resList } = useRequest(parmas)
+
+const change = (value: any[]) => {
+  parmas.value.beginDate = dayjs(value[0]).format('YYYY-MM-DD HH:mm:ss')
+  parmas.value.endDate = dayjs(value[1]).format('YYYY-MM-DD HH:mm:ss')
+}
+
+watch(() => resList.value, (newValue) => {
+  const data1 = newValue[0].orderSaleDateVOS
+  setOption({
+    xData: data1.map(n => (n.dataDate)), yData: [
+      { name: '订单', data: data1.map(n => (n.orderCount)) },
+      { name: '流水', data: data1.map(n => (n.amount)) }]
+  })
+
+
   if (dom.value && dom5.value && dom3.value && dom4.value && dom6.value && sexDom.value) {
-    useStackedChatOptions(dom.value)
-    useStackedChatOptions(dom6.value)
-    useBarOptions(dom3.value)
-    usePieOptions(dom5.value, {})
-    usePieOptions(dom4.value, {
-      radius: ['40%', '70%'],
-      legend: {
-        orient: 'vertical',
-        x: 'left',
-        y: 'center',
-        textStyle: {
-          color: '#fff'
-        },
-        width: 400
-      },
-      grid: {
-        bottom: '10%',
-        left: '10%'
 
-      },
-      center: ['70%', '50%']
 
-    })
+    // useBarOptions(dom3.value)
+    // usePieOptions(dom5.value, {})
+    // usePieOptions(dom4.value, {
+    //   radius: ['40%', '70%'],
+    //   legend: {
+    //     orient: 'vertical',
+    //     x: 'left',
+    //     y: 'center',
+    //     textStyle: {
+    //       color: '#fff'
+    //     },
+    //     width: 400
+    //   },
+    //   grid: {
+    //     bottom: '10%',
+    //     left: '10%'
 
-    usehorizontalBarOptions(sexDom.value)
+    //   },
+    //   center: ['70%', '50%']
+
+    // })
+
+    // usehorizontalBarOptions(sexDom.value)
   }
 
+
 })
+
+
+
 
 const state = ref({
   name: '',

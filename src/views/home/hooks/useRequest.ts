@@ -1,16 +1,21 @@
 import { Ref } from "vue";
-
-export type IParmas = {
-  storeId: string;
-  beginDate: string,
-  endDate: string,
-}
-export default (parmas: Ref<IParmas>) => {
+import { IParams, wineParty, orderSale, enterStore, drinkMealRanking, customerAgeGender, areaPreference } from '/@/api/admin/dataBoard'
 
 
+
+export default (parmas: Ref<IParams>) => {
+  const parmasRequest = parmas.value
+  const resList = ref<any[]>([])
   watchEffect(async () => {
-    await Promise.all()
+    resList.value = await Promise.all([orderSale(parmasRequest), drinkMealRanking(parmasRequest), areaPreference(parmasRequest), customerAgeGender(parmasRequest), enterStore(parmasRequest), wineParty(parmasRequest)])
+
+    console.log(resList.value);
+    console.log(parmas.value);
+
   })
+  return {
+    resList
+  }
 }
 
 
