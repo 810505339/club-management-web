@@ -71,7 +71,7 @@
           <el-col class="mb20">
             <el-form-item :label="t('dynamic.eventTime')" prop="showOrNotPersonNumber">
               <el-date-picker v-model="form.activityTime" type="datetime" placeholder="Select date and time"
-                value-format="YYYY/MM/DD HH:mm" />
+                value-format="YYYY/MM/DD HH:mm"  format="YYYY/MM/DD HH:mm"  />
             </el-form-item>
             <el-form-item :label="t('dynamic.activityPlace')" prop="showOrNotPersonNumber">
               <el-input v-model="form.activityPlace" type="textarea" :row="2"></el-input>
