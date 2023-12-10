@@ -21,7 +21,10 @@ export default {
 		showOrNotPersonNumber: '是否对外显示总人数',
 		activityPersonNumber: '活动限制总人数',
 		showActivityPersonNumber: '是否限制活动限制总人数',
-		showTicketId: '是否显示门票ID'
-	},
+		showTicketId: '是否显示门票ID',
+		use: '用途',
+		eventTime: '活动时间',
+		activityPlace: '活动地点',
+	}
 
 };

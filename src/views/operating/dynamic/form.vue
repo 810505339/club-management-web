@@ -57,7 +57,7 @@
         </el-col>
 
         <!-- 是否报名 -->
-        <el-col :span="20" class="mb20">
+        <el-col class="mb20">
           <el-form-item :label="t('dynamic.register')" prop="whetherSignUp">
             <el-switch v-model="form.whetherSignUp" />
           </el-form-item>
@@ -66,40 +66,57 @@
 
         <!-- 是否显示总人数 -->
 
-        <div v-if="form.whetherSignUp">
+        <el-col class="mb20" v-if="form.whetherSignUp">
 
-          <el-col :span="20" class="mb20">
+          <el-col class="mb20">
+            <el-form-item :label="t('dynamic.eventTime')" prop="showOrNotPersonNumber">
+              <el-date-picker v-model="form.activityTime" type="datetime" placeholder="Select date and time"
+                value-format="YYYY/MM/DD HH:mm" />
+            </el-form-item>
+            <el-form-item :label="t('dynamic.activityPlace')" prop="showOrNotPersonNumber">
+              <el-input v-model="form.activityPlace" type="textarea" :row="2"></el-input>
+            </el-form-item>
+          </el-col>
+
+
+          <el-col class="mb20">
             <el-form-item :label="t('dynamic.showOrNotPersonNumber')" prop="showOrNotPersonNumber">
               <el-switch v-model="form.showOrNotPersonNumber" />
             </el-form-item>
           </el-col>
 
 
-          <el-col :span="20" class="mb20">
+          <el-col class="mb20">
             <el-form-item :label="t('dynamic.showActivityPersonNumber')" prop="showActivityPersonNumber">
               <el-switch v-model="form.showActivityPersonNumber" />
             </el-form-item>
           </el-col>
           <!-- 活动限制总人数 -->
 
-          <el-col :span="20" class="mb20" v-if="form.showActivityPersonNumber">
+          <el-col class="mb20" v-if="form.showActivityPersonNumber">
             <el-form-item :label="t('dynamic.activityPersonNumber')" prop="activityPersonNumber">
               <el-input-number v-model="form.activityPersonNumber" :min="0" :precision="0" :step="1" />
             </el-form-item>
           </el-col>
 
 
-          <el-col :span="20" class="mb20">
+          <el-col class="mb20">
             <el-form-item :label="t('dynamic.expenses')" prop="charge">
               <el-switch v-model="form.charge" />
             </el-form-item>
           </el-col>
 
-          <el-col :span="20" class="mb20" v-if="form.charge">
+          <el-col class="mb20" v-if="form.charge">
             <el-form-item :label="t('dynamic.expense') + '($)'" prop="amount">
               <el-input-number v-model="form.amount" :min="0" :precision="2" :step="0.1" />
             </el-form-item>
+            <el-form-item :label="t('dynamic.use')" prop="useOfExpenses">
+              <el-input v-model="form.useOfExpenses" type="textarea" :row="2"></el-input>
+            </el-form-item>
           </el-col>
+
+
+
 
 
           <!--是否显示门票ID -->
@@ -118,7 +135,7 @@
           </el-col>
 
 
-        </div>
+        </el-col>
 
       </el-row>
     </el-form>
@@ -140,6 +157,7 @@ import { getDynamicById, AddDynamic, EditDynamic } from '/@/api/admin/dynamic';
 import { useI18n } from 'vue-i18n';
 import { useTranslateText } from './hooks/translate';
 import upload from "/@/components/Upload/index.vue";
+import dayjs from 'dayjs'
 
 import { storeTicket } from '/@/api/operating/coupon'
 const emit = defineEmits(['refresh']);
@@ -211,7 +229,11 @@ const defalut = {
   showTicketId: false,
   amount: 0,
   charge: false,
-  showActivityPersonNumber: false
+  showActivityPersonNumber: false,
+  useOfExpenses: '',
+  activityPlace: '',
+  activityTime: dayjs().format('YYYY-MM-DD HH:mm')
+
 }
 // 提交表单数据
 const form = reactive({

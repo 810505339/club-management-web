@@ -21,7 +21,10 @@ export default {
 		showOrNotPersonNumber: 'Whether the total number of people is displayed',
 		activityPersonNumber: 'The total number of participants is limited',
 		showActivityPersonNumber: 'Whether or not the activity is limited to the total number of people',
-		showTicketId: 'Whether or not to display the ticket ID'
+		showTicketId: 'Whether or not to display the ticket ID',
+		use: 'use',
+		eventTime: 'activity Time',
+		activityPlace: 'activity Place',
 	},
 
 };
