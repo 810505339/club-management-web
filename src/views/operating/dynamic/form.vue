@@ -1,6 +1,6 @@
 <template>
   <el-dialog v-model="visible" :append-to-body="true" :close-on-click-modal="false" :top="'5vh'"
-    :title="form.jobId ? $t('common.editBtn') : $t('common.addBtn')" draggable width="600">
+    :title="form.jobId ? $t('common.editBtn') : $t('common.addBtn')" draggable width="1200">
     <el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="200px" v-loading="loading">
       <el-row :gutter="20">
         <el-col :span="20" class="mb20">
@@ -17,13 +17,15 @@
 
         <el-col :span="20" class="mb20">
           <el-form-item :label="contextChinese" prop="dynamicContentCn">
-            <el-input :rows="2" type="textarea" v-model="form.dynamicContentCn" :placeholder="titlePlaceholder" />
+            <QuillEditor theme="snow" style="width: 100%; height: 300px;" v-model:content="form.dynamicContentCn"
+              contentType="html" />
           </el-form-item>
         </el-col>
 
         <el-col :span="20" class="mb20">
           <el-form-item :label="contextEnglish" prop="dynamicContentUk">
-            <el-input :rows="2" type="textarea" v-model="form.dynamicContentUk" :placeholder="titlePlaceholder" />
+            <QuillEditor theme="snow" style="width: 100%; height: 300px;" v-model:content="form.dynamicContentUk"
+              contentType="html" />
           </el-form-item>
         </el-col>
         <el-col :span="20" class="mb20">
@@ -71,7 +73,7 @@
           <el-col class="mb20">
             <el-form-item :label="t('dynamic.eventTime')" prop="showOrNotPersonNumber">
               <el-date-picker v-model="form.activityTime" type="datetime" placeholder="Select date and time"
-                value-format="YYYY-MM-DD HH:mm"  format="YYYY-MM-DD HH:mm"  />
+                value-format="YYYY-MM-DD HH:mm" format="YYYY-MM-DD HH:mm" />
             </el-form-item>
             <el-form-item :label="t('dynamic.activityPlace')" prop="showOrNotPersonNumber">
               <el-input v-model="form.activityPlace" type="textarea" :row="2"></el-input>
@@ -346,3 +348,14 @@ defineExpose({
   openDialog,
 });
 </script>
+
+<style scoped >
+:deep(.ql-editor) {
+  color: #fff;
+}
+
+:deep(.ql-snow) {
+  width: 100%;
+}
+
+</style>
