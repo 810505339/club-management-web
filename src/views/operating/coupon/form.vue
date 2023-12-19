@@ -1,7 +1,7 @@
 <!--
  * @Author: yxx
  * @Date: 2023-09-24 11:45:01
- * @LastEditTime: 2023-12-19 23:55:06
+ * @LastEditTime: 2023-12-20 00:09:30
  * @LastEditors: yxx
  * @Description: 
  * @FilePath: \club-management-web\src\views\operating\coupon\form.vue
@@ -420,7 +420,8 @@ const getsysJobData = (id: string) => {
 		let _data = {
 			...res.data,
 			typeDetailDTO: res.data.couponTypeDetailVO,
-			scopeDTO: res.data.couponScopeVO
+			scopeDTO: res.data.couponScopeVO,
+			useScopes: res.data.couponScopeVO.useScopes
 		}
 
 		// res.data.couponScopeVOS.forEach(d => {
