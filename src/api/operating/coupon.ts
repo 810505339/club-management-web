@@ -1,7 +1,7 @@
 /*
  * @Author: yxx
  * @Date: 2023-10-29 10:40:54
- * @LastEditTime: 2023-12-19 23:18:38
+ * @LastEditTime: 2023-12-20 00:11:40
  * @LastEditors: yxx
  * @Description: 
  * @FilePath: \club-management-web\src\api\operating\coupon.ts
@@ -55,7 +55,7 @@ export const deleteObj = (ids: string[]) => {
 }
 export const putObj = (data?: Object) => {
 	return request({
-		url: '/operation/messageManage',
+		url: '/operation/coupon',
 		method: 'put',
 		data,
 	});
