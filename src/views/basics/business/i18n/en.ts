@@ -28,5 +28,24 @@ export default {
 		text_22: 'Temporary liquor store latest lock time: the same day',
 		text_23: 'dot',
 		text_24: 'minute',
+
+
+
+		fight_title1: 'Spelling Liquor Bureau AA System - Chinese',
+		fight_title2: 'Introduction to the AA system of the Spelling Wine Bureau - Chinese',
+		fight_title3: 'Spelling Bureau AA - English',
+		fight_title4: 'Introduction to the AA system of the Fighting Wine Bureau - English',
+		fight_title5: 'Spelling Bureau Male A Female Free - Chinese',
+		fight_title6: 'Spelling Bureau Male A Female Free Introduction - Chinese',
+		fight_title7: 'Cocktail Male A Female Free - English',
+		fight_title8: 'Introduction to Men A Female Free of Spelling Bureau - English',
+		fight_title9: 'Spelling Bureau Female A Male Free - Chinese',
+		fight_title10: 'Spelling Bureau Female A Male Free Introduction - Chinese',
+		fight_title11: 'Fighting Female A Male Free - English',
+		fight_title12: 'Cocktail Female A Male Free Introduction - English',
+		fight_title13: 'I pay for the wine bureau - Chinese',
+		fight_title14: 'Introduction to the Spelling Wine Bureau I Pay - Chinese',
+		fight_title15: 'I pay for the wine bureau - English',
+		fight_title16: 'Introduction to the Wine Bureau, I Pay - English',
 	},
 };

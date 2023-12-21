@@ -10,12 +10,6 @@ export default {
 		text_4: '规则名称',
 		text_5: '预订酒局',
 		text_6: '临时酒局',
-		text_7: 'AA制-中文',
-		text_8: 'AA制-英文',
-		text_9: '男A女免-中文',
-		text_10: '女A男免-英文',
-		text_11: '我买单-中文',
-		text_12: '我买单-英文',
 		text_13: '预订酒局最晚锁定时间：当日营业时间前',
 		text_14: '小时',
 		text_15: '我买单踢人次数:发起者在每场酒局最多可以踢人',
@@ -28,5 +22,25 @@ export default {
 		text_22: '临时酒局最晚锁定时间：当日',
 		text_23: '点',
 		text_24: '分钟',
+
+		fight_title1: '拼酒局AA制-中文',
+		fight_title2: '拼酒局AA制简介-中文',
+		fight_title3: '拼酒局AA制-英文',
+		fight_title4: '拼酒局AA制简介-英文',
+		fight_title5: '拼酒局男A女免-中文',
+		fight_title6: '拼酒局男A女免简介-中文',
+		fight_title7: '拼酒局男A女免-英文',
+		fight_title8: '拼酒局男A女免简介-英文',
+		fight_title9: '拼酒局女A男免-中文',
+		fight_title10: '拼酒局女A男免简介-中文',
+		fight_title11: '拼酒局女A男免-英文',
+		fight_title12: '拼酒局女A男免简介-英文',
+		fight_title13: '拼酒局我买单-中文',
+		fight_title14: '拼酒局我买单简介-中文',
+		fight_title15: '拼酒局我买单-英文',
+		fight_title16: '拼酒局我买单简介-英文',
+
+
+
 	},
 };

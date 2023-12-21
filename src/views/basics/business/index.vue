@@ -69,7 +69,7 @@
                       <div class="px-4 my-4 h-10 flex items-center" v-for="(item) in fightRender" :key="item.id">
                         <span class="w-40">{{ t(item.text) }}:</span>
                         <span v-if="state.fightMod === 'EDIT'">{{ item.value }}</span>
-                        <el-input v-model="item.value" v-else></el-input>
+                        <el-input v-model="item.value" :type="item.type" v-else></el-input>
 
                       </div>
 
@@ -297,13 +297,43 @@ const state = ref({
 let formList = [] //拿到返回给后端
 
 
+/* 
+SHARE_WINE_PARTY_AA_ZH("拼酒局AA制-中文"),
+SHARE_WINE_PARTY_AA_ZH_INTRO("拼酒局AA制简介-中文"),
+SHARE_WINE_PARTY_AA_EN("拼酒局AA制-英文"),
+SHARE_WINE_PARTY_AA_EN_INTRO("拼酒局AA制简介-英文"),
+SHARE_WINE_PARTY_MALE_AA_ZH("拼酒局男A女免-中文"),
+SHARE_WINE_PARTY_MALE_AA_ZH_INTRO("拼酒局男A女免简介-中文"),
+SHARE_WINE_PARTY_MALE_AA_EN("拼酒局男A女免-英文"),
+SHARE_WINE_PARTY_MALE_AA_EN_INTRO("拼酒局男A女免简介-英文"),
+SHARE_WINE_PARTY_FEMALE_AA_ZH("拼酒局女A男免-中文"),
+SHARE_WINE_PARTY_FEMALE_AA_ZH_INTRO("拼酒局女A男免简介-中文"),
+SHARE_WINE_PARTY_FEMALE_AA_EN("拼酒局女A男免-英文"),
+SHARE_WINE_PARTY_FEMALE_AA_EN_INTRO("拼酒局女A男免简介-英文"),
+SHARE_WINE_PARTY_PAY_SOLO_ZH("拼酒局我买单-中文"),
+SHARE_WINE_PARTY_PAY_SOLO_ZH_INTRO("拼酒局我买单简介-中文"),
+SHARE_WINE_PARTY_PAY_SOLO_EN("拼酒局我买单-英文"),
+SHARE_WINE_PARTY_PAY_SOLO_EN_INTRO("拼酒局我买单简介-英文"),
+*/
+
 const fightRender = ref([
-  { id: 0, text: 'bus.text_7', value: '', key: 'SHARE_WINE_PARTY_AA_ZH' },
-  { id: 1, text: 'bus.text_8', value: '', key: 'SHARE_WINE_PARTY_AA_EN' },
-  { id: 2, text: 'bus.text_9', value: '', key: 'SHARE_WINE_PARTY_A_FREE_ZH' },
-  { id: 3, text: 'bus.text_10', value: '', key: 'SHARE_WINE_PARTY_FREE_A_EN' },
-  { id: 4, text: 'bus.text_11', value: '', key: 'SHARE_WINE_PARTY_ME_PAY_ZH', },
-  { id: 5, text: 'bus.text_12', value: '', key: 'SHARE_WINE_PARTY_ME_PAY_EN' },
+  { id: 0, text: 'bus.fight_title1', value: '', key: 'SHARE_WINE_PARTY_AA_ZH', type: 'text' },
+  { id: 1, text: 'bus.fight_title2', value: '', key: 'SHARE_WINE_PARTY_AA_ZH_INTRO', type: 'textarea' },
+  { id: 2, text: 'bus.fight_title3', value: '', key: 'SHARE_WINE_PARTY_AA_EN', type: 'text' },
+  { id: 3, text: 'bus.fight_title4', value: '', key: 'SHARE_WINE_PARTY_AA_EN_INTRO', type: 'textarea' },
+  { id: 4, text: 'bus.fight_title5', value: '', key: 'SHARE_WINE_PARTY_MALE_AA_ZH', type: 'text' },
+  { id: 5, text: 'bus.fight_title6', value: '', key: 'SHARE_WINE_PARTY_MALE_AA_ZH_INTRO', type: 'textarea' },
+  { id: 6, text: 'bus.fight_title7', value: '', key: 'SHARE_WINE_PARTY_MALE_AA_EN', type: 'text' },
+  { id: 7, text: 'bus.fight_title8', value: '', key: 'SHARE_WINE_PARTY_MALE_AA_EN_INTRO', type: 'textarea' },
+  { id: 8, text: 'bus.fight_title9', value: '', key: 'SHARE_WINE_PARTY_FEMALE_AA_ZH', type: 'text' },
+  { id: 9, text: 'bus.fight_title10', value: '', key: 'SHARE_WINE_PARTY_FEMALE_AA_ZH_INTRO', type: 'textarea' },
+  { id: 10, text: 'bus.fight_title11', value: '', key: 'SHARE_WINE_PARTY_FEMALE_AA_EN', type: 'text' },
+  { id: 11, text: 'bus.fight_title12', value: '', key: 'SHARE_WINE_PARTY_FEMALE_AA_EN_INTRO', type: 'textarea' },
+  { id: 12, text: 'bus.fight_title13', value: '', key: 'SHARE_WINE_PARTY_PAY_SOLO_ZH', type: 'text' },
+  { id: 13, text: 'bus.fight_title14', value: '', key: 'SHARE_WINE_PARTY_PAY_SOLO_ZH_INTRO', type: 'textarea' },
+  { id: 14, text: 'bus.fight_title15', value: '', key: 'SHARE_WINE_PARTY_PAY_SOLO_EN', type: 'text' },
+  { id: 15, text: 'bus.fight_title16', value: '', key: 'SHARE_WINE_PARTY_PAY_SOLO_EN_INTRO', type: 'textarea' },
+
 ])
 
 
