@@ -1,7 +1,7 @@
 /*
  * @Author: yxx
  * @Date: 2023-10-29 10:40:54
- * @LastEditTime: 2023-12-05 21:00:27
+ * @LastEditTime: 2023-12-20 00:11:40
  * @LastEditors: yxx
  * @Description: 
  * @FilePath: \club-management-web\src\api\operating\coupon.ts
@@ -55,7 +55,7 @@ export const deleteObj = (ids: string[]) => {
 }
 export const putObj = (data?: Object) => {
 	return request({
-		url: '/operation/messageManage',
+		url: '/operation/coupon',
 		method: 'put',
 		data,
 	});
@@ -71,6 +71,30 @@ export const getStoreActivity = () => {
 export const storeTicket = async () => {
 	return request({
 		url: '/operation/ticket/storeTicket',
+		method: 'get',
+	});
+};
+export const getActivityByStoreId = (id: any) => {
+	return request({
+		url: '/operation/dynamicState/getActivityByStoreId/' + id,
+		method: 'get',
+	});
+};
+export const getTicketByStoreId = async (id: any) => {
+	return request({
+		url: '/operation/ticket/getTicketByStoreId/' + id,
+		method: 'get',
+	});
+};
+export const getAreaBoothById = async (id: any) => {
+	return request({
+		url: '/admin/store/getAreaBoothById/' + id,
+		method: 'get',
+	});
+};
+export const getWinePartyMode = async () => {
+	return request({
+		url: '/operation/coupon/getWinePartyMode',
 		method: 'get',
 	});
 };

@@ -1,7 +1,7 @@
 /*
  * @Author: yxx
  * @Date: 2023-09-24 11:45:01
- * @LastEditTime: 2023-11-12 23:48:39
+ * @LastEditTime: 2023-12-19 22:21:29
  * @LastEditors: yxx
  * @Description: 
  * @FilePath: \club-management-web\src\views\operating\coupon\i18n\en.ts
@@ -46,6 +46,7 @@ export default {
 		useScope2: '拼酒局',
 		useScope3: '预订卡座',
 		useScope4: '活动',
+		storeId: '门店',
 		scopeDTOS: '使用范围',
 		HAVE_NOT_STARTED: "未开始",
 		UNDER_RELEASE: "发放中",

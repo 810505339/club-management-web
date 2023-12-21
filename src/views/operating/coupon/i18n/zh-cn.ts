@@ -38,6 +38,7 @@ export default {
 		useScope2: '拼酒局',
 		useScope3: '预订卡座',
 		useScope4: '活动',
+		storeId: '门店',
 		scopeDTOS: '使用范围',
 		HAVE_NOT_STARTED: "未开始",
 		UNDER_RELEASE: "发放中",
