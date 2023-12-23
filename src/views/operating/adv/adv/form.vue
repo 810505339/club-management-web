@@ -31,7 +31,8 @@
       </el-form-item>
       <el-form-item v-if="form.jump == 1" label=" " prop="dynamicStateId">
         <el-select v-model="form.dynamicStateId" :placeholder="$t('common.select') + $t('banner.dynamicStateId')">
-          <el-option v-for="item, index in dynamicState" :key="index" :label="item.name" :value="item.id" clearable>
+          <el-option v-for="item, index in dynamicState" :key="index" :label="item.dynamicTitleCn" :value="item.id"
+            clearable>
           </el-option>
         </el-select>
       </el-form-item>
@@ -112,7 +113,7 @@ const dataRules = ref({
     { required: true, message: `${t('banner.introduce')}${t('common.empty')}`, trigger: 'blur' },
   ],
   dynamicStateId: [
-    { required: true, type: 'array', message: `${t('banner.address')}${t('common.empty')}`, trigger: 'change' },
+    { required: true, message: `${t('banner.address')}${t('common.empty')}`, trigger: 'change' },
   ],
   pictureIds: [
     { required: true, type: 'array', message: `${t('banner.image')}${t('common.empty')}`, trigger: 'change' },
