@@ -22,7 +22,12 @@
           @change="(_, fileList) => uploadChange('pictureIds', fileList)" />
 
       </el-form-item>
-
+      <el-form-item :label="t('banner.name')" prop="storeIds">
+        <el-select v-model="form.storeIds" :placeholder="$t('shopList.nameSelect')" multiple clearable>
+          <el-option v-for="item, index in storeList" :key="index" :label="item.name" :value="item.id" clearable>
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item :label="t('banner.address')">
         <el-radio-group v-model="form.jump" class="ml-4">
           <el-radio label="1" size="large">是</el-radio>
@@ -53,14 +58,14 @@
 import { useDict } from '/@/hooks/dict';
 import { useMessage } from '/@/hooks/message';
 import { fetchList, } from '/@/api/operating/dynamic';
-
+import { getStoreName } from '/@/api/admin/store';
 // import { addObj, getObj, putObj, validateclientId } from '/@/api/admin/client';
 import { addCarousel, EditCarousel, getObj } from '/@/api/operating/adv';
 import { useI18n } from 'vue-i18n';
 import { rule } from '/@/utils/validate';
 import upload from "/@/components/Upload/index.vue";
 
-
+const storeList = ref([])
 
 //图片props
 const IMG_PROPS = {
@@ -137,6 +142,8 @@ const openDialog = async (type: string) => {
   nextTick(() => {
     dataFormRef.value?.resetFields();
   });
+  let { data } = await getStoreName()
+  storeList.value = data
   await fetchList({
     current: 1,
     size: 10
