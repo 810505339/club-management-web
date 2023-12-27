@@ -1,6 +1,6 @@
 <template>
   <div class="flex p-2.5 absolute inset-0 ">
-    <div class="flex-auto border border-[#FFFFFF40] bg-[#00000040] rounded-xl mr-5 overflow-hidden py-6 pl-6">
+    <div class="flex-1 border border-[#FFFFFF40] bg-[#00000040] rounded-xl mr-5 overflow-hidden py-6 pl-6">
       <header>
         <div class="flex items-center">
           <label class="text-[#CFD3DCFF] text-xl font-semibold mr-5">工作台</label>
@@ -29,10 +29,10 @@
         </div>
       </header>
 
-      <!-- <BoothReservation v-show="active === 0" class="mt-10" /> -->
+      <BoothReservation v-show="active === 0" />
 
 
-      <el-scrollbar height="450px" class="pr-6 pb-5" v-show="active === 0">
+      <el-scrollbar height="450px" class="pr-6 pb-5" v-show="active === 1">
         <div class="py-10">
           <div class="flex h-[320px] gap-6">
             <div class="w-1/3 rounded-3xl bg-[#72AA3D80]  text-[#CAF16CFF] p-6 flex flex-col relative">
