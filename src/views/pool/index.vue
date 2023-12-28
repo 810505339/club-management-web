@@ -11,8 +11,12 @@
 							<el-row v-show="showSearch">
 								<el-form ref="queryRef" :inline="true" :model="state.queryForm" @keyup.enter="getDataList">
 
-									<el-form-item :label="t('pool.search1')" prop="areaList">
-										<el-select />
+									<el-form-item :label="t('pool.search1')" prop="partyMode">
+										<el-select v-model="state.queryForm.partyMode">
+
+											<el-option v-for="item in modeList" :key="item.winePartyMode" :label="item.modeName"
+												:value="item.winePartyMode" />
+										</el-select>
 									</el-form-item>
 
 									<el-form-item :label="t('pool.search2')" prop="areaList">
@@ -23,8 +27,8 @@
 										<el-input />
 									</el-form-item>
 
-									<el-form-item :label="t('pool.search4')" prop="areaList">
-										<el-input />
+									<el-form-item :label="t('pool.search4')" prop="playerName">
+										<el-input v-model="state.queryForm.playerName" />
 									</el-form-item>
 
 
@@ -46,54 +50,21 @@
 							<el-table stripe v-loading="state.loading" :data="state.dataList" @selection-change="handleSelectionChange"
 								border :cell-style="tableStyle.cellStyle" :header-cell-style="tableStyle.headerCellStyle">
 								<el-table-column :label="$t('common.index')" type="index" width="60" fixed="left" />
-								<el-table-column :label="t('pool.search3')" fixed="left">
-									<template #default="scope">
-										{{ scope.row['ticketVO'].name }}
+								<el-table-column :label="t('pool.search3')" fixed="left" prop="partyName" />
+								<el-table-column :label="t('pool.search2')" fixed="left" />
+								<el-table-column :label="t('pool.search1')" width="300" prop="partyMode" />
+								<el-table-column :label="t('pool.table1')" prop="partyPlayerNumber">
+									<template #default="{ row }">
+										<div class="text-[#759BFFFF] cursor-pointer" @click="userDialogRef.openDialog(row.id)">
+											{{ row['partyPlayerNumber'] }}</div>
 									</template>
 								</el-table-column>
-								<el-table-column :label="t('pool.search2')" fixed="left">
-									<template #default="scope">
-										{{ scope.row['ticketVO'].areaVO.name }}
-									</template>
-								</el-table-column>
-								<el-table-column :label="t('pool.search1')" width="300" fixed="left">
-									<template #default="scope">
-										{{ scope.row['beginTime'] }}~{{ scope.row['endTime'] }}
-									</template>
-								</el-table-column>
-								<el-table-column :label="t('pool.table1')" props="ticketDetailNumber">
-									<template #default="scope">
-										<span @click="userDialogRef.openDialog()" class="text-[#759BFFFF] cursor-pointer border-b border-[#759BFFFF]"> {{
-											scope.row['ticketDetailNumber'] }}</span>
-									</template>
-								</el-table-column>
-								<el-table-column :label="t('pool.table2')" props="amount">
-									<template #default="scope">
-										{{ scope.row['amount'] }}
-									</template>
-								</el-table-column>
-								<el-table-column :label="t('pool.table3')" width="300">
-									<template #default="scope">
-										{{ scope.row['disabledTime'] }}
-									</template>
-								</el-table-column>
-								<el-table-column :label="t('pool.table4')">
-									<template #default="scope">
-										{{ scope.row['enabled'] == 1 ? $t('shopList.shelves') : $t('shopList.takedown') }}
-									</template>
-								</el-table-column>
+								<el-table-column :label="t('pool.table2')" prop="areaBooth" />
+								<el-table-column :label="t('pool.table3')" prop="drinksMeal" />
+								<el-table-column :label="t('pool.table4')" prop="partyAmount" />
+								<el-table-column :label="t('pool.table5')" prop="partyTime" />
+								<el-table-column :label="t('pool.table6')" prop="promoterName" />
 
-								<el-table-column :label="t('pool.table5')">
-									<template #default="scope">
-										{{ scope.row['enabled'] == 1 ? $t('shopList.shelves') : $t('shopList.takedown') }}
-									</template>
-								</el-table-column>
-
-								<el-table-column :label="t('pool.table6')">
-									<template #default="scope">
-										{{ scope.row['enabled'] == 1 ? $t('shopList.shelves') : $t('shopList.takedown') }}
-									</template>
-								</el-table-column>
 
 							</el-table>
 							<pagination v-bind="state.pagination" @current-change="currentChangeHandle" @size-change="sizeChangeHandle">
@@ -122,6 +93,8 @@ import { getTicketAll, getTicketDetail, updateEnabledByTicketDetail } from '/@/a
 import { useUserInfo } from '/@/stores/userInfo';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { storeAreaTree } from '/@/api/operating/coupon';
+import useAllModel from './hooks/useAllModel';
+import { wineList } from '/@/api/admin/pool';
 const store = useUserInfo()
 const fileCommonUrl = computed(() => store.userInfos.fileCommonUrl)
 const options = ref([])
@@ -143,41 +116,22 @@ const queryRef = ref();
 // 定义变量内容
 const userDialogRef = ref();
 const showSearch = ref(true);
-const storeNameList = ref<any[]>([])
-type ITicket = {
-	id: string;
-	img: string
-}
-const ticketsList = ref<ITicket[]>([])
-const activeId = ref('235645682655')
+const { modeList } = useAllModel()
 
-const cascaderProps = {
-	label: "name",
-	value: 'id',
-	children: 'list',
-	checkStrictly: true
-}
 
 // 定义表格查询、后台调用的API
 const state: BasicTableProps = reactive<BasicTableProps>({
 	queryForm: {
-		enabled: '',
-		storeId: '',
-		areaId: '',
-		areaList: []
+		partyType: '',
+		partyMode: '',
+		status: '',
+		partyName: '',
+		playerName: '',
+
 	},
-	pageList: async (pamars) => {
-		console.log(pamars)
-		const temp = {
-			...pamars,
-			storeId: pamars?.areaList?.[0],
-			areaId: pamars?.areaList?.[1]
-		}
-		// console.log(temp);
-		return await getTicketDetail(temp)
-	},
+	pageList: wineList
 });
-const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, tableStyle } = useTable(state);
 
 
 //点击下架

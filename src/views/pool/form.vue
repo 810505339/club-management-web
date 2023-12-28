@@ -7,20 +7,7 @@
           <img :src="boy" class="absolute z-10  right-0 top-0" />
         </div>
         <div class="absolute z-20 top-24 right-0 left-0">
-          <div class="grid grid-cols-2 gap-2.5 pl-3.5">
-            <div
-              class="w-[195px] h-[98px] box-border p-2.5 rounded-xl item-bg relative border border-[#212F4DFF] text-[#8CB2FFFF]"
-              v-for="item in 10" :key="item">
-              <div class="absolute z-10 right-0 bottom-0 flex justify-center items-center">
-                <img :src="getImgByType('type1')" />
-                <span class="absolute text-[#16191FFF] bg-[#FED753FF] rounded-xl border border-[#FED753] px-2">付费</span>
-
-              </div>
-              <div class="text-base font-bold">李先生</div>
-              <div class="text-xs mt-2.5">13888881111</div>
-              <div class="text-white text-base font-bold mt-2.5">$123.00</div>
-            </div>
-          </div>
+          <play-list :playerList="person.boy" />
         </div>
       </div>
       <div class=" flex-1 relative">
@@ -30,19 +17,7 @@
         </div>
 
         <div class="absolute z-20 top-24 right-0 left-0">
-          <div class="grid grid-cols-2 gap-2.5 pl-3.5">
-            <div
-              class="w-[195px] h-[98px] box-border p-2.5 rounded-xl item-bg relative border border-[#212F4DFF] text-[#FF88B9FF]"
-              v-for="item in 10" :key="item">
-              <div class="absolute z-10 right-0 bottom-0 flex justify-center items-center">
-                <img :src="getImgByType('type1')" />
-                <span class="absolute text-[#16191FFF] bg-[#FED753FF] rounded-xl border border-[#FED753] px-2">付费</span>
-              </div>
-              <div class="text-base font-bold">李先生</div>
-              <div class="text-xs mt-2.5">13888881111</div>
-              <div class="text-white text-base font-bold mt-2.5">$123.00</div>
-            </div>
-          </div>
+          <play-list :playerList="person.girls" />
         </div>
 
 
@@ -64,6 +39,8 @@ import girls from '/@/assets/home/girls.png'
 import type1 from '/@/assets/home/type1.png'
 import type2 from '/@/assets/home/type2.png'
 import type3 from '/@/assets/home/type3.png'
+import { winePartyBusiness } from '/@/api/admin/pool';
+import playList from './playList.vue';
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
@@ -80,8 +57,15 @@ const person = ref({
 
 
 // 打开弹窗
-const openDialog = (id: string) => {
+const openDialog = async (id: string) => {
   visible.value = true;
+  const { data } = await winePartyBusiness(id);
+
+  person.value.boy = data.playerDetails.filter((p) => (p.gender == '1'))
+
+  person.value.girls = data.playerDetails.filter((p) => (p.gender == '2'))
+
+  console.log(data, 'person');
 
   // 重置表单数据
   nextTick(() => {
