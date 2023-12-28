@@ -1,13 +1,13 @@
 <!--
  * @Author: yxx
  * @Date: 2023-11-29 21:34:54
- * @LastEditTime: 2023-11-29 22:39:27
+ * @LastEditTime: 2023-12-27 23:13:34
  * @LastEditors: yxx
  * @Description: 
  * @FilePath: \club-management-web\src\views\home\BoothReservation.vue
 -->
 <template>
-  <div class="booth-reservation">
+  <el-scrollbar class="booth-reservation">
     <el-form inline>
       <el-form-item :label="$t('shopList.name')" prop="name">
         <el-select v-model="state.name" :placeholder="$t('shopList.nameSelect')">
@@ -42,45 +42,52 @@
             </el-tag>
           </template>
         </div>
-        <el-row :gutter="10">
-          <el-col :span="8">
-            <div class="grid-content green">
-              <div class="flex text-[24px] justify-between font-bold"><span>01</span><span class="title">使用中</span></div>
-              <div class="flex justify-between my-[15px] ">
-                <div class="font-bold">使用人数：4 <span class="text-[rgba(207,211,220,0.50)]">/ 6</span></div>
-                <el-button size="small" round @click="dialogVisible = true">详情</el-button>
+        <div class="flex flex-wrap">
+          <div class="grid-content green">
+            <div class="flex text-[16px] justify-between font-bold">
+              <div>
+                <span>01</span><span class="title">使用中</span>
               </div>
-              <div class="flex justify-center"> <el-button type="success" plain round>释放卡座</el-button></div>
+              <el-button size="small" round @click="dialogVisible = true">详情</el-button>
             </div>
-          </el-col>
-          <el-col :span="8">
-            <div class="grid-content blue">
-              <div class="flex text-[24px] justify-between font-bold"><span>01</span><span class="title">空闲</span></div>
-              <div class="flex justify-between  my-[15px]">
-                <div class="font-bold">最大容纳人数：4 </div>
+            <div class="flex justify-between mt-[15px] items-center">
+              <div class="font-bold">使用人数：4 <span class="text-[rgba(207,211,220,0.50)]">/ 6</span></div>
+              <el-button type="success" size="small" plain round>释放卡座</el-button>
+            </div>
+          </div>
+          <div class="grid-content blue">
+            <div class="flex text-[16px] justify-between font-bold">
+              <div> <span>01</span><span class="title">空闲</span></div>
+            </div>
+            <div class="flex justify-between  mt-[15px]">
+              <div class="font-bold">最大容纳人数：4 </div>
+            </div>
+          </div>
+          <div class="grid-content red">
+            <div class="flex text-[16px] justify-between font-bold">
+              <div>
+                <span>01</span><span class="title">锁定</span>
               </div>
+              <el-button size="small" round>详情</el-button>
             </div>
-          </el-col>
-          <el-col :span="8">
-            <div class="grid-content red">
-              <div class="flex text-[24px] justify-between font-bold"><span>01</span><span class="title">锁定</span></div>
-              <div class="flex justify-between  my-[15px]">
-                <div class="font-bold">预定人数：4 <span class="text-[rgba(207,211,220,0.50)]">/ 6</span></div>
-                <el-button size="small" round>详情</el-button>
+            <div class="flex justify-between  mt-[15px]">
+              <div class="font-bold">预定人数：4 <span class="text-[rgba(207,211,220,0.50)]">/ 6</span></div>
+
+            </div>
+          </div>
+          <div class="grid-content yellow">
+            <div class="flex text-[16px] justify-between font-bold">
+              <div>
+                <span>01</span><span class="title">待付款</span>
               </div>
+              <el-button size="small" round>详情</el-button>
             </div>
-          </el-col>
-          <el-col :span="8">
-            <div class="grid-content yellow">
-              <div class="flex text-[24px] justify-between font-bold"><span>01</span><span class="title">待付款</span></div>
-              <div class="flex justify-between  my-[15px]">
-                <div class="font-bold">预定人数：4 <span class="text-[rgba(207,211,220,0.50)]">/ 6</span></div>
-                <el-button size="small" round>详情</el-button>
-              </div>
-              <div class="flex justify-center"> <el-button type="warning" plain round>取消预定</el-button></div>
+            <div class="flex justify-between  mt-[15px]">
+              <div class="font-bold">预定人数：4 <span class="text-[rgba(207,211,220,0.50)]">/ 6</span></div>
             </div>
-          </el-col>
-        </el-row>
+
+          </div>
+        </div>
       </div>
     </div>
     <el-dialog v-model="dialogVisible" title="详情">
@@ -142,7 +149,7 @@
       </template>
     </el-dialog>
 
-  </div>
+  </el-scrollbar>
 </template>
 
 <script setup lang="ts" name="home">
@@ -197,7 +204,13 @@ handleStoreNameList()
     border: 1px solid rgba(255, 255, 255, 0.25);
     padding: 20px;
     margin-bottom: 10px;
-    min-height: 160px;
+    // min-height: 160px;
+    min-width: 240px;
+    margin: 10px;
+
+    .title {
+      margin-left: 10px;
+    }
 
     &.green {
 

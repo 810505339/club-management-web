@@ -1,3 +1,11 @@
+/*
+ * @Author: yxx
+ * @Date: 2023-12-19 22:08:19
+ * @LastEditTime: 2023-12-23 21:42:47
+ * @LastEditors: yxx
+ * @Description: 
+ * @FilePath: \club-management-web\src\views\operating\dynamic\i18n\zh-cn.ts
+ */
 export default {
 	dynamic: {
 		index: '#',
@@ -17,7 +25,7 @@ export default {
 		userName: '用户姓名',
 		userPhone: '用户手机',
 		expense: '费用',
-		image: '图片',
+		image: '封面图',
 		showOrNotPersonNumber: '是否对外显示总人数',
 		activityPersonNumber: '活动限制总人数',
 		showActivityPersonNumber: '是否限制活动限制总人数',
