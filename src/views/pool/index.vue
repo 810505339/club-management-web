@@ -1,80 +1,80 @@
 <template>
 	<div class="layout-padding">
-		<splitpanes>
-			<pane>
-				<div class="layout-padding-auto layout-padding-view ">
+		<div class="layout-padding-auto layout-padding-view ">
 
-					<div class="flex h-full text-center">
+			<div class="flex  text-center">
 
-						<div class="flex-auto h-full p-5">
+				<div class="flex-auto p-5">
 
-							<el-row v-show="showSearch">
-								<el-form ref="queryRef" :inline="true" :model="state.queryForm" @keyup.enter="getDataList">
+					<el-row v-show="showSearch">
+						<el-form ref="queryRef" :inline="true" :model="state.queryForm" @keyup.enter="getDataList">
 
-									<el-form-item :label="t('pool.search1')" prop="partyMode">
-										<el-select v-model="state.queryForm.partyMode">
+							<el-form-item :label="t('pool.search1')" prop="partyMode">
+								<el-select v-model="state.queryForm.partyMode">
 
-											<el-option v-for="item in modeList" :key="item.winePartyMode" :label="item.modeName"
-												:value="item.winePartyMode" />
-										</el-select>
-									</el-form-item>
+									<el-option v-for="item in modeList" :key="item.winePartyMode" :label="item.modeName"
+										:value="item.winePartyMode" />
+								</el-select>
+							</el-form-item>
 
-									<el-form-item :label="t('pool.search2')" prop="areaList">
-										<el-select />
-									</el-form-item>
+							<el-form-item :label="t('pool.search2')" prop="areaList">
+								<el-select />
+							</el-form-item>
 
-									<el-form-item :label="t('pool.search3')" prop="areaList">
-										<el-input />
-									</el-form-item>
+							<el-form-item :label="t('pool.search3')" prop="partyName" fixed="right">
+								<el-input v-model="state.queryForm.partyName" />
+							</el-form-item>
 
-									<el-form-item :label="t('pool.search4')" prop="playerName">
-										<el-input v-model="state.queryForm.playerName" />
-									</el-form-item>
+							<el-form-item :label="t('pool.search4')" prop="playerName" fixed="right">
+								<el-input v-model="state.queryForm.playerName" />
+							</el-form-item>
 
 
-									<el-form-item>
-										<el-button icon="Search" type="primary" @click="getDataList">{{ $t('common.queryBtn') }}</el-button>
-										<el-button icon="Refresh" @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
-									</el-form-item>
-								</el-form>
-							</el-row>
-							<el-row>
-								<div class="mb8 flex items-center">
-									<div v-for="item, index in stateList" :key="index" class="mr-2">
-										<span>{{ item.label }}:</span>
-										<span :class="item.color" class="ml-2 font-bold">{{ item.num }}</span>
-									</div>
-								</div>
-							</el-row>
-
-							<el-table stripe v-loading="state.loading" :data="state.dataList" @selection-change="handleSelectionChange"
-								border :cell-style="tableStyle.cellStyle" :header-cell-style="tableStyle.headerCellStyle">
-								<el-table-column :label="$t('common.index')" type="index" width="60" fixed="left" />
-								<el-table-column :label="t('pool.search3')" fixed="left" prop="partyName" />
-								<el-table-column :label="t('pool.search2')" fixed="left" />
-								<el-table-column :label="t('pool.search1')" width="300" prop="partyMode" />
-								<el-table-column :label="t('pool.table1')" prop="partyPlayerNumber">
-									<template #default="{ row }">
-										<div class="text-[#759BFFFF] cursor-pointer" @click="userDialogRef.openDialog(row.id)">
-											{{ row['partyPlayerNumber'] }}</div>
-									</template>
-								</el-table-column>
-								<el-table-column :label="t('pool.table2')" prop="areaBooth" />
-								<el-table-column :label="t('pool.table3')" prop="drinksMeal" />
-								<el-table-column :label="t('pool.table4')" prop="partyAmount" />
-								<el-table-column :label="t('pool.table5')" prop="partyTime" />
-								<el-table-column :label="t('pool.table6')" prop="promoterName" />
-
-
-							</el-table>
-							<pagination v-bind="state.pagination" @current-change="currentChangeHandle" @size-change="sizeChangeHandle">
-							</pagination>
+							<el-form-item>
+								<el-button icon="Search" type="primary" @click="getDataList">{{ $t('common.queryBtn') }}</el-button>
+								<el-button icon="Refresh" @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
+							</el-form-item>
+						</el-form>
+					</el-row>
+					<el-row>
+						<div class="mb8 flex items-center">
+							<div v-for="item, index in stateList" :key="index" class="mr-2">
+								<span>{{ item.label }}:</span>
+								<span :class="item.color" class="ml-2 font-bold">{{ item.num }}</span>
+							</div>
 						</div>
-					</div>
+					</el-row>
+
+					<el-scrollbar height="500px">
+
+						<el-table stripe :data="state.dataList" style="width: 100%" v-loading="state.loading"
+							:cell-style="tableStyle.cellStyle" :header-cell-style="tableStyle.headerCellStyle">
+							<el-table-column :label="$t('common.index')" type="index" width="60" fixed="left" />
+							<el-table-column :label="t('pool.search3')" fixed="left" prop="partyName" />
+							<el-table-column :label="t('pool.search2')" prop="partyType" />
+							<el-table-column :label="t('pool.search1')" width="300" prop="partyMode.modeName" />
+							<el-table-column :label="t('pool.table1')" prop="partyPlayerNumber">
+								<template #default="{ row }">
+									<div class="text-[#759BFFFF] cursor-pointer" @click="userDialogRef.openDialog(row.id)">
+										{{ row['partyPlayerNumber'] }}</div>
+								</template>
+							</el-table-column>
+							<el-table-column :label="t('pool.table2')" prop="areaBooth" />
+							<el-table-column :label="t('pool.table3')" prop="drinksMeal" />
+							<el-table-column :label="t('pool.table4')" prop="partyAmount" />
+							<el-table-column :label="t('pool.table5')" prop="partyTime" fixed="right" width="300" />
+							<el-table-column :label="t('pool.table6')" prop="promoterName" fixed="right" width="300" />
+						</el-table>
+						<pagination v-bind="state.pagination" @current-change="currentChangeHandle" @size-change="sizeChangeHandle">
+						</pagination>
+
+					</el-scrollbar>
+
 
 				</div>
-			</pane>
-		</splitpanes>
+			</div>
+
+		</div>
 
 		<user-form ref="userDialogRef" @refresh="handlegetTicketList" />
 

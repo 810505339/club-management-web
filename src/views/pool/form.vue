@@ -75,13 +75,6 @@ const openDialog = async (id: string) => {
 
 };
 
-function getImgByType(type: string) {
-  return {
-    type1: type1,
-    type2: type2,
-    type3: type3
-  }[type]
-}
 
 
 
