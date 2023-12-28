@@ -186,6 +186,7 @@ import btn5 from '/@/assets/home/btn5.png'
 import userBg from '/@/assets/home/userBg.png'
 
 import useRequest from './hooks/useRequest'
+import useParmas from './hooks/useParmas'
 
 const todos = [
   { title: '待处理订单', num: '2534', sub: '个', icon: btn1, bg: todoIcon1, color: 'text-[#E6A055FF]' },
@@ -197,6 +198,9 @@ const todos = [
 
 
 const dom = ref<HTMLElement>()
+
+const { params } = useParmas()
+console.log(params)
 
 const { setOption } = useStackedChatOptions(dom)
 
