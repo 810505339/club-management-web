@@ -1,7 +1,7 @@
 <!--
  * @Author: yxx
  * @Date: 2023-09-24 11:45:01
- * @LastEditTime: 2023-12-20 00:15:34
+ * @LastEditTime: 2024-01-07 18:01:00
  * @LastEditors: yxx
  * @Description: 
  * @FilePath: \club-management-web\src\views\operating\coupon\form.vue
@@ -113,7 +113,7 @@
 					</el-form-item>
 				</el-col>
 				<!-- 预定门票 -->
-				<el-col v-if="form.scopeDTO.useScopes.includes('RESERVE_TICKET')" :span="24" class="mb20">
+				<el-col v-if="form.scopeDTO.useScopes?.includes('RESERVE_TICKET')" :span="24" class="mb20">
 					<el-form-item :label="t('coupon.useScope1')" prop="scopeDTO.ticketIds">
 						<!-- <el-cascader v-model="form.reserveTickets" :options="reserveTicket" :props="props" collapse-tags
 							:show-all-levels="false" clearable /> -->
@@ -125,7 +125,7 @@
 
 				</el-col>
 				<!-- 拼酒局 -->
-				<el-col v-if="form.scopeDTO.useScopes.includes('SHARE_WINE')" :span="24" class="mb20">
+				<el-col v-if="form.scopeDTO.useScopes?.includes('SHARE_WINE')" :span="24" class="mb20">
 					<el-form-item :label="t('coupon.useScope2')" prop="scopeDTO.winePartyModes">
 						<!-- <el-cascader v-model="form.shareWines" :options="shareWine" :props="props" collapse-tags
 							:show-all-levels="false" clearable /> -->
@@ -137,7 +137,7 @@
 
 				</el-col>
 				<!-- 预定卡座 -->
-				<el-col v-if="form.scopeDTO.useScopes.includes('RESERVE_BOOTH')" :span="24" class="mb20">
+				<el-col v-if="form.scopeDTO.useScopes?.includes('RESERVE_BOOTH')" :span="24" class="mb20">
 
 					<el-form-item :label="t('coupon.useScope3')" prop="scopeDTO.boothIds">
 						<el-cascader v-model="form.scopeDTO.boothIds" :options="reserveBooth" :props="props" collapse-tags
@@ -149,7 +149,7 @@
 					</el-form-item>
 				</el-col>
 				<!-- 活动 -->
-				<el-col v-if="form.scopeDTO.useScopes.includes('ACTIVITY')" :span="24" class="mb20">
+				<el-col v-if="form.scopeDTO.useScopes?.includes('ACTIVITY')" :span="24" class="mb20">
 					<el-form-item :label="t('coupon.useScope4')" prop="scopeDTO.activityIds">
 						<!-- <el-cascader v-model="form.activities" :options="activity" :props="props" collapse-tags
 							:show-all-levels="false" clearable /> -->
@@ -351,7 +351,8 @@ const changeStoreId = (type?: number) => {
 			ticketIds: [],
 			winePartyModes: [],
 			boothIds: [],
-			activityIds: []
+			activityIds: [],
+			useScopes: [],
 		}
 	}
 	toGetStoreActivity()

@@ -137,7 +137,7 @@ export type IUser = {
 }
 export function getUserList(params: IUser) {
 	return request({
-		url: '/admin/customer/page',
+		url: '/consumption/customer/page',
 		method: 'get',
 		params
 	});
