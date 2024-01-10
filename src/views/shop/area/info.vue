@@ -34,7 +34,7 @@
             <el-table-column prop="name" :label="t('area.deckname')" />
             <el-table-column prop="maxAccommodate" :label="t('area.capacity')" />
 
-            <el-table-column prop="minConsumption" :label="t('area.spend')" />
+            <!-- <el-table-column prop="minConsumption" :label="t('area.spend')" /> -->
             <el-table-column prop="reserveAmount" :label="t('area.reservation')" />
           </el-table>
 
@@ -83,7 +83,7 @@ const getInfo = async (id: string) => {
 function timerFormat(list: any[]) {
 
   return list.map((item) => {
-    return `${weekdayFormat(Number(item.beginWeekDay), t)}  ${item.beginTime}~${weekdayFormat(Number(item.beginWeekDay), t)}  ${item.endTime}`
+    return `${weekdayFormat(Number(item.weekDay), t)}  ${item.beginTime}~${weekdayFormat(Number(item.weekDay), t)}  ${item.endTime}`
   })
 
 }

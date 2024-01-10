@@ -1,5 +1,5 @@
 <template>
-  <el-drawer v-model="drawer" :title="t('common.detailBtn')" direction="rtl" destroy-on-close>
+  <el-drawer v-model="drawer" :title="t('common.detailBtn')" destroy-on-close>
     <div class="text-[#fff]">
       <el-form :model="userInfo" label-width="120px">
         <el-form-item :label="t('shopList.id')" prop="id">

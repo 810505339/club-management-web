@@ -45,7 +45,7 @@
 						</div>
 					</el-row>
 
-					<el-scrollbar height="500px">
+					<el-scrollbar height="400px">
 
 						<el-table stripe :data="state.dataList" style="width: 100%" v-loading="state.loading"
 							:cell-style="tableStyle.cellStyle" :header-cell-style="tableStyle.headerCellStyle">
@@ -62,8 +62,8 @@
 							<el-table-column :label="t('pool.table2')" prop="areaBooth" />
 							<el-table-column :label="t('pool.table3')" prop="drinksMeal" />
 							<el-table-column :label="t('pool.table4')" prop="partyAmount" />
-							<el-table-column :label="t('pool.table5')" prop="partyTime" fixed="right" width="300" />
-							<el-table-column :label="t('pool.table6')" prop="promoterName" fixed="right" width="300" />
+							<el-table-column :label="t('pool.table5')" prop="partyTime" width="300" />
+							<el-table-column :label="t('pool.table6')" fixed="right" prop="promoterName" width="300" />
 						</el-table>
 						<pagination v-bind="state.pagination" @current-change="currentChangeHandle" @size-change="sizeChangeHandle">
 						</pagination>

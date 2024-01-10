@@ -57,9 +57,9 @@
               <el-form-item :label="t('area.capacity')" prop="item.name" width="100" class="mb-2">
                 <el-input-number v-model="item.maxAccommodate" :step="1" :min="1" />
               </el-form-item>
-              <el-form-item :label="t('area.spend')" prop="item.minConsumption" width="100" class="mb-2">
+              <!-- <el-form-item :label="t('area.spend')" prop="item.minConsumption" width="100" class="mb-2">
                 <el-input-number v-model="item.minConsumption" :precision="2" :step="0.01" :min="0.00" />
-              </el-form-item>
+              </el-form-item> -->
               <el-form-item :label="t('area.reservation')" prop="item.reservation" width="100" class="mb-2">
                 <el-input-number v-model="item.reserveAmount" :precision="2" :step="0.01" :min="0.00" />
               </el-form-item>
