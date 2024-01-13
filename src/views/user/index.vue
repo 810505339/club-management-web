@@ -114,10 +114,7 @@ const resetQuery = () => {
 
 
 
-// // 导出excel
-// const exportExcel = () => {
-// 	downBlobFile('/admin/user/export', state.queryForm, 'users.xlsx');
-// };
+
 
 
 
