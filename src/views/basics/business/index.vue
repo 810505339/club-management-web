@@ -155,7 +155,8 @@
                       {{ t('bus.text_22') }}
                       <span v-if="state.fightMod === 'EDIT'" class="text-[#3876F6]">{{
                         state.TEMPORARY_WINE_PARTY_LATEST_TIME }}</span>
-                      <el-time-picker format="HH:mm" v-model="state.TEMPORARY_WINE_PARTY_LATEST_TIME_LABEL" v-else />
+                      <el-time-picker format="HH:mm" value-format="HH:mm" v-model="state.TEMPORARY_WINE_PARTY_LATEST_TIME"
+                        v-else />
 
 
                     </div>
@@ -165,7 +166,7 @@
                         <el-radio-group v-model="state.TEMPORARY_WINE_AMOUNT" :disabled="state.fightMod === 'EDIT'">
                           <el-radio label="TEMPORARY_WINE_PARTY_AMOUNT_LOWEST">{{ t('bus.text_18') }}</el-radio>
                           <el-radio label="TEMPORARY_WINE_PARTY_AMOUNT_LOWEST_UP">
-                            <span v-if="state.fightMod === 'EDIT'">{{ t('bus.text_19') }}</span>
+                            <span>{{ t('bus.text_19') }}</span>
                             <span v-if="state.fightMod === 'EDIT'">{{
                               state.TEMPORARY_WINE_PARTY_AMOUNT_LOWEST_UP
                             }}{{ state.TEMPORARY_WINE_PARTY_AMOUNT_LOWEST_UP_UNITS }}</span>
@@ -283,7 +284,7 @@ const state = ref({
   ORDER_WINE_PARTY_AMOUNT_LOWEST_DOWN_UNITS: '%',
   ORDER_WINE_PARTY_AMOUNT_CUSTOM: '',
   TEMPORARY_WINE_PARTY_LATEST_TIME: '',
-  TEMPORARY_WINE_PARTY_LATEST_TIME_LABEL: dayjs('00:00', 'HH:mm'),
+
   TEMPORARY_WINE_PARTY_AMOUNT_LOWEST: '',
   TEMPORARY_WINE_PARTY_AMOUNT_LOWEST_UP: '',
   TEMPORARY_WINE_PARTY_AMOUNT_LOWEST_UP_UNITS: '%',
@@ -355,10 +356,6 @@ const getListApi = async () => {
     })
   });
 
-  const temp = data.find((item: any) => item.configType === 'TEMPORARY_WINE_PARTY_LATEST_TIME')!.configValue
-
-  state.value.TEMPORARY_WINE_PARTY_LATEST_TIME_LABEL = dayjs(temp === "" ? '00:00' : temp, 'HH:mm')
-
 
 
 
@@ -399,7 +396,7 @@ const changeMod = async (key: string, value: 'EDIT' | 'SURE') => {
 
     }
 
-
+    console.log(tempList)
     await putbusiness(tempList)
   }
 }
