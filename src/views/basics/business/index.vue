@@ -354,7 +354,11 @@ const getListApi = async () => {
       }
     })
   });
-  state.value.TEMPORARY_WINE_PARTY_LATEST_TIME_LABEL = dayjs(data.find((item: any) => item.configType === 'TEMPORARY_WINE_PARTY_LATEST_TIME')!.configValue!, 'HH:mm')
+
+  const temp = data.find((item: any) => item.configType === 'TEMPORARY_WINE_PARTY_LATEST_TIME')!.configValue
+
+  state.value.TEMPORARY_WINE_PARTY_LATEST_TIME_LABEL = dayjs(temp === "" ? '00:00' : temp, 'HH:mm')
+
 
 
 
