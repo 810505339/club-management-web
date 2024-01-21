@@ -43,6 +43,7 @@
 				<el-table-column :label="t('coupon.index')" fixed="left" width="180px" prop="id" show-overflow-tooltip />
 				<el-table-column :label="t('coupon.couponName')" width="120px" prop="name" show-overflow-tooltip />
 				<el-table-column :label="t('coupon.nominalValue')" prop="type" width="200px" show-overflow-tooltip>
+					<!-- CASH_VOUCHERS 现金,MAX_OUT_VOUCHERS 满减,DISCOUNT_VOUCHERS 折扣 -->
 					<template #default="scope">
 						{{ scope.row?.couponTypeDetailVO.type ? '【' + t('coupon.' + scope.row.couponTypeDetailVO.type) + '】' : '-' }}
 
