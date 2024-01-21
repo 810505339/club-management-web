@@ -92,8 +92,9 @@
 								$t('common.editBtn') }} </el-button>
 						</template>
 						<template v-if="scope.row.auditState == 'PASS'">
-							<el-button v-if="scope.row.status == 'STOP_ISSUE' || !scope.row.status" v-auth="'job_sys_job_start_job'"
-								@click="handleRunJob(scope.row, 1)" text type="primary">发放</el-button>
+							<el-button
+								v-if="scope.row.status == 'STOP_ISSUE' || !scope.row.status || scope.row.status == 'HAVE_NOT_STARTED'"
+								v-auth="'job_sys_job_start_job'" @click="handleRunJob(scope.row, 1)" text type="primary">发放</el-button>
 							<el-button v-if="scope.row.status == 'UNDER_RELEASE'" v-auth="'job_sys_job_start_job'"
 								@click="handleRunJob(scope.row, 0)" text type="primary">停止发放</el-button>
 						</template>

@@ -113,7 +113,7 @@
 					</el-form-item>
 				</el-col>
 				<!-- 预定门票 -->
-				<el-col v-if="form.scopeDTO.useScopes?.includes('RESERVE_TICKET')" :span="24" class="mb20">
+				<el-col v-if="form.scopeDTO.useScopes?.includes('TICKET')" :span="24" class="mb20">
 					<el-form-item :label="t('coupon.useScope1')" prop="scopeDTO.ticketIds">
 						<!-- <el-cascader v-model="form.reserveTickets" :options="reserveTicket" :props="props" collapse-tags
 							:show-all-levels="false" clearable /> -->
@@ -137,7 +137,7 @@
 
 				</el-col>
 				<!-- 预定卡座 -->
-				<el-col v-if="form.scopeDTO.useScopes?.includes('RESERVE_BOOTH')" :span="24" class="mb20">
+				<el-col v-if="form.scopeDTO.useScopes?.includes('BOOTH')" :span="24" class="mb20">
 
 					<el-form-item :label="t('coupon.useScope3')" prop="scopeDTO.boothIds">
 						<el-cascader v-model="form.scopeDTO.boothIds" :options="reserveBooth" :props="props" collapse-tags
@@ -219,13 +219,13 @@ const typeOption = ref([
 const useScopeOption = ref([
 	{
 		label: t('coupon.useScope1'),
-		value: 'RESERVE_TICKET'
+		value: 'TICKET'
 	}, {
 		label: t('coupon.useScope2'),
 		value: 'SHARE_WINE'
 	}, {
 		label: t('coupon.useScope3'),
-		value: 'RESERVE_BOOTH'
+		value: 'BOOTH'
 	}, {
 		label: t('coupon.useScope4'),
 		value: 'ACTIVITY'
@@ -392,13 +392,13 @@ const onSubmit = async () => {
 		// 	if (d === 'ACTIVITY') {
 		// 		_a.scopeIds = form.activities
 		// 	}
-		// 	if (d == 'RESERVE_BOOTH') {
+		// 	if (d == 'BOOTH') {
 		// 		_a.scopeIds = form.reserveBooths
 		// 	}
 		// 	if (d == 'SHARE_WINE') {
 		// 		_a.scopeIds = form.shareWines
 		// 	}
-		// 	if (d == 'RESERVE_TICKET') {
+		// 	if (d == 'TICKET') {
 		// 		_a.scopeIds = form.reserveTickets
 		// 	}
 		// 	return _a
@@ -428,13 +428,13 @@ const getsysJobData = (id: string) => {
 		// 	if (d.useScope == 'ACTIVITY') {
 		// 		_data.activities = d.scopeIds
 		// 	}
-		// 	if (d.useScope == 'RESERVE_BOOTH') {
+		// 	if (d.useScope == 'BOOTH') {
 		// 		_data.reserveBooths = d.scopeIds
 		// 	}
 		// 	if (d.useScope == 'SHARE_WINE') {
 		// 		_data.shareWines = d.scopeIds
 		// 	}
-		// 	if (d.useScope == 'RESERVE_TICKET') {
+		// 	if (d.useScope == 'TICKET') {
 		// 		_data.reserveTickets = d.scopeIds
 		// 	}
 		// 	_data.useScopes.push(d.useScope)
