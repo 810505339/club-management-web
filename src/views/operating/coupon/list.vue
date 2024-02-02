@@ -58,7 +58,7 @@
 				<el-table-column :label="t('coupon.issuePerson')" prop="issuePerson" show-overflow-tooltip />
 				<el-table-column :label="t('coupon.validity')" width="300px" prop="createBy" show-overflow-tooltip>
 					<template #default="scope">
-						{{ scope.row.takeEffectTime }} - {{ scope.row.takeEffectTime }}
+						{{ scope.row.takeEffectTime }} - {{ scope.row.disabledTime }}
 					</template>
 				</el-table-column>
 				<el-table-column :label="t('coupon.useState')" width="130px" prop="useState" show-overflow-tooltip>

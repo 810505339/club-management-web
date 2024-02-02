@@ -43,6 +43,7 @@
 				<el-table-column :label="t('coupon.index')" fixed="left" width="180px" prop="id" show-overflow-tooltip />
 				<el-table-column :label="t('coupon.couponName')" width="120px" prop="name" show-overflow-tooltip />
 				<el-table-column :label="t('coupon.nominalValue')" prop="type" width="200px" show-overflow-tooltip>
+					<!-- CASH_VOUCHERS 现金,MAX_OUT_VOUCHERS 满减,DISCOUNT_VOUCHERS 折扣 -->
 					<template #default="scope">
 						{{ scope.row?.couponTypeDetailVO.type ? '【' + t('coupon.' + scope.row.couponTypeDetailVO.type) + '】' : '-' }}
 
@@ -92,8 +93,9 @@
 								$t('common.editBtn') }} </el-button>
 						</template>
 						<template v-if="scope.row.auditState == 'PASS'">
-							<el-button v-if="scope.row.status == 'STOP_ISSUE' || !scope.row.status" v-auth="'job_sys_job_start_job'"
-								@click="handleRunJob(scope.row, 1)" text type="primary">发放</el-button>
+							<el-button
+								v-if="scope.row.status == 'STOP_ISSUE' || !scope.row.status || scope.row.status == 'HAVE_NOT_STARTED'"
+								v-auth="'job_sys_job_start_job'" @click="handleRunJob(scope.row, 1)" text type="primary">发放</el-button>
 							<el-button v-if="scope.row.status == 'UNDER_RELEASE'" v-auth="'job_sys_job_start_job'"
 								@click="handleRunJob(scope.row, 0)" text type="primary">停止发放</el-button>
 						</template>

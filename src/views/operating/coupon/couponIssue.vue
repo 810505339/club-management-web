@@ -49,7 +49,6 @@
 				<el-col :span="24" class="mb20">
 					{{ t("coupon.provideMode") }}
 				</el-col>
-
 				<!-- issueWay 发放方式,1:指定用户发放 ==手动发放，0:按条件发放===系统发放 -->
 				<template v-if="couponInfo.issueWay == 0">
 					<el-col :span="24" class="mb20">
@@ -72,8 +71,8 @@
 						<el-form-item :label="t('coupon.gender')" prop="customerGender">
 							<el-radio-group v-model="form.customerGender">
 								<!-- <el-radio label="">全部</el-radio> -->
-								<el-radio label="1">{{ t('coupon.gender1') }}</el-radio>
-								<el-radio label="2">{{ t('coupon.gender2') }}</el-radio>
+								<el-radio label="MALE">{{ t('coupon.gender1') }}</el-radio>
+								<el-radio label="FEMALE">{{ t('coupon.gender2') }}</el-radio>
 							</el-radio-group>
 						</el-form-item>
 					</el-col>
@@ -210,6 +209,7 @@ const closeUser = (item: any) => {
 const dataRules = reactive({
 	name: [{ required: true, type: 'array', message: t('common.empty'), trigger: 'blur' }],
 	customerInfos: [{ required: true, type: 'array', message: t('common.empty'), trigger: 'change' }],
+	validDay: [{ required: true, message: t('common.empty'), trigger: 'change' }],
 	times: [{ required: true, message: t('common.empty'), trigger: 'blur' }],
 	customerGender: [{ required: true, message: t('common.empty'), trigger: 'blur' }],
 	behavior: [{ required: true, message: t('common.empty'), trigger: 'blur' }],
@@ -222,11 +222,11 @@ const behaviorOption = ref([
 		label: t('coupon.SHARE_WINE_SUCCESS'),
 		value: 'SHARE_WINE_SUCCESS'
 	}, {
-		label: t('coupon.RESERVE_TICKET_SUCCESS'),
-		value: 'RESERVE_TICKET_SUCCESS'
+		label: t('coupon.TICKET_SUCCESS'),
+		value: 'TICKET_SUCCESS'
 	}, {
-		label: t('coupon.RESERVE_BOOTH_SUCCESS'),
-		value: 'RESERVE_BOOTH_SUCCESS'
+		label: t('coupon.BOOTH_SUCCESS'),
+		value: 'BOOTH_SUCCESS'
 	},
 ])
 const loading = ref(false)
@@ -240,21 +240,25 @@ const getsysJobData = (id: string) => {
 			typeDetailDTO: res.data.couponTypeDetailVO,
 			useScopes: []
 		}
-		res.data.couponScopeVOS.forEach(d => {
-			if (d.useScope == 'ACTIVITY') {
-				_data.activities = d.scopeIds
-			}
-			if (d.useScope == 'RESERVE_BOOTH') {
-				_data.reserveBooths = d.scopeIds
-			}
-			if (d.useScope == 'SHARE_WINE') {
-				_data.shareWines = d.scopeIds
-			}
-			if (d.useScope == 'RESERVE_TICKET') {
-				_data.reserveTickets = d.scopeIds
-			}
-			_data.useScopes.push(d.useScope)
-		});
+		_data.activities = res.data.couponScopeVO.activityIds
+		_data.reserveBooths = res.data.couponScopeVO.boothIds
+		_data.shareWines = res.data.couponScopeVO.winePartyModes
+		_data.reserveTickets = res.data.couponScopeVO.ticketIds
+		// res.data.couponScopeVOS.forEach(d => {
+		// 	if (d.useScope == 'ACTIVITY') {
+		// 		_data.activities = d.scopeIds
+		// 	}
+		// 	if (d.useScope == 'BOOTH') {
+		// 		_data.reserveBooths = d.scopeIds
+		// 	}
+		// 	if (d.useScope == 'SHARE_WINE') {
+		// 		_data.shareWines = d.scopeIds
+		// 	}
+		// 	if (d.useScope == 'TICKET') {
+		// 		_data.reserveTickets = d.scopeIds
+		// 	}
+		// 	_data.useScopes.push(d.useScope)
+		// });
 		form.couponId = res.data.id
 		Object.assign(couponInfo, _data);
 	});

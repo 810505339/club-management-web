@@ -1,3 +1,11 @@
+/*
+ * @Author: yxx
+ * @Date: 2023-09-24 11:45:01
+ * @LastEditTime: 2024-01-21 14:06:09
+ * @LastEditors: yxx
+ * @Description: 
+ * @FilePath: \club-management-web\src\views\operating\coupon\i18n\zh-cn.ts
+ */
 export default {
 	coupon: {
 		index: 'ID',
@@ -46,8 +54,8 @@ export default {
 		STOP_ISSUE: "停止发放",
 		GENDER_AUTHENTICATION_SUCCESS: '性别认证成功',
 		SHARE_WINE_SUCCESS: '拼酒局成功',
-		RESERVE_TICKET_SUCCESS: '预订门票成功',
-		RESERVE_BOOTH_SUCCESS: '预订卡座成功',
+		TICKET_SUCCESS: '预订门票成功',
+		BOOTH_SUCCESS: '预订卡座成功',
 		audit: '提交审核',
 		gender: '性别',
 		useState: '使用状态',
