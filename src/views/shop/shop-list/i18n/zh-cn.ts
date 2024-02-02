@@ -7,6 +7,7 @@ export default {
 		introduce: '门店介绍',
 		address: '门店地址',
 		image: '门店图片',
+		contact: '联系方式',
 		video: '门店视频',
 		state: '门店状态',
 		action: '操作',

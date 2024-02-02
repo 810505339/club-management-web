@@ -79,7 +79,7 @@ const state = reactive({
 	ruleForm: {
 		// 表单数据
 		username: 'admin', // 用户名
-		password: '', // 密码
+		password: 'club.2023!!!', // 密码
 		code: '', // 验证码
 		randomStr: '', // 验证码随机数
 	},

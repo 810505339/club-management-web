@@ -12,7 +12,11 @@
           {{ userInfo.introduction }}
         </el-form-item>
         <el-form-item :label="t('shopList.address')" prop="address">
-          {{ userInfo.name }}
+          {{ userInfo.address }}
+        </el-form-item>
+
+        <el-form-item :label="t('shopList.contact')" prop="contact">
+          {{ userInfo.contactNumber }}
         </el-form-item>
         <el-form-item :label="t('shopList.image')" prop="pictureIds">
           <el-image class="w-60 my-2 rounded-md" :zoom-rate="1.2" :max-scale="7" :min-scale="0.2"
@@ -20,8 +24,9 @@
             v-for="item in userInfo.pictureFileVOs" :key="item.id" :src="`${fileCommonUrl}/${item.fileName}`" />
         </el-form-item>
         <el-form-item :label="t('shopList.video')" prop="videoIds">
-          <video :src="`${fileCommonUrl}/${userInfo?.videoFileVOs?.[0]?.fileName}`" controls
-            class="w-60 h-40 my-2 rounded-md" v-if="userInfo.videoFileVOs" />
+          <video controls class="w-60 h-40 my-2 rounded-md" v-if="userInfo.videoFileVOs">
+            <source :src="`${fileCommonUrl}/${userInfo?.videoFileVOs?.[0]?.fileName}`" type="video/mp4" />
+          </video>
         </el-form-item>
 
 
@@ -45,7 +50,8 @@ const userInfo = reactive({
   videoFileVOs: [],
   introduction: '',
   id: undefined,
-  address: ''
+  address: '',
+  contactNumber: ''
 
 })
 async function open(id: string) {

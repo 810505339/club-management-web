@@ -13,6 +13,10 @@
         <el-input type="textarea" :placeholder="`${t('shopList.please')}${t('shopList.address')}`"
           v-model="form.address" />
       </el-form-item>
+
+      <el-form-item :label="t('shopList.contact')" prop="contact">
+        <el-input :placeholder="`${t('shopList.please')}${t('shopList.contact')}`" v-model="form.contactNumber" />
+      </el-form-item>
       <el-form-item :label="t('shopList.image')" prop="pictureIds">
         <upload v-bind="IMG_PROPS" class="w-full" :model-value="form.pictureIds"
           @change="(_, fileList) => uploadChange('pictureIds', fileList)" />
@@ -83,7 +87,8 @@ const form = reactive({
   videoIds: [],
   introduction: '',
   id: undefined,
-  address: ''
+  address: '',
+  contactNumber: ''
 });
 
 // 定义校验规则

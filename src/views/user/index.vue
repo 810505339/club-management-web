@@ -41,12 +41,10 @@
 							width="180"></el-table-column>
 						<el-table-column :label="$t('common.action')" prop="createTime" show-overflow-tooltip width="180">
 							<template #default="scope">
-								<el-button text type="primary">
-									{{ t('suer.consume') }}
+								<el-button text type="primary" @click="userDialogRef.openDialog(scope.row['id'])">
+									数据统计
 								</el-button>
-								<el-button text type="primary">
-									{{ t('suer.bottle') }}
-								</el-button>
+
 							</template>
 						</el-table-column>
 
@@ -57,21 +55,20 @@
 			</pane>
 		</splitpanes>
 
-		<user-form ref="userDialogRef" :gender="gender" :lock_flag="lock_flag" @refresh="getDataList(false)" />
+		<user-form ref="userDialogRef" />
 	</div>
 </template>
 
 <script lang="ts" name="systemUser" setup>
 import { getUserList } from '/@/api/admin/user';
 import { BasicTableProps, useTable } from '/@/hooks/table';
-import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 import { useDict } from '/@/hooks/dict';
 // 动态引入组件
 const UserForm = defineAsyncComponent(() => import('./form.vue'));
 
 const { t } = useI18n();
-const { lock_flag } = useDict('lock_flag');
+
 const gender = ref([
 	{
 		value: 1,

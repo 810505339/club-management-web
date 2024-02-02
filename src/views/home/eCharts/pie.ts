@@ -8,7 +8,10 @@ type IData = Array<{ name: string, value: string }>
 
 
 const useBarOptions = (chartDom: Ref<HTMLElement | undefined>, opt: any) => {
-  let myChart: unknown = null
+  let myChart = ref()
+
+
+
   const data = ref<IData>([])
   const { radius = ['50%', '10%'], legend = {
     top: '5%',
@@ -22,11 +25,12 @@ const useBarOptions = (chartDom: Ref<HTMLElement | undefined>, opt: any) => {
 
 
 
-  onMounted(() => {
+  watch(chartDom, () => {
     if (chartDom.value) {
-      myChart = echarts.init(chartDom.value)
+      myChart.value = echarts.init(chartDom.value)
     }
   })
+
 
   const setOption = (parmams: IData) => {
 
@@ -74,7 +78,13 @@ const useBarOptions = (chartDom: Ref<HTMLElement | undefined>, opt: any) => {
       grid: grid
     };
 
-    myChart.setOption(options)
+
+
+    nextTick(() => {
+
+
+      myChart.value.setOption(options)
+    })
   }
 
   return {

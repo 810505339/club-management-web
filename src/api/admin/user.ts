@@ -143,3 +143,16 @@ export function getUserList(params: IUser) {
 	});
 }
 
+
+
+//用户消费数据统计
+export async function getUserConsumption(customerId: string) {
+	const { data } = await request({
+		url: `/consumption/orderManage/customer/getDataStat`,
+		method: 'get',
+		params: {
+			customerId
+		}
+	});
+	return data
+}

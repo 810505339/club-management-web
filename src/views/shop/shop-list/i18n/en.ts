@@ -6,6 +6,7 @@ export default {
 		introduce: 'store introduce',
 		address: 'store address',
 		image: 'store image',
+		contact: 'store contact',
 		video: 'store video',
 		state: 'store state',
 		action: 'action',
