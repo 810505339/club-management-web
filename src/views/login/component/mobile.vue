@@ -1,5 +1,6 @@
 <template>
-	<el-form size="large" class="login-content-form" ref="loginFormRef" :rules="loginRules" :model="loginForm" @keyup.enter="handleLogin">
+	<el-form size="large" class="login-content-form" ref="loginFormRef" :rules="loginRules" :model="loginForm"
+		@keyup.enter="handleLogin">
 		<el-form-item class="login-animation1" prop="mobile">
 			<el-input text :placeholder="$t('mobile.placeholder1')" v-model="loginForm.mobile" clearable autocomplete="off">
 				<template #prefix>
@@ -9,7 +10,9 @@
 		</el-form-item>
 		<el-form-item class="login-animation2" prop="code">
 			<el-col :span="15">
-				<el-input text maxlength="6" :placeholder="$t('mobile.placeholder2')" v-model="loginForm.code" clearable autocomplete="off">
+				<el-input text maxlength="6" :placeholder="$t('mobile.placeholder2')" v-model="loginForm.code" clearable
+					autocomplete="off">
+
 					<template #prefix>
 						<el-icon class="el-input__icon">
 							<ele-Position />
@@ -19,7 +22,8 @@
 			</el-col>
 			<el-col :span="1"></el-col>
 			<el-col :span="8">
-				<el-button v-waves class="login-content-code" @click="handleSendCode" :loading="msg.msgKey">{{ msg.msgText }} </el-button>
+				<el-button v-waves class="login-content-code" @click="handleSendCode" :loading="msg.msgKey">{{ msg.msgText }}
+				</el-button>
 			</el-col>
 		</el-form-item>
 		<el-form-item class="login-animation3">
@@ -37,6 +41,7 @@ import { useUserInfo } from '/@/stores/userInfo';
 import { rule } from '/@/utils/validate';
 import { useI18n } from 'vue-i18n';
 
+
 const { t } = useI18n();
 const emit = defineEmits(['signInSuccess']);
 
@@ -49,6 +54,8 @@ const loginForm = reactive({
 	mobile: '',
 	code: '',
 });
+
+
 
 // 定义校验规则
 const loginRules = reactive({
@@ -66,7 +73,7 @@ const loginRules = reactive({
  * 处理发送验证码事件。
  */
 const handleSendCode = async () => {
-	const valid = await loginFormRef.value.validateField('mobile').catch(() => {});
+	const valid = await loginFormRef.value.validateField('mobile').catch(() => { });
 	if (!valid) return;
 
 	const response = await sendMobileCode(loginForm.mobile);
@@ -82,7 +89,7 @@ const handleSendCode = async () => {
  * 处理登录事件。
  */
 const handleLogin = async () => {
-	const valid = await loginFormRef.value.validate().catch(() => {});
+	const valid = await loginFormRef.value.validate().catch(() => { });
 	if (!valid) return;
 
 	try {

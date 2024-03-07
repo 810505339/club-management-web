@@ -36,7 +36,6 @@
 			</el-row>
 			<el-row>
 				<div class="mb8" style="width: 100%">
-
 					<right-toolbar @queryTable="getDataList" class="ml10" style="float: right; margin-right: 20px"
 						v-model:showSearch="showSearch" />
 				</div>

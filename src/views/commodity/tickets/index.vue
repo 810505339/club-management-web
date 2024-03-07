@@ -18,7 +18,8 @@
 
 									<el-form-item :label="$t('area.state')" prop="enabled">
 										<el-select v-model="state.queryForm.enabled" :placeholder="$t('area.stateSelect')" clearable>
-											<el-option v-for="item, index in enabledList" :key="index" :label="item.label" :value="item.value">
+											<el-option v-for="item, index in enabledList" :key="index" :label="item.label"
+												:value="item.value">
 											</el-option>
 										</el-select>
 									</el-form-item>
@@ -32,7 +33,8 @@
 							</el-row>
 							<el-row>
 								<div class="mb8">
-									<el-button v-auth="'sys_user_add'" icon="folder-add" type="primary" @click="userDialogRef.openDialog()">
+									<el-button v-auth="'sys_user_add'" icon="folder-add" type="primary"
+										@click="userDialogRef.openDialog()">
 										{{ $t('common.shelves') + t('tickets.tickets') }}
 									</el-button>
 
@@ -41,8 +43,9 @@
 								</div>
 							</el-row>
 
-							<el-table stripe v-loading="state.loading" :data="state.dataList" @selection-change="handleSelectionChange"
-								border :cell-style="tableStyle.cellStyle" :header-cell-style="tableStyle.headerCellStyle">
+							<el-table stripe v-loading="state.loading" :data="state.dataList"
+								@selection-change="handleSelectionChange" border :cell-style="tableStyle.cellStyle"
+								:header-cell-style="tableStyle.headerCellStyle">
 								<el-table-column :label="$t('common.index')" type="index" width="60" fixed="left" />
 								<el-table-column :label="name" fixed="left">
 									<template #default="scope">
@@ -50,36 +53,43 @@
 									</template>
 								</el-table-column>
 								<el-table-column :label="areaName" fixed="left">
+
 									<template #default="scope">
 										{{ scope.row['ticketVO'].areaVO.name }}
 									</template>
 								</el-table-column>
 								<el-table-column :label="time" width="300" fixed="left">
+
 									<template #default="scope">
 										{{ scope.row['beginTime'] }}~{{ scope.row['endTime'] }}
 									</template>
 								</el-table-column>
 								<el-table-column :label="sum" props="ticketDetailNumber">
+
 									<template #default="scope">
 										{{ scope.row['ticketDetailNumber'] }}
 									</template>
 								</el-table-column>
 								<el-table-column :label="price" props="amount">
+
 									<template #default="scope">
 										{{ scope.row['amount'] }}
 									</template>
 								</el-table-column>
 								<el-table-column :label="duration" width="300">
+
 									<template #default="scope">
 										{{ scope.row['disabledTime'] }}
 									</template>
 								</el-table-column>
 								<el-table-column :label="status">
+
 									<template #default="scope">
 										{{ scope.row['enabled'] == 1 ? $t('shopList.shelves') : $t('shopList.takedown') }}
 									</template>
 								</el-table-column>
 								<el-table-column :label="$t('common.action')" width="180" fixed="right">
+
 									<template #default="scope">
 
 
@@ -116,7 +126,8 @@
 									</template>
 								</el-table-column>
 							</el-table>
-							<pagination v-bind="state.pagination" @current-change="currentChangeHandle" @size-change="sizeChangeHandle">
+							<pagination v-bind="state.pagination" @current-change="currentChangeHandle"
+								@size-change="sizeChangeHandle">
 							</pagination>
 						</div>
 					</div>
@@ -125,7 +136,7 @@
 			</pane>
 		</splitpanes>
 
-		<user-form ref="userDialogRef" @refresh="handlegetTicketList" />
+		<user-form ref="userDialogRef" @refresh="getDataList" />
 
 		<upload-excel ref="excelUploadRef" :title="$t('sysuser.importUserTip')"
 			temp-url="/admin/sys-file/local/file/user.xlsx" url="/admin/user/import" @refreshDataList="getDataList" />
@@ -238,6 +249,7 @@ onMounted(async () => {
 })
 
 </script>
+
 <style scoped>
 :deep(.el-scrollbar) {
 	height: 90%;
